@@ -44,6 +44,19 @@ npm run preview   # preview the production build
   data chart, data table) — every one reusable, responsive, and RTL, with
   generic placeholder content only.
 
+- A reusable **physics simulation engine** (`src/engine/`): a `Vector2` class,
+  a fixed-timestep `SimulationEngine` (physics stepping decoupled from
+  render rate — stable at any display refresh rate), `CanvasEngine` /
+  `SvgEngine` (world-coordinate, Y-up drawing with circle/line/arrow/grid/text
+  primitives), a live-updating `GraphEngine`, framework-free drag/zoom/tooltip
+  interaction behaviors (mouse + touch + keyboard), and pure-function formula
+  libraries for motion, rotation, force, energy, momentum, waves,
+  electricity, and chemistry — plus matching reusable UI controls
+  (`<sim-slider>`, `<sim-play-toggle>`, `<sim-reset-button>`,
+  `<sim-speed-control>`, `<sim-zoom-control>`, `<sim-value-display>`,
+  `<sim-formula-display>`, `<unit-label>`). No chapter/lesson content — just
+  the engine future chapters will build on.
+
 See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the reasoning behind each
 piece, including several Shadow DOM / CSS cascade gotchas worth knowing
 before extending it.

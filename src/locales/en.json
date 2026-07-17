@@ -126,5 +126,13 @@
   "table.caption": "Sample data table",
   "table.col1": "Quantity",
   "table.col2": "Symbol",
-  "table.col3": "Unit"
+  "table.col3": "Unit",
+
+  "sim.play": "Play",
+  "sim.pause": "Pause",
+  "sim.reset": "Reset",
+  "sim.speedControl": "Speed",
+  "sim.zoomIn": "Zoom in",
+  "sim.zoomOut": "Zoom out",
+  "sim.zoomReset": "Reset zoom"
 }

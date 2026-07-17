@@ -30,3 +30,13 @@ import './svg-figure.js';
 import './canvas-figure.js';
 import './data-chart.js';
 import './data-table.js';
+
+// Phase 4: physics engine controls
+import './unit-label.js';
+import './sim-value-display.js';
+import './sim-formula-display.js';
+import './sim-slider.js';
+import './sim-play-toggle.js';
+import './sim-reset-button.js';
+import './sim-speed-control.js';
+import './sim-zoom-control.js';

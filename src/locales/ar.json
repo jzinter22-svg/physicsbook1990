@@ -126,5 +126,13 @@
   "table.caption": "جدول بيانات نموذجي",
   "table.col1": "الكمية",
   "table.col2": "الرمز",
-  "table.col3": "الوحدة"
+  "table.col3": "الوحدة",
+
+  "sim.play": "تشغيل",
+  "sim.pause": "إيقاف مؤقت",
+  "sim.reset": "إعادة ضبط",
+  "sim.speedControl": "السرعة",
+  "sim.zoomIn": "تكبير",
+  "sim.zoomOut": "تصغير",
+  "sim.zoomReset": "إعادة ضبط التكبير"
 }

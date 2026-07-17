@@ -65,8 +65,23 @@ src/
     toast-stack.js                 Singleton toast host — see src/lib/toast.js
     svg-figure.js, canvas-figure.js  Figure frames (click-to-enlarge / decorative canvas loop)
     data-chart.js, data-table.js    Chart + table templates — no bundled data
+
+    -- Physics engine controls (Phase 4) --
+    unit-label.js                  Formats "m/s^2" -> "m/s²", "kg*m/s" -> "kg·m/s"
+    sim-value-display.js            Live label + number + unit readout
+    sim-formula-display.js           <math-block> with live {placeholder} substitution
+    sim-slider.js                    Self-labeled, unit-aware range input
+    sim-play-toggle.js, sim-reset-button.js, sim-speed-control.js, sim-zoom-control.js
+                                      Standalone controls — talk to any engine via events
   lib/
     toast.js                      showToast() — fires a "show-toast" document event
+  engine/                        Physics simulation engine (Phase 4) — see its own section below
+    vector.js, animation-engine.js, simulation-engine.js
+    canvas-engine.js, svg-engine.js, graph-engine.js
+    units.js
+    interactions/  drag.js, zoom.js, tooltip-follow.js
+    physics/       motion.js, rotation.js, force.js, energy.js, momentum.js,
+                    waves.js, electricity.js, chemistry.js
 design-system.html            Component-library showcase (own Vite entry, see below)
 src/design-system.js          Its bootstrap: same init as main.js + demo wiring
 ```
@@ -323,6 +338,131 @@ outer template early, exactly like the Phase 2 `app-sidebar.js` incident —
 it recurred twice while writing this phase's components. When writing a
 comment inside any component's `css` template, don't use backticks; say
 "the hidden attribute" instead of `` `hidden` ``.)
+
+## Physics engine (Phase 4)
+
+`src/engine/` is the reusable simulation engine every future chapter's
+interactive figures build on. Nothing in it renders a page or knows about
+any specific physics lesson — it's imported by chapter code, not visited
+directly.
+
+### Vector2 (`vector.js`)
+
+The one truly foundational piece — position, velocity, force, and momentum
+are all 2D vectors. Instance methods **mutate `this` and return it** for
+chaining (`velocity.addScaled(acceleration, dt)`), matching the convention
+of real-time physics/game libraries (three.js `Vector2`, Box2D's `b2Vec2`)
+rather than allocating a new object per operation — a simulation stepping
+hundreds of vectors at 60 FPS can't afford that garbage-collector pressure.
+Reach for `.clone()` or the static helpers (`Vector2.add(a, b)`) when
+immutability is more convenient than raw speed.
+
+### Clock & SimulationEngine (`animation-engine.js`, `simulation-engine.js`)
+
+`SimulationEngine` runs physics on a **fixed timestep decoupled from the
+render rate** (the classic "fix your timestep" pattern): however many
+display frames actually happen between two ticks, `step(dt)` is always
+called with the same `fixedDt`, accumulated via a `while` loop, while
+`render(alpha)` is called once per displayed frame with `alpha` (0–1)
+indicating how far into the next physics step the accumulator sits — so
+rendering can optionally interpolate between the last two physics states
+instead of visibly stepping. This is what keeps integration numerically
+stable and reproducible regardless of whether the display is 60 Hz, 120 Hz,
+or a throttled background tab, instead of the naive "multiply by whatever
+dt this frame happened to be" approach (which is what the *legacy* Phase 1
+`Simulation` class in `src/lib/simulation.js` still does — kept as-is for
+backward compatibility with `sim-container`/`canvas-figure`, but
+`SimulationEngine` is the one to reach for going forward). Exposes the same
+`start()`/`pause()`/`reset()`/`running`/`destroy()` shape as the legacy
+class by convention, but is not a drop-in replacement (different `step`/
+`render` signatures) — adapting `sim-container` to accept either is future
+work, not done in this phase.
+
+### CanvasEngine & SvgEngine (`canvas-engine.js`, `svg-engine.js`)
+
+Both wrap a physics-friendly coordinate system — world units, **Y-up**
+(matching math/physics convention, unlike the DOM's Y-down), a configurable
+origin (`'center' | 'bottom-left' | 'top-left'`) and `pixelsPerUnit` scale —
+with `toScreen`/`toWorld`/`clientToWorld` conversions and a small shared set
+of draw primitives (circle, line, **arrow** — the standard way to draw a
+force/velocity vector, grid, text). CanvasEngine is immediate-mode (redraw
+every frame from scratch); SvgEngine is retained-mode (create each shape
+once, then `updateCircle`/`updateLine`/etc. its attributes per frame) —
+cheaper for a diagram with a handful of stable shapes, where canvas is
+cheaper for a scene that's fundamentally "clear and repaint everything."
+Pick whichever fits the simulation; both share the same coordinate API so
+switching later doesn't change the physics/layout code.
+
+**Bug found and fixed here**: `ResizeObserver` is spec-guaranteed to fire
+once asynchronously right after `observe()` even when nothing actually
+changed size — and assigning `canvas.width`/`height`, even to their current
+value, implicitly clears the canvas bitmap. Since CanvasEngine is
+immediate-mode with no retained scene to redraw from, that spurious initial
+callback was silently wiping out anything drawn synchronously right after
+construction (a one-shot render, e.g. a static figure). Fixed by skipping
+the width/height reassignment — and the resulting wipe — when the target
+pixel size hasn't actually changed. (The legacy `Simulation` class and
+`GraphEngine` were never affected: both unconditionally re-render from
+retained state on every resize, including the spurious one, so they
+self-heal by design rather than needing this guard.)
+
+### GraphEngine (`graph-engine.js`)
+
+A live line plot for any physics quantity over time (or against another
+quantity) — domain-agnostic, just numbers in and a trace out.
+`addPoint(x, y)` pushes into a rolling buffer (`maxPoints`) and re-renders;
+axes auto-scale to the visible data unless `yMin`/`yMax` are fixed. Per the
+dataviz skill's form heuristic this is a single-series line (no legend
+needed — the direct-labeled current-value dot at the trace's end substitutes
+for one), sequential in spirit (magnitude over time), with recessive
+gridlines and an emphasized zero-line when the range crosses it.
+
+### Interactions (`interactions/`)
+
+Framework-free behaviors attachable to a canvas, an SVG shape, or any
+element, all via the Pointer Events API (one code path for mouse, touch,
+and pen):
+
+- **`attachDrag`** — pointer drag with an optional `hitTest` (for canvas,
+  where there's no per-shape DOM node to attach to) and arrow-key nudging
+  when the target is focusable, since a canvas has no native keyboard
+  equivalent for "drag this" otherwise.
+- **`attachZoom`** — mouse wheel *and* two-finger pinch (tracked via
+  multiple active pointers) funneled through one `onZoom(factor, center)`
+  callback, so callers don't handle desktop and mobile separately.
+- **`attachFollowTooltip`** — a pointer-following floating tooltip (reusing
+  the `.ui-tooltip-bubble` styling from `base.css`) for canvas content,
+  which has no DOM element per shape for `<ui-tooltip>` to anchor to.
+
+`<sim-zoom-control>`'s +/−/reset buttons are the keyboard/screen-reader-
+reachable equivalent of wheel/pinch zoom — pair both so zoom is never
+mouse/touch-only.
+
+### Physics formula modules (`physics/`)
+
+One small module per domain — **motion, rotation, force, energy, momentum,
+waves, electricity, chemistry** — each a set of pure functions implementing
+standard formulas (`kineticEnergy(mass, speed)`, `elasticCollision1D(...)`,
+`pendulumPeriod(length, g)`, `ohmsLawCurrent(voltage, resistance)`, the
+ideal gas law, and so on). These are reference formula libraries, not
+lessons: no narrative, no worked examples, no exercises — a future chapter
+imports the functions it needs and supplies its own explanation and
+context. `units.js` (`formatQuantity`, `formatUnit`) formats the numbers
+these produce consistently with the rest of the UI.
+
+### Verifying the engine
+
+There's no committed demo/showcase page for this phase (unlike Phase 3's
+`design-system.html`) — deliberately, since a live physics demo risks
+crossing into "lesson content." It was instead verified with a throwaway
+local HTML harness (built, exercised, screenshotted, then deleted — not
+committed) confirming: correct vector math and coordinate round-trips;
+correct results from a representative formula in every physics module;
+`SimulationEngine` rendering at the display's ~60 FPS while stepping physics
+at its own configured fixed rate independently; drag/zoom/tooltip attaching
+without error under touch/mobile emulation; and full RTL/i18n reactivity
+(theme/language toggles) plus keyboard accessibility (`aria-pressed`,
+`aria-label`) on every new control.
 
 ## What's deliberately not here yet
 
