@@ -1,0 +1,112 @@
+/*
+  Responsive page layout, mobile-first.
+  Breakpoints (referenced consistently across the project):
+    sm: 640px   md: 768px   lg: 1024px   xl: 1280px
+*/
+
+.app-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block: var(--space-7);
+}
+
+/* Generic responsive grid for cards / component showcases */
+.grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid--2-up { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .grid--3-up { grid-template-columns: repeat(3, 1fr); }
+  .grid--2-up { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.section {
+  padding-block: var(--space-6);
+}
+
+.section--sunken {
+  background: var(--color-bg-sunken);
+  border-radius: var(--radius-lg);
+}
+
+/* Graph-paper texture, used sparingly behind "lab" sections */
+.lab-texture {
+  background-image: var(--pattern-grid);
+  background-size: var(--pattern-grid-size);
+}
+
+/* Fluid hero */
+.hero {
+  display: grid;
+  gap: var(--space-6);
+  padding-block: var(--space-8);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* Simulation containers need a stable, resizable box on every viewport */
+.sim-frame {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 220px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .sim-frame {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* Utility visibility helpers keyed to the same breakpoints */
+.hide-below-md {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-below-md {
+    display: revert;
+  }
+  .hide-above-md {
+    display: none;
+  }
+}

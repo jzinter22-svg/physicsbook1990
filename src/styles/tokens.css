@@ -1,0 +1,187 @@
+/*
+  Design tokens for the "Interactive Science Lab" theme.
+  Every visual value in the app should trace back to a token here.
+  Components consume these via var(--token-name); never hard-code raw values.
+*/
+
+:root {
+  /* ---- Brand palette (lab console identity) ---- */
+  --color-lab-cyan-50: #e6fbfd;
+  --color-lab-cyan-100: #baf3f8;
+  --color-lab-cyan-300: #58d9e8;
+  --color-lab-cyan-500: #0eb7cc;
+  --color-lab-cyan-600: #0a93a6;
+  --color-lab-cyan-700: #08717f;
+  --color-lab-cyan-900: #063d45;
+
+  --color-lab-amber-300: #ffcf70;
+  --color-lab-amber-500: #f5a623;
+  --color-lab-amber-700: #b9760f;
+
+  --color-lab-violet-300: #c6b6ff;
+  --color-lab-violet-500: #8c6fef;
+  --color-lab-violet-700: #5c46b0;
+
+  --color-lab-green-300: #a6e8b8;
+  --color-lab-green-500: #38b76a;
+  --color-lab-green-700: #237a46;
+
+  --color-lab-red-300: #ffb3ad;
+  --color-lab-red-500: #e5484d;
+  --color-lab-red-700: #a82e32;
+
+  --color-ink-950: #060b12;
+  --color-ink-900: #0b1220;
+  --color-ink-800: #121b2c;
+  --color-ink-700: #1b2740;
+  --color-ink-600: #2a3a5c;
+  --color-ink-500: #4b5f88;
+  --color-ink-300: #8fa2c4;
+  --color-ink-100: #d7e0ef;
+  --color-ink-50: #f2f5fb;
+  --color-white: #ffffff;
+
+  /* ---- Semantic roles: light mode (default) ---- */
+  --color-bg: var(--color-ink-50);
+  --color-bg-raised: var(--color-white);
+  --color-bg-sunken: #e7edf7;
+  --color-bg-grid-line: rgba(11, 18, 32, 0.05);
+
+  --color-text: var(--color-ink-900);
+  --color-text-muted: var(--color-ink-600);
+  --color-text-on-accent: var(--color-white);
+
+  --color-border: var(--color-ink-100);
+  --color-border-strong: var(--color-ink-300);
+
+  --color-primary: var(--color-lab-cyan-600);
+  --color-primary-hover: var(--color-lab-cyan-700);
+  --color-primary-soft: var(--color-lab-cyan-50);
+
+  --color-accent: var(--color-lab-amber-500);
+  --color-accent-soft: #fff3dd;
+
+  --color-success: var(--color-lab-green-700);
+  --color-success-soft: #e7f8ed;
+  --color-warning: var(--color-lab-amber-700);
+  --color-warning-soft: #fff3dd;
+  --color-danger: var(--color-lab-red-700);
+  --color-danger-soft: #fdeceb;
+  --color-info: var(--color-lab-violet-700);
+  --color-info-soft: #f1ecff;
+
+  /* Domain accents — reserved for tagging future chapters by physics topic */
+  --color-domain-mechanics: var(--color-lab-cyan-600);
+  --color-domain-thermo: var(--color-lab-amber-700);
+  --color-domain-waves: var(--color-lab-violet-700);
+  --color-domain-electromag: var(--color-lab-green-700);
+  --color-domain-optics: var(--color-lab-red-700);
+
+  --shadow-color: 220 60% 12%;
+  --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.08);
+  --shadow-md: 0 4px 12px hsl(var(--shadow-color) / 0.10);
+  --shadow-lg: 0 12px 32px hsl(var(--shadow-color) / 0.14);
+  --shadow-glow-primary: 0 0 0 3px hsl(190 80% 45% / 0.25);
+
+  /* ---- Typography ---- */
+  --font-latin: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-arabic: 'Tajawal', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, monospace;
+  --font-body: var(--font-arabic), var(--font-latin);
+
+  --fs-100: clamp(0.72rem, 0.7rem + 0.1vw, 0.78rem);
+  --fs-200: clamp(0.82rem, 0.8rem + 0.1vw, 0.88rem);
+  --fs-300: clamp(0.95rem, 0.92rem + 0.15vw, 1rem);
+  --fs-400: clamp(1.05rem, 1rem + 0.2vw, 1.15rem);
+  --fs-500: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --fs-600: clamp(1.55rem, 1.4rem + 0.7vw, 1.95rem);
+  --fs-700: clamp(1.95rem, 1.7rem + 1.2vw, 2.6rem);
+  --fs-800: clamp(2.4rem, 2rem + 2vw, 3.4rem);
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.55;
+  --lh-loose: 1.85;
+
+  /* ---- Spacing scale (4px base grid) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* ---- Shape ---- */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* ---- Motion ---- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 120ms;
+  --duration-normal: 220ms;
+  --duration-slow: 400ms;
+
+  /* ---- Layout ---- */
+  --layout-max-width: 1200px;
+  --layout-gutter: clamp(1rem, 3vw, 2.5rem);
+  --header-height: 64px;
+
+  /* ---- Z-index scale ---- */
+  --z-header: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+
+  /* Subtle graph-paper texture used behind hero/lab sections */
+  --pattern-grid: linear-gradient(var(--color-bg-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-bg-grid-line) 1px, transparent 1px);
+  --pattern-grid-size: 24px 24px;
+}
+
+/* ---- Semantic roles: dark mode ("lab console at night") ---- */
+:root[data-theme='dark'] {
+  --color-bg: var(--color-ink-950);
+  --color-bg-raised: var(--color-ink-900);
+  --color-bg-sunken: var(--color-ink-800);
+  --color-bg-grid-line: rgba(215, 224, 239, 0.06);
+
+  --color-text: var(--color-ink-50);
+  --color-text-muted: var(--color-ink-300);
+  --color-text-on-accent: var(--color-ink-950);
+
+  --color-border: var(--color-ink-700);
+  --color-border-strong: var(--color-ink-600);
+
+  --color-primary: var(--color-lab-cyan-300);
+  --color-primary-hover: var(--color-lab-cyan-100);
+  --color-primary-soft: rgba(88, 217, 232, 0.12);
+
+  --color-accent: var(--color-lab-amber-300);
+  --color-accent-soft: rgba(255, 207, 112, 0.12);
+
+  --color-success: var(--color-lab-green-300);
+  --color-success-soft: rgba(166, 232, 184, 0.12);
+  --color-warning: var(--color-lab-amber-300);
+  --color-warning-soft: rgba(255, 207, 112, 0.12);
+  --color-danger: var(--color-lab-red-300);
+  --color-danger-soft: rgba(255, 179, 173, 0.12);
+  --color-info: var(--color-lab-violet-300);
+  --color-info-soft: rgba(198, 182, 255, 0.12);
+
+  --shadow-color: 220 60% 2%;
+  --shadow-glow-primary: 0 0 0 3px hsl(190 90% 65% / 0.25);
+}
+
+/* Respect system preference when the user hasn't chosen explicitly */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}

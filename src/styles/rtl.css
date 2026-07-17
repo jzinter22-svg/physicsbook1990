@@ -1,0 +1,46 @@
+/*
+  RTL/LTR support.
+
+  Strategy: the rest of the codebase uses CSS logical properties
+  (margin-inline-start, inset-inline-end, text-align: start, etc.) so layout
+  mirrors automatically based on the `dir` attribute on <html>. This file only
+  holds the handful of things logical properties can't express — directional
+  icons, shadow offsets, and anything with an explicit transform.
+
+  Arabic is the default/primary language of this project: <html lang="ar" dir="rtl">.
+  Toggling to English switches to <html lang="en" dir="ltr">.
+*/
+
+[dir='rtl'] .icon-flip {
+  transform: scaleX(-1);
+}
+
+/* Directional shadows should lean toward the reading direction's "back" side */
+[dir='ltr'] .shadow-directional {
+  box-shadow: -6px 6px 0 var(--color-border);
+}
+
+[dir='rtl'] .shadow-directional {
+  box-shadow: 6px 6px 0 var(--color-border);
+}
+
+/* Numerals and LTR-only fragments (formulas, units, code) embedded inside RTL
+   text should not be reversed by the bidi algorithm. */
+[dir='rtl'] .ltr-embed {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* MathJax output is inherently LTR-structured even inside Arabic paragraphs */
+[dir='rtl'] mjx-container {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Blockquote-style callouts use a border to mark the "start" edge */
+.lab-callout {
+  border-inline-start: 4px solid var(--callout-color, var(--color-primary));
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
