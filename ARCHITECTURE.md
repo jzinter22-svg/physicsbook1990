@@ -54,6 +54,21 @@ src/
     sim-container.js             Chrome (viewport + start/pause/reset) for a Simulation
     utils.js                      defineOnce() + no-op css/html tag helpers
     index.js                     Registers every component
+
+    -- Design system (Phase 3) --
+    content-card.js               ContentCard base + 12 registered variants (see below)
+    breadcrumb-nav.js, page-toc.js, pager-nav.js   Navigation primitives
+    form-field.js, ui-tooltip.js    No-shadow-root components (see "Light-DOM exceptions")
+    ui-accordion.js                <ui-accordion> + <ui-accordion-item>
+    ui-modal.js, ui-dialog.js       General overlay / confirm-style overlay
+    progress-bar.js                Linear sibling of <progress-ring>
+    toast-stack.js                 Singleton toast host — see src/lib/toast.js
+    svg-figure.js, canvas-figure.js  Figure frames (click-to-enlarge / decorative canvas loop)
+    data-chart.js, data-table.js    Chart + table templates — no bundled data
+  lib/
+    toast.js                      showToast() — fires a "show-toast" document event
+design-system.html            Component-library showcase (own Vite entry, see below)
+src/design-system.js          Its bootstrap: same init as main.js + demo wiring
 ```
 
 ## Language & RTL
@@ -216,6 +231,98 @@ resize handling, and controls during foundation testing — it is not mounted
 on the home page and is not physics content; keep it as a reference for the
 `Simulation` subclassing pattern, or delete it once a real chapter
 simulation exists.
+
+## Design system (Phase 3)
+
+`design-system.html` is a second, independent Vite entry point (see
+`vite.config.js`'s `build.rollupOptions.input`) — a component-library
+showcase, reachable at `/design-system.html`, not linked from the home page.
+It demonstrates every component below with generic placeholder copy
+(`card.placeholder.title/body`, "Category A/B/C", etc.) — deliberately no
+Chapter 1 content. Its own sidebar is a live `<page-toc>` built from the
+page's own headings, doubling as that component's demo.
+
+### Content cards
+
+`content-card.js` exports one `ContentCard` base class and registers 12 tag
+names against it — `lesson-card`, `example-card`, `exercise-card`,
+`formula-card`, `note-card`, `warning-card`, `experiment-card`,
+`simulation-card`, `quiz-card`, `summary-card`, `mindmap-card`,
+`glossary-card`. Each just sets `static config = { icon, accent, labelKey }`;
+adding a 13th type is three lines, not a new file. Shared attributes:
+`title`, `number` (e.g. `1.2`, shown as "Lesson · 1.2"), `collapsible` (+
+`collapsed` to start closed). Accent colors are deliberately reused from the
+existing semantic tokens (primary/success/warning/info/accent/muted) rather
+than inventing 12 new hues — these are UI-type indicators always paired with
+an icon + label, not a categorical data series, so the dataviz skill's
+palette-cap concerns don't apply the way they do to the chapter-domain
+colors.
+
+### Light-DOM exceptions
+
+Two components deliberately have **no shadow root**: `form-field.js` and
+`ui-tooltip.js`. A `<label for="…">` or `aria-describedby` reference can't
+reliably resolve across a shadow boundary (id lookups are scoped per tree),
+so both enhance their own light-DOM children directly instead of rendering
+into an encapsulated tree. If a future component needs a real `for`/id or
+ARIA relationship pointing at slotted/light-DOM content, follow this
+pattern rather than fighting the shadow boundary.
+
+### Overlays
+
+`ui-modal` (general-purpose, e.g. viewing a figure full-size) and `ui-dialog`
+(confirm/cancel) both follow the `app-search`/`settings-panel` shape: the
+backdrop lives *inside* the component's own shadow root as a sibling of the
+dialog box, not appended to `document.body` separately — that avoids the
+stacking-order trap described above for `app-sidebar`. Open with
+`el.open()`/`el.close()` (method calls, not a global event) since a page can
+have more than one modal/dialog instance.
+
+### Physics component templates
+
+`svg-figure` (click-to-enlarge lightbox around a slotted `<svg>`),
+`canvas-figure` (the decorative, non-interactive sibling of `sim-container` —
+mounts a `Simulation` and auto-starts unless reduced motion is on),
+`data-chart` (single-series bar chart; ships with **no data** — set
+`el.data = [{label, value}, …]` from calling code; sequential single-hue
+bars per the dataviz form heuristic, plus a toggle to an equivalent
+`<table>`), and `data-table` (a responsive/sticky-header frame around a real
+slotted `<table>`, so colspans and multi-row headers just work natively).
+None of these contain sample physics data — `design-system.html` feeds them
+generic placeholders at runtime.
+
+### Three more bugs found building this phase (fixed, worth knowing)
+
+1. **`.grid--2-up` was redeclared inside the `≥1024px` media block in
+   `layout.css`, after `.grid--3-up`.** Min-width media queries stack (both
+   apply at 1440px), so the redeclaration silently won the cascade tie and
+   capped every `class="grid grid--2-up grid--3-up"` grid at 2 columns even
+   on wide viewports — present (unnoticed) since Phase 2's chapter-card grid.
+   Fixed by deleting the redundant redeclaration; `.grid--3-up` alone in that
+   block is sufficient since the 640px rule already carries forward.
+2. **A plain class selector that sets `display` beats the `hidden` attribute
+   at equal specificity**, because author-origin rules always outrank the
+   UA stylesheet regardless of selector order. `content-card.js`'s
+   `.toggle-btn { display: grid; … }` meant the collapse-toggle button
+   rendered on *every* card, not just `collapsible` ones, even though it
+   had the `hidden` attribute. Fix: add a same-file `.toggle-btn[hidden] {
+   display: none; }` rule wherever a component sets `display` on something
+   it also toggles via `.hidden`.
+3. **`:empty` never matches a shadow-root wrapper around a named `<slot>`**,
+   because the `<slot>` element itself always counts as a child node,
+   whether or not anything is actually assigned to it. `content-card.js` and
+   `ui-modal.js` both had a `.footer:empty { display: none; }` rule meant to
+   hide an unused footer slot — it never fired, so an empty footer bar
+   showed on every card/modal. Fixed by listening for the slot's
+   `slotchange` event and toggling a real `hidden` property based on
+   `slot.assignedNodes({ flatten: true }).length`.
+
+(Also re-confirmed, not new: literal backticks inside a `/* CSS comment */`
+that itself lives inside a `` css`…` `` JS template literal still close the
+outer template early, exactly like the Phase 2 `app-sidebar.js` incident —
+it recurred twice while writing this phase's components. When writing a
+comment inside any component's `css` template, don't use backticks; say
+"the hidden attribute" instead of `` `hidden` ``.)
 
 ## What's deliberately not here yet
 

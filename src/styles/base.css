@@ -122,6 +122,41 @@ button, input, select, textarea {
 .btn--ghost:hover {
   border-color: var(--color-primary);
 }
+.btn--secondary {
+  background: var(--color-bg-sunken);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+.btn--secondary:hover {
+  border-color: var(--color-border-strong);
+}
+.btn--danger {
+  background: var(--color-danger);
+  color: var(--color-white);
+  box-shadow: var(--shadow-md);
+}
+.btn--danger:hover {
+  filter: brightness(1.08);
+}
+.btn--sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--fs-200);
+}
+.btn--lg {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--fs-400);
+}
+.btn--icon {
+  padding: var(--space-3);
+  border-radius: var(--radius-pill);
+  aspect-ratio: 1;
+}
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
 
 .badge-pill {
   display: inline-flex;
@@ -163,6 +198,76 @@ button, input, select, textarea {
 
 .skip-link:focus {
   top: var(--space-4);
+}
+
+/*
+  <data-table> slotted-content styling. ::slotted() only reaches direct
+  slotted children (the <table> itself), not its descendant <tr>/<td>/<th>,
+  so the actual cell/row treatment for the table the component wraps lives
+  here in a document-level stylesheet instead of the component's shadow root.
+*/
+.data-table-host table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-bg-sunken);
+  color: var(--color-text-muted);
+  font-size: var(--fs-100);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.data-table-host table th,
+.data-table-host table td {
+  padding: var(--space-3) var(--space-4);
+  border-block-end: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.data-table-host table tbody tr:nth-child(even) {
+  background: var(--color-bg-sunken);
+}
+.data-table-host table tbody tr:last-child td {
+  border-block-end: none;
+}
+
+/* <ui-tooltip> chrome — see src/components/ui-tooltip.js for why this lives
+   in light-DOM CSS rather than the component's own shadow root. */
+.ui-tooltip {
+  position: relative;
+  display: inline-block;
+}
+.ui-tooltip-bubble {
+  position: absolute;
+  bottom: calc(100% + var(--space-2));
+  inset-inline-start: 50%;
+  transform: translateX(-50%) translateY(4px);
+  min-width: max-content;
+  max-width: 240px;
+  background: var(--color-ink-900);
+  color: var(--color-ink-50);
+  font-size: var(--fs-100);
+  font-weight: 500;
+  line-height: var(--lh-normal);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+  z-index: var(--z-toast);
+}
+[dir='rtl'] .ui-tooltip-bubble {
+  transform: translateX(50%) translateY(4px);
+}
+.ui-tooltip:hover .ui-tooltip-bubble,
+.ui-tooltip:focus-within .ui-tooltip-bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+[dir='rtl'] .ui-tooltip:hover .ui-tooltip-bubble,
+[dir='rtl'] .ui-tooltip:focus-within .ui-tooltip-bubble {
+  transform: translateX(50%) translateY(0);
 }
 
 /*

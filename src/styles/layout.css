@@ -80,8 +80,12 @@ main > * {
 }
 
 @media (min-width: 1024px) {
+  /* .grid--2-up isn't redeclared here: min-width media queries stack, so the
+     640px rule above already still applies at 1024px+. Redeclaring it here
+     (as an earlier version of this file did) would sit after .grid--3-up in
+     the cascade and silently win the specificity tie, capping every
+     ".grid--2-up.grid--3-up" grid at 2 columns even on wide viewports. */
   .grid--3-up { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .grid--2-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .stack {
@@ -207,6 +211,40 @@ main > * {
   .stat-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+/* Design-system showcase page: content column + sticky TOC aside. */
+.ds-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-7);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .ds-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+
+  .ds-toc {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-6));
+    max-height: calc(100vh - var(--header-height) - var(--space-8));
+    overflow-y: auto;
+  }
+}
+
+.ds-section {
+  padding-block: var(--space-6);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.ds-section:last-child {
+  border-block-end: none;
+}
+
+.ds-subsection + .ds-subsection {
+  margin-block-start: var(--space-7);
 }
 
 /* Utility visibility helpers keyed to the same breakpoints */

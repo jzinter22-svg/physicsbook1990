@@ -31,6 +31,26 @@ const PATHS = {
   reset: `<path d="M4 4v6h6"/><path d="M4.5 13a8 8 0 1 0 2-8.5L4 10"/>`,
   compass: `<circle cx="12" cy="12" r="9"/><path d="m14.8 9.2-1.6 4.4-4.4 1.6 1.6-4.4z"/>`,
   beaker: `<path d="M9 3h6M10 3v6.5L4.9 18a1.8 1.8 0 0 0 1.55 2.7h11.1A1.8 1.8 0 0 0 19.1 18L14 9.5V3"/><path d="M7.5 14.5h9"/>`,
+
+  book: `<path d="M5 4.5A2 2 0 0 1 7 3h9.5a1 1 0 0 1 1 1v14.5a1 1 0 0 1-1 1H7a2 2 0 0 0-2 2Z"/><path d="M5 4.5V19a2 2 0 0 0 2 2h10.5"/>`,
+  bulb: `<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.45 1 1.15 1 1.9V16h5v-.2c0-.75.4-1.45 1-1.9A6 6 0 0 0 12 3Z"/>`,
+  pencil: `<path d="m4 20 1-4.2L15.5 5.3a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20Z"/><path d="m14 6.5 3.5 3.5"/>`,
+  sigma: `<path d="M17 4H6l6 8-6 8h11"/>`,
+  info: `<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="8" r="0.9" fill="currentColor" stroke="none"/>`,
+  alertTriangle: `<path d="M12 3.5 2.5 20h19Z"/><path d="M12 9.5v4.5"/><circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/>`,
+  monitor: `<rect x="3" y="4.5" width="18" height="12" rx="1.5"/><path d="M9 20.5h6M12 16.5v4"/>`,
+  target: `<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.9" fill="currentColor" stroke="none"/>`,
+  listCheck: `<path d="m4 6 1.5 1.5L8 5"/><path d="M11 6h9"/><path d="m4 12 1.5 1.5L8 11"/><path d="M11 12h9"/><path d="m4 18 1.5 1.5L8 17"/><path d="M11 18h9"/>`,
+  tree: `<circle cx="12" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M12 7v5m0 0-6 5m6-5 6 5"/>`,
+  bookOpen: `<path d="M12 6.5c-1.2-1-3-1.5-5.5-1.5S3 5.5 3 6.5v12c1-.7 2.5-1 4.5-1s3.6.4 4.5 1c.9-.6 2.5-1 4.5-1s3.5.3 4.5 1v-12c0-1-1-1.5-3.5-1.5S13.2 5.5 12 6.5Z"/><path d="M12 6.5V19"/>`,
+  chevronLeft: `<path d="m15 6-6 6 6 6"/>`,
+  chevronRight: `<path d="m9 6 6 6-6 6"/>`,
+  dragHandle: `<circle cx="9" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1" fill="currentColor" stroke="none"/>`,
+  expand: `<path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/>`,
+  image: `<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 15-5-5-4.5 4.5M12 16l-2.5-2.5L3 19"/>`,
+  table: `<rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="M3 9.5h18M3 14.5h18M9 4.5v15M15 4.5v15"/>`,
+  checkCircle: `<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.5 2.5L16 9.5"/>`,
+  xCircle: `<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/>`,
 };
 
 /**

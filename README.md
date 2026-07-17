@@ -34,10 +34,19 @@ npm run preview   # preview the production build
 - A base `Simulation` class (`src/lib/simulation.js`) for future canvas-based
   interactive physics simulations, plus a non-physics tech demo (not mounted
   on the home page) proving the render/resize/controls pipeline works.
+- A full component **design system** at `/design-system.html` (own Vite
+  entry, not linked from the home page): 12 content-card types (lesson,
+  example, exercise, formula, note, warning, experiment, simulation, quiz,
+  summary, mind map, glossary), navigation primitives (breadcrumb, table of
+  contents, prev/next pager), UI primitives (buttons, inputs, tabs,
+  accordion, modal, dialog, tooltip, toast, progress bar/ring), and physics
+  component templates (SVG figure lightbox, decorative canvas animation,
+  data chart, data table) — every one reusable, responsive, and RTL, with
+  generic placeholder content only.
 
 See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the reasoning behind each
-piece, including a few Shadow DOM and CSS Grid gotchas worth knowing before
-extending it.
+piece, including several Shadow DOM / CSS cascade gotchas worth knowing
+before extending it.
 
 ## Reference material
 
