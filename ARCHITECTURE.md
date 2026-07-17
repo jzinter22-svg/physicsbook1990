@@ -464,12 +464,109 @@ without error under touch/mobile emulation; and full RTL/i18n reactivity
 (theme/language toggles) plus keyboard accessibility (`aria-pressed`,
 `aria-label`) on every new control.
 
+## Chapter 1 — Circular & Rotational Motion (Phase 5)
+
+Chapter 1 is a hand-written page (`chapter-1.html` + `src/chapter-1.js`),
+not a content pipeline from the source PDF — with one chapter shipped, it
+was too early to know what a general chapter-authoring pipeline should look
+like (see the "not here yet" note below, carried over from Phase 4). The
+page is a new Vite entry (`chapter1` in `vite.config.js`'s
+`rollupOptions.input`), reachable from the home page once a chapter's
+`CHAPTERS` entry (`src/data/chapters.js`) has `locked: false` and an `href`
+— `<chapter-card>` and `main.js`'s `renderChapterGrid()` were extended to
+render an unlocked card as a real link instead of always forcing the
+`locked` attribute.
+
+**Source discipline**: every fact, figure, table, example, and exercise
+in the chapter traces back to `assets/pdf/كتاب الطبيعيات.pdf` (pages 5–20),
+transcribed by rendering each page to an image (the PDF's Arabic text is
+garbled at the glyph level through `pdftotext`, but renders correctly as an
+image) and cross-checked against `pdftotext -layout` output for any
+ambiguous passage. Nothing in the chapter body is invented content — the
+"did you know" boxes, real-life applications, and "think" prompts are all
+lifted from the textbook's own asides, not authored fresh, so "textbook as
+the only curriculum source" holds even for the enrichment material.
+
+**Content structure**: each subsection is a `<lesson-card>` (exposition) with
+inline `<formula-card>`s for numbered equations, `<svg-figure>`s for the
+textbook's static diagrams, and `<lab-callout variant="note" label="…">`
+for "هل تعلم؟" / "تذكر" / "فكر" boxes (the custom `label` override on
+`lab-callout` exists for exactly this — a callout whose heading isn't one
+of the three built-in variant labels). Every worked example is one
+`example-card` with the full step-by-step derivation in the body (each
+algebraic step its own `<math-block>`, per "no skipped steps") and the
+final boxed result in the card's `footer` slot; every chapter-end exercise
+follows the same one-card-one-question-one-complete-solution rule via
+`exercise-card` (numerical problems, "explain why" items) or `quiz-card`
+(multiple-choice, since the reveal — correct option plus its reasoning —
+still ships in the same card's `footer`, just visually set apart, never
+hidden). Chapter content is authored directly in Arabic (the textbook's
+only language) rather than run through `t()`; only the surrounding UI
+chrome (card type labels, breadcrumb, simulation control labels) stays
+bilingual through the existing `ar.json`/`en.json` dictionaries, so the
+language toggle still repaints the whole page without throwing — it just
+leaves the lesson prose in Arabic either way, same as a real bilingual
+textbook site would.
+
+### Interactive simulations (`src/simulations/`)
+
+Three chapter-specific simulations replace six of the textbook's static
+vector/orbit diagrams outright (rather than duplicating both a static image
+*and* an interactive version of the same figure) — each is a thin
+composition of `CanvasEngine` + `SimulationEngine` from the Phase 4 engine,
+built the same way any future chapter's simulations should be:
+
+- **`CircularMotionSim`** — uniform circular motion with live tangential
+  velocity (green, solid) and centripetal acceleration (red, dashed)
+  vectors, replacing Figures 1-1/2-1/3-1. Vectors are distinguished by
+  line style and a text label in addition to color (never color-alone).
+  Reuses `centripetalAcceleration`/`centripetalForce` from
+  `engine/physics/rotation.js` rather than re-deriving them.
+- **`KeplerOrbitSim`** — replaces Figures 4-1/5-1/6-1. A body orbits a
+  fixed focus on a true polar ellipse (`r(θ) = a(1-e²)/(1+e·cosθ)`) with
+  `dθ/dt = k/r²` for a constant `k` — the standard angular-momentum-
+  conservation result that makes the body numerically (not just visually)
+  sweep equal areas in equal times. A trailing shaded sector, built by
+  sampling the orbit path between the current angle and the angle at
+  `now - lag` (a small ring-buffer of `{time, unwrapped angle}` samples,
+  interpolated), makes Kepler's second law directly visible rather than
+  asserted.
+- **`AngularMomentumSim`** — a two-point-mass "spinning body" whose arm
+  radius is slider-controlled; angular momentum `L` is fixed at the last
+  reset, so `ω = L / I(r)` (via `momentOfInertia.pointMass` and
+  `angularMomentum` from `engine/physics/rotation.js`) rises automatically
+  as the arms are pulled in — the same mechanism as the textbook's diving
+  exercise (9-1, "explain why" #4) and the flywheel "did you know", made
+  interactive instead of only described.
+
+Each simulation exposes the same `running`/`start()`/`pause()`/`reset()`/
+`destroy()` shape as `SimulationEngine` (so `<sim-container>`'s existing
+play/pause/reset chrome drives it with no adapter code) plus an `onUpdate`
+callback that `src/chapter-1.js` wires to `<sim-value-display>` elements,
+and public setters (`setRadius`, `setOmega`, …) that `<sim-slider>`'s
+`sim-change` event calls directly — no new event-wiring pattern beyond what
+`design-system.html` already demonstrated for the Phase 3/4 components.
+
+### Verifying Chapter 1
+
+Checked with a throwaway Playwright harness against `vite preview`
+(same pattern as Phase 4, not committed): production build succeeds; all
+three simulations mount their canvas and free-run without a console error;
+slider input propagates to the physics and back out to the value displays
+with correct numbers (spot-checked against the formulas by hand); the
+language toggle flips `dir`/`lang` and every bilingual control's label with
+no error; and no new *visible* horizontal scroll on a 375px viewport (wide
+`<data-table>`s scroll within their own frame, which is by design — the
+`documentElement.scrollWidth` metric itself is not a reliable check on this
+codebase, since the off-canvas `<app-sidebar>`'s transform inflates it
+identically on the pre-existing home page). MathJax itself couldn't be
+verified rendering in this sandboxed environment (no route to the CDN) —
+`<math-block>`'s existing error handling was confirmed to fail gracefully
+rather than break the page.
+
 ## What's deliberately not here yet
 
-- No chapter content or navigation — sidebar/search "Chapters" entries are
-  category placeholders only, all marked "coming soon" on purpose.
-- No routing/build-per-chapter setup — decide this when Chapter 1 starts,
-  since it depends on how many chapters and how they're authored (hand-written
-  HTML vs. a content pipeline from the source PDFs in `assets/pdf/`).
+- No chapter-authoring pipeline from the source PDFs — Chapter 1 is
+  hand-written; revisit once a second chapter makes the common shape clear.
 - No test setup — added when there's non-trivial logic to test (physics
   simulation math, not UI chrome).

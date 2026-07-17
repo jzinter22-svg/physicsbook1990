@@ -22,7 +22,8 @@ function renderChapterGrid() {
         icon="${chapter.icon}"
         title-key="${chapter.titleKey}"
         desc-key="${chapter.descKey}"
-        locked
+        ${chapter.locked ? 'locked' : ''}
+        ${!chapter.locked && chapter.href ? `href="${chapter.href}"` : ''}
       ></chapter-card>
     `
   ).join('');

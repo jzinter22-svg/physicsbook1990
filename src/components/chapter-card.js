@@ -77,6 +77,10 @@ const style = css`
     background: var(--color-accent-soft);
     color: var(--color-accent);
   }
+  .badge--start {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+  }
   .badge svg {
     width: 0.9em;
     height: 0.9em;
@@ -86,6 +90,12 @@ const style = css`
     color: var(--color-text-muted);
     font-weight: 600;
   }
+  a.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
 `;
 
 /**
@@ -93,6 +103,7 @@ const style = css`
  *               desc-key="chapters.mechanics.desc" locked></chapter-card>
  * With no `domain`, renders as a neutral (non-categorical) card — used for the
  * "more chapters soon" tile so it never competes with the validated domain palette.
+ * Omit `locked` and set `href` to make the whole card a real link to the chapter.
  */
 class ChapterCard extends HTMLElement {
   constructor() {
@@ -116,19 +127,28 @@ class ChapterCard extends HTMLElement {
     const titleKey = this.getAttribute('title-key');
     const descKey = this.getAttribute('desc-key');
     const locked = this.hasAttribute('locked');
+    const href = this.getAttribute('href');
     const accent = domain ? `var(--color-domain-${domain})` : 'var(--color-text-muted)';
 
-    this.shadowRoot.innerHTML = `
-      <style>${style}</style>
+    const cardInner = `
       <div class="card" style="--card-accent:${accent}">
         <div class="icon-badge">${icon(iconName)}</div>
         <h3>${t(titleKey)}</h3>
         <p>${t(descKey)}</p>
         <div class="footer">
-          ${locked ? `<span class="badge">${icon('lock')}${t('nav.chapters.soon')}</span>` : '<span></span>'}
+          ${
+            locked
+              ? `<span class="badge">${icon('lock')}${t('nav.chapters.soon')}</span>`
+              : `<span class="badge badge--start">${icon('play')}${t('chapters.start')}</span>`
+          }
           <span class="progress-text">0%</span>
         </div>
       </div>
+    `;
+
+    this.shadowRoot.innerHTML = `
+      <style>${style}</style>
+      ${!locked && href ? `<a class="card-link" href="${href}">${cardInner}</a>` : cardInner}
     `;
   }
 }

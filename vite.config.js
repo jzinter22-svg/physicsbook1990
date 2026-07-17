@@ -13,6 +13,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         designSystem: resolve(__dirname, 'design-system.html'),
+        chapter1: resolve(__dirname, 'chapter-1.html'),
       },
     },
   },

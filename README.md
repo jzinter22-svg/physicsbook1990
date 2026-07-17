@@ -1,10 +1,10 @@
 # كتاب الطبيعيات التفاعلي — Interactive Physics Book
 
-Project foundation for an interactive, Arabic-first physics textbook: a
-design system, full RTL support, MathJax equation rendering, and a framework
-for interactive simulations. **No chapter content yet** — see
+An interactive, Arabic-first physics textbook: a design system, full RTL
+support, MathJax equation rendering, a framework for interactive
+simulations, and — as of Chapter 1 — real chapter content. See
 [`ARCHITECTURE.md`](./ARCHITECTURE.md) for how the pieces fit together
-before adding any.
+before extending it.
 
 ## Getting started
 
@@ -57,11 +57,25 @@ npm run preview   # preview the production build
   `<sim-formula-display>`, `<unit-label>`). No chapter/lesson content — just
   the engine future chapters will build on.
 
+- **Chapter 1 — الحركة الدائرية والدورانية (Circular & Rotational Motion)**
+  at `/chapter-1.html`: every section from 1-1 (تمهيد) through 9-1 (أسئلة
+  ومسائل الفصل), transcribed in full from the source textbook — circular
+  motion and centripetal force/acceleration, satellite orbits and Kepler's
+  three laws, rotational kinematics and moment of inertia, rotational
+  energy/work/power, and angular momentum. Every worked example and every
+  end-of-chapter question/problem is solved in full, one card per question
+  with no skipped steps. Three interactive simulations (uniform circular
+  motion, Kepler orbits sweeping equal areas, conservation of angular
+  momentum) replace six of the book's static figures, built on the Phase 4
+  engine; the rest of the book's diagrams are hand-drawn SVGs. Unlocked and
+  linked from the home page's chapter grid.
+
 See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the reasoning behind each
 piece, including several Shadow DOM / CSS cascade gotchas worth knowing
 before extending it.
 
 ## Reference material
 
-`assets/pdf/` holds the source physics textbook PDFs (Arabic and generic
-filenames) used as content reference for future chapter authoring.
+`assets/pdf/كتاب الطبيعيات.pdf` is the source physics textbook — the sole
+curriculum source for every chapter. (`assets/pdf/physics-book.pdf` is an
+empty placeholder, not a real source.)

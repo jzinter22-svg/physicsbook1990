@@ -1,7 +1,7 @@
 /*
-  Placeholder chapter catalogue — category names only, no lesson content.
-  Drives the homepage chapter-card grid and the search index. Every entry is
-  `locked: true` until real chapter authoring starts.
+  Chapter catalogue driving the homepage chapter-card grid and the search
+  index. An entry stays `locked: true` (no `href`) until that chapter has
+  been authored — Chapter 1 (mechanics) is the first to unlock.
 
   Domain/icon/color pairing intentionally stays within the 4-hue categorical
   set validated in tokens.css (see the comment there before adding a 5th).
@@ -13,7 +13,8 @@ export const CHAPTERS = [
     icon: 'compass',
     titleKey: 'chapters.mechanics.title',
     descKey: 'chapters.mechanics.desc',
-    locked: true,
+    locked: false,
+    href: '/chapter-1.html',
   },
   {
     id: 'thermo',
