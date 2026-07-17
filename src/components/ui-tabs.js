@@ -1,6 +1,8 @@
 import { defineOnce, css } from './utils.js';
 
 const style = css`
+  /* Shadow DOM doesn't inherit the light-DOM box-sizing reset from base.css. */
+  *, *::before, *::after { box-sizing: border-box; }
   :host {
     display: block;
   }

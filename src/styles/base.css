@@ -15,6 +15,11 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  /* The off-canvas sidebar (app-sidebar.js) sits fully off-screen via
+     inset-inline-start when closed — still extends the document's scrollable
+     area unless clipped here. Fixed-position descendants render fine despite
+     this; only the page's own horizontal scroll is what gets suppressed. */
+  overflow-x: hidden;
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
@@ -75,6 +80,61 @@ button, input, select, textarea {
   color: var(--color-text-on-accent);
 }
 
+/* Buttons — shared visual language for CTAs across the site. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: var(--fs-300);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-text-on-accent);
+  box-shadow: var(--shadow-md);
+}
+.btn--primary:hover {
+  background: var(--color-primary-hover);
+}
+.btn--ghost {
+  background: var(--glass-bg);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.btn--ghost:hover {
+  border-color: var(--color-primary);
+}
+
+.badge-pill {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: var(--fs-200);
+}
+
 /* Utility: visually-hidden but accessible to assistive tech */
 .visually-hidden {
   position: absolute;
@@ -105,12 +165,33 @@ button, input, select, textarea {
   top: var(--space-4);
 }
 
-/* Reduce motion for users who ask for it — important once simulations land */
+/*
+  Reduce motion for users who ask for it — either via OS preference or the
+  in-app Settings panel override (`data-motion="reduced"` on <html>, see
+  src/lib/motion.js). Both paths land on the same rule.
+*/
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  :root:not([data-motion='full']) {
+    scroll-behavior: auto;
+    --anim-play: paused;
+  }
+  :root:not([data-motion='full']) *,
+  :root:not([data-motion='full']) *::before,
+  :root:not([data-motion='full']) *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
   }
+}
+
+:root[data-motion='reduced'] {
+  scroll-behavior: auto;
+  --anim-play: paused;
+}
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
 }

@@ -70,12 +70,19 @@
   --color-info: var(--color-lab-violet-700);
   --color-info-soft: #f1ecff;
 
-  /* Domain accents — reserved for tagging future chapters by physics topic */
-  --color-domain-mechanics: var(--color-lab-cyan-600);
-  --color-domain-thermo: var(--color-lab-amber-700);
-  --color-domain-waves: var(--color-lab-violet-700);
-  --color-domain-electromag: var(--color-lab-green-700);
-  --color-domain-optics: var(--color-lab-red-700);
+  /*
+    Domain accents — categorical colors tagging chapters by physics topic.
+    This exact 4-hue set + order is validated (CVD-safe on the adjacent AND
+    all-pairs pairlist, both themes) via the dataviz skill's validator — do not
+    reorder or recolor without re-running it. A 5th slot (aqua, #1baf7a light /
+    #199e70 dark) passes the adjacent-pairlist but not all-pairs, so a 5th topic
+    should fold into "Other" rather than take a straight 5th hue; always pair
+    every domain color with an icon + text label, never color alone.
+  */
+  --color-domain-mechanics: #2a78d6;
+  --color-domain-electromag: #008300;
+  --color-domain-waves: #e87ba4;
+  --color-domain-thermo: #eda100;
 
   --shadow-color: 220 60% 12%;
   --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.08);
@@ -124,11 +131,20 @@
   --duration-fast: 120ms;
   --duration-normal: 220ms;
   --duration-slow: 400ms;
+  /*
+    Custom properties inherit across Shadow DOM boundaries even though rule
+    matching doesn't — this is how decorative CSS @keyframes animations inside
+    a component's shadow root (particles, orbit rings) stay reachable by the
+    reduced-motion setting in base.css. Reference it as
+    `animation-play-state: var(--anim-play, running);` on any looping animation.
+  */
+  --anim-play: running;
 
   /* ---- Layout ---- */
   --layout-max-width: 1200px;
   --layout-gutter: clamp(1rem, 3vw, 2.5rem);
   --header-height: 64px;
+  --sidebar-width: 264px;
 
   /* ---- Z-index scale ---- */
   --z-header: 100;
@@ -140,6 +156,17 @@
   --pattern-grid: linear-gradient(var(--color-bg-grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-bg-grid-line) 1px, transparent 1px);
   --pattern-grid-size: 24px 24px;
+
+  /* ---- Glassmorphism ---- */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-bg-strong: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: 18px;
+  --glass-shadow: 0 8px 32px hsl(210 60% 20% / 0.12);
+
+  /* Soft ambient glow blobs behind hero/lab sections */
+  --glow-primary: radial-gradient(circle, hsl(190 85% 55% / 0.35), transparent 70%);
+  --glow-accent: radial-gradient(circle, hsl(38 95% 62% / 0.3), transparent 70%);
 }
 
 /* ---- Semantic roles: dark mode ("lab console at night") ---- */
@@ -172,8 +199,22 @@
   --color-info: var(--color-lab-violet-300);
   --color-info-soft: rgba(198, 182, 255, 0.12);
 
+  /* Same validated 4-hue set, stepped for the dark surface (see :root comment). */
+  --color-domain-mechanics: #3987e5;
+  --color-domain-electromag: #008300;
+  --color-domain-waves: #d55181;
+  --color-domain-thermo: #c98500;
+
   --shadow-color: 220 60% 2%;
   --shadow-glow-primary: 0 0 0 3px hsl(190 90% 65% / 0.25);
+
+  --glass-bg: rgba(18, 27, 44, 0.55);
+  --glass-bg-strong: rgba(18, 27, 44, 0.75);
+  --glass-border: rgba(215, 224, 239, 0.12);
+  --glass-shadow: 0 8px 32px hsl(220 70% 2% / 0.45);
+
+  --glow-primary: radial-gradient(circle, hsl(190 90% 60% / 0.28), transparent 70%);
+  --glow-accent: radial-gradient(circle, hsl(38 95% 65% / 0.22), transparent 70%);
 }
 
 /* Respect system preference when the user hasn't chosen explicitly */

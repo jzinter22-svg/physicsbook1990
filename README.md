@@ -18,15 +18,26 @@ npm run preview   # preview the production build
 ## What's here
 
 - Vite + vanilla JS + native Web Components (no framework dependency).
-- Interactive Science Lab design system (`src/styles/tokens.css`).
+- Interactive Science Lab design system: glassmorphism, soft glow, a
+  CVD-validated categorical palette for chapter domains (`src/styles/tokens.css`).
+- A dashboard-style home page: sticky top nav, responsive sidebar (off-canvas
+  on mobile), hero section with an animated SVG illustration + floating
+  particles, chapter-card grid, progress section, command-palette search, and
+  a settings drawer.
 - Arabic (default, RTL) / English (LTR) language toggle.
-- Light/dark theme toggle.
+- Light/dark theme toggle, plus a reduced-motion override.
 - MathJax v3, lazy-loaded, with a `<math-block>` component.
-- Reusable UI components: `<app-header>`, `<app-nav>`, `<app-footer>`,
-  `<ui-card>`, `<ui-tabs>`, `<lab-callout>`, `<sim-container>`.
+- Reusable UI components: `<app-header>`, `<app-sidebar>`, `<app-footer>`,
+  `<app-search>`, `<settings-panel>`, `<ui-card>`, `<ui-tabs>`,
+  `<lab-callout>`, `<chapter-card>`, `<progress-ring>`, `<stat-tile>`,
+  `<sim-container>`.
 - A base `Simulation` class (`src/lib/simulation.js`) for future canvas-based
-  interactive physics simulations, plus a non-physics tech demo proving the
-  render/resize/controls pipeline works end to end.
+  interactive physics simulations, plus a non-physics tech demo (not mounted
+  on the home page) proving the render/resize/controls pipeline works.
+
+See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the reasoning behind each
+piece, including a few Shadow DOM and CSS Grid gotchas worth knowing before
+extending it.
 
 ## Reference material
 

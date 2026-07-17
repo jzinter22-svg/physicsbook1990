@@ -1,0 +1,136 @@
+import { defineOnce, css } from './utils.js';
+import { icon } from './icons.js';
+import { t } from '../lib/i18n.js';
+
+const style = css`
+  /* Shadow DOM doesn't inherit the light-DOM box-sizing reset from base.css. */
+  *, *::before, *::after { box-sizing: border-box; }
+  :host {
+    display: block;
+    --accent: var(--card-accent, var(--color-text-muted));
+  }
+  .card {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    background: var(--glass-bg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: transform var(--duration-normal) var(--ease-standard),
+      box-shadow var(--duration-normal) var(--ease-standard),
+      border-color var(--duration-normal) var(--ease-standard);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 4px;
+    background: var(--accent);
+  }
+  :host(:hover) .card,
+  :host(:focus-within) .card {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md), 0 0 0 1px var(--accent);
+  }
+  .icon-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: grid;
+    place-items: center;
+    background: var(--accent);
+    color: var(--color-white);
+    font-size: 1.3rem;
+  }
+  h3 {
+    margin: 0;
+    font-size: var(--fs-500);
+  }
+  p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--fs-300);
+    line-height: var(--lh-normal);
+    flex: 1;
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--fs-100);
+    font-weight: 700;
+    padding: 3px var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+  .badge svg {
+    width: 0.9em;
+    height: 0.9em;
+  }
+  .progress-text {
+    font-size: var(--fs-200);
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+`;
+
+/**
+ * <chapter-card domain="mechanics" icon="compass" title-key="chapters.mechanics.title"
+ *               desc-key="chapters.mechanics.desc" locked></chapter-card>
+ * With no `domain`, renders as a neutral (non-categorical) card — used for the
+ * "more chapters soon" tile so it never competes with the validated domain palette.
+ */
+class ChapterCard extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback() {
+    this._render();
+    this._onLangChange = () => this._render();
+    document.addEventListener('langchange', this._onLangChange);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('langchange', this._onLangChange);
+  }
+
+  _render() {
+    const domain = this.getAttribute('domain');
+    const iconName = this.getAttribute('icon') ?? 'beaker';
+    const titleKey = this.getAttribute('title-key');
+    const descKey = this.getAttribute('desc-key');
+    const locked = this.hasAttribute('locked');
+    const accent = domain ? `var(--color-domain-${domain})` : 'var(--color-text-muted)';
+
+    this.shadowRoot.innerHTML = `
+      <style>${style}</style>
+      <div class="card" style="--card-accent:${accent}">
+        <div class="icon-badge">${icon(iconName)}</div>
+        <h3>${t(titleKey)}</h3>
+        <p>${t(descKey)}</p>
+        <div class="footer">
+          ${locked ? `<span class="badge">${icon('lock')}${t('nav.chapters.soon')}</span>` : '<span></span>'}
+          <span class="progress-text">0%</span>
+        </div>
+      </div>
+    `;
+  }
+}
+
+defineOnce('chapter-card', ChapterCard);

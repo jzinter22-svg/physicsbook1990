@@ -1,8 +1,15 @@
 import './app-header.js';
-import './app-nav.js';
+import './app-sidebar.js';
 import './app-footer.js';
 import './ui-card.js';
 import './ui-tabs.js';
 import './lab-callout.js';
 import './math-block.js';
 import './sim-container.js';
+import './chapter-card.js';
+import './progress-ring.js';
+import './stat-tile.js';
+import './particle-field.js';
+import './hero-visual.js';
+import './app-search.js';
+import './settings-panel.js';

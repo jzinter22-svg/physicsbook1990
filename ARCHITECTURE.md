@@ -19,27 +19,40 @@ the *why* behind the structure — read it before adding Chapter 1 content.
 ## Directory layout
 
 ```
-index.html                 Entry HTML (also the homepage / foundation demo)
+index.html                 Entry HTML / the home page
 src/
-  main.js                  App bootstrap: theme, i18n, component registration
+  main.js                  App bootstrap: theme, i18n, motion, chapter grid, progress stats
   styles/
-    tokens.css             Design tokens (color, type, spacing, motion, shape)
-    base.css                Reset + base typography
-    layout.css              Responsive grid/layout primitives
+    tokens.css             Design tokens (color, type, spacing, motion, shape, glass, glow)
+    base.css                Reset + base typography + buttons + reduced-motion wiring
+    layout.css              Dashboard shell (topbar+sidebar+content) + responsive grid
     rtl.css                  The few things CSS logical properties can't express
   lib/
     theme.js                 Light/dark theme, persisted + system-aware
     i18n.js                   ar/en strings, drives <html lang/dir>
+    motion.js                  Reduced-motion override, drives --anim-play token
     mathjax.js                MathJax v3 loader + typesetMath()
     simulation.js              Base class for canvas-driven simulations
-    demo-simulation.js          Tech-demo subclass (NOT chapter content)
+    demo-simulation.js          Tech-demo subclass (NOT chapter content, not mounted)
+    progress.js                 localStorage-backed chapter-completion stats
   locales/
     ar.json, en.json           UI string dictionaries
+  data/
+    chapters.js                 Placeholder chapter catalogue (category names only)
   components/
-    app-header.js, app-nav.js, app-footer.js
+    icons.js                    Shared inline-SVG icon set
+    app-header.js                Sticky top nav: sidebar toggle, search, theme/lang/settings
+    app-sidebar.js                Off-canvas (mobile) / sticky (desktop) primary nav
+    app-footer.js
+    app-search.js                 Command-palette style chapter search overlay
+    settings-panel.js             Theme/language/motion drawer
     ui-card.js, ui-tabs.js, lab-callout.js
-    math-block.js               Wraps TeX/MathML, auto-typesets on mutation
+    chapter-card.js                Locked/coming-soon chapter tile
+    progress-ring.js, stat-tile.js  Single-value meter / KPI tile (see Progress UI below)
+    particle-field.js, hero-visual.js  Decorative hero SVG + floating particles
+    math-block.js                Wraps TeX/MathML, auto-typesets on mutation
     sim-container.js             Chrome (viewport + start/pause/reset) for a Simulation
+    utils.js                      defineOnce() + no-op css/html tag helpers
     index.js                     Registers every component
 ```
 
@@ -61,8 +74,37 @@ Rules for future contributors:
   markup. Light-DOM text uses `data-i18n="key"` and is re-rendered by
   `applyLang()` in `i18n.js`. **Components with a Shadow DOM cannot rely on
   `data-i18n`** (the global scanner can't reach across the shadow boundary) —
-  they import `t()` directly and re-render on the `langchange` event
-  (see `app-header.js`, `app-nav.js`, `lab-callout.js` for the pattern).
+  they import `t()` directly and re-render on the `langchange` event (see
+  `app-header.js`, `app-sidebar.js`, `lab-callout.js` for the pattern).
+
+## Shadow DOM gotchas (read before adding a component)
+
+Every component in `src/components/` renders into a Shadow DOM. Two easy-to-miss
+consequences, both discovered and fixed while building the home page:
+
+1. **The light-DOM `box-sizing: border-box` reset in `base.css` does not reach
+   into shadow roots.** Without repeating it, elements default to the UA
+   stylesheet's `content-box`, which silently adds padding on top of any
+   `width`/`height` you set (this broke `app-sidebar`'s height calculation).
+   Every component's `css` template therefore opens with its own
+   `*, *::before, *::after { box-sizing: border-box; }` — keep that line when
+   copying a component as a starting point for a new one.
+2. **CSS custom properties inherit across the shadow boundary; selector rules
+   do not.** Use custom properties (like `--anim-play`, see Motion below) to
+   reach into a shadow tree from `base.css`; don't assume an outer rule like
+   `:root[data-motion='reduced'] *` will touch anything inside a component's
+   own `<style>`.
+
+A third, non-shadow-specific gotcha that cost real debugging time: **a bare
+`1fr` grid track (or an implicit `auto` track) has an automatic minimum sized
+to its content**, so a long heading or an unwrapped row can force a grid
+container — and everything up the ancestor chain — wider than the viewport.
+Every `fr` track in this codebase is written `minmax(0, 1fr)`, and grid/flex
+items that shouldn't propagate their content size upward get an explicit
+`min-width: 0` (see `.app-shell`, `.hero`, `.grid`, `.stat-row` in
+`layout.css`). `body` also carries `overflow-x: hidden` as a last line of
+defense, since the off-canvas sidebar's closed (off-screen) position still
+extends the document's scrollable width otherwise.
 
 ## MathJax
 
@@ -83,22 +125,82 @@ MathJax output is forced `direction: ltr` even inside Arabic paragraphs
 
 - **Brand color** — cyan/teal (`--color-primary`), evoking lab
   instrumentation, with amber as the energy/accent color.
-- **Domain accents** (`--color-domain-*`) are reserved, unused tokens for
-  tagging future chapters by physics topic (mechanics, thermo, waves,
-  electromagnetism, optics) — wire these up when chapter navigation exists.
+- **Domain accents** (`--color-domain-*`) tag chapters by physics topic —
+  mechanics, thermo, waves, electromagnetism. This exact 4-hue set and order
+  is CVD-validated (colorblind-safe on both the adjacent *and* all-pairs
+  pairlist, light and dark) via the dataviz skill's `validate_palette.js`;
+  don't reorder, recolor, or add a 5th hue without re-running it — a 5th
+  topic should fold into "Other" (see the home page's neutral "more chapters
+  soon" tile) rather than take a straight 5th color. Every domain-colored
+  element also carries an icon + text label — identity is never color-alone.
 - Light and dark themes are both first-class (`data-theme="dark"` on
   `<html>`, toggled by `src/lib/theme.js`, defaulting to system preference).
-- Typography: Tajawal for Arabic, Inter for Latin text, JetBrains Mono
-  reserved for future code/data readouts.
-- A subtle graph-paper grid pattern (`.lab-texture`) is available for
-  "lab notebook" framing — used sparingly, not on every section.
+- **Glassmorphism tokens** (`--glass-bg`, `--glass-border`, `--glass-blur`,
+  `--glass-shadow`) and **soft-glow gradients** (`--glow-primary`,
+  `--glow-accent`) each have light/dark variants — use the `.glass` utility
+  class or reference the tokens directly, never hard-code an rgba blur.
+- Typography: Tajawal for Arabic, Inter for Latin text, JetBrains Mono for
+  numeric readouts (progress ring / stat tile values).
+- A subtle graph-paper grid pattern (`.lab-texture`) and ambient glow blobs
+  (`.glow-field`) frame the hero section — used sparingly, not everywhere.
 
 ## Responsive layout
 
 Mobile-first. Shared breakpoints: `640 / 768 / 1024 / 1280`px, used
 consistently across `layout.css` and components (don't invent new
-breakpoints ad hoc). `.sim-frame` gives simulation containers a stable,
-resizable aspect-ratio box on any viewport.
+breakpoints ad hoc). The home page is a dashboard shell: a sticky topbar
+(`app-header`, full width) above a sidebar + content two-column grid at
+`>=1024px`, collapsing to a single column with an off-canvas sidebar drawer
+below that. `.sim-frame` gives simulation containers a stable, resizable
+aspect-ratio box on any viewport.
+
+### Sidebar stacking note
+
+`app-sidebar` creates its own mobile backdrop as a `<div>` appended straight
+to `document.body` (not inside its shadow root), so the drawer can sit above
+dimmed page content while everything else stays untouched. Because that
+backdrop is appended after the sidebar in DOM order, it would otherwise win
+equal-z-index paint order and render over the drawer — the sidebar's mobile
+`:host` rule uses `z-index: var(--z-modal)` (above `--z-overlay`) specifically
+to stay on top regardless of DOM position. If you add another top-level
+overlay that manages its own backdrop this way, give it the same treatment.
+
+## Motion & reduced motion
+
+`src/lib/motion.js` tracks a `reduced | full` preference (persisted +
+system-aware, same pattern as `theme.js`), applied as `data-motion` on
+`<html>`. `base.css` zeroes out animation/transition durations for light-DOM
+elements when reduced; shadow-DOM components with their own `@keyframes`
+(`particle-field.js`, `hero-visual.js`) reference
+`animation-play-state: var(--anim-play, running)` instead, since that custom
+property — unlike a selector rule — correctly inherits into shadow roots.
+Any new looping CSS animation inside a component must do the same.
+
+## Search & Settings
+
+Both are overlay components toggled via plain `document` `CustomEvent`s
+(`open-search`, `open-settings`, `toggle-sidebar`) rather than direct method
+calls, so any button anywhere (topbar, sidebar) can trigger them without an
+import/reference to the overlay element itself.
+
+- `<app-search>` is a command-palette-style dialog (`/` shortcut) filtering
+  `src/data/chapters.js` client-side. Every result is locked/"coming soon" —
+  it's a real, working search over the site's placeholder structure, not a
+  mock.
+- `<settings-panel>` is a slide-in drawer exposing the same theme/language
+  controls as the topbar plus the motion-reduction toggle, as segmented
+  controls bound to `theme.js` / `i18n.js` / `motion.js`.
+
+## Progress UI
+
+`src/lib/progress.js` stores completed chapter IDs in `localStorage` and
+exposes `computeStats(chapters)`. Nothing can be marked complete yet (no
+chapter content exists), so the home page's progress ring and stat tiles
+always show `0` / `0%` today — the storage shape and API are ready for a
+future chapter page to call `markComplete(id)`. `<progress-ring>` is a
+single-ratio meter (per the dataviz skill's form heuristic: "a single ratio
+against a limit → meter, same-ramp track") — its track and fill are both
+drawn from the `--color-primary` ramp, never two competing hues.
 
 ## Simulation framework
 
@@ -108,15 +210,17 @@ via `ResizeObserver`, and a `requestAnimationFrame` loop with clamped delta
 time. Subclasses only implement `update(dt)` and `render(ctx)`.
 
 `<sim-container>` is the reusable UI chrome around a `Simulation` (viewport +
-start/pause/reset controls). `DemoSimulation` on the homepage is a **tech
-demo only** — an oscilloscope-style sweep proving the render loop, resize
-handling, and controls work. It is explicitly not physics content and should
-be removed or replaced once real chapter simulations exist.
+start/pause/reset controls). `DemoSimulation` (`src/lib/demo-simulation.js`)
+is a **tech-demo-only** oscilloscope sweep that proved the render loop,
+resize handling, and controls during foundation testing — it is not mounted
+on the home page and is not physics content; keep it as a reference for the
+`Simulation` subclassing pattern, or delete it once a real chapter
+simulation exists.
 
 ## What's deliberately not here yet
 
-- No chapter content or navigation — `nav.chapters` in the header links
-  nowhere and is marked "coming soon" on purpose.
+- No chapter content or navigation — sidebar/search "Chapters" entries are
+  category placeholders only, all marked "coming soon" on purpose.
 - No routing/build-per-chapter setup — decide this when Chapter 1 starts,
   since it depends on how many chapters and how they're authored (hand-written
   HTML vs. a content pipeline from the source PDFs in `assets/pdf/`).
