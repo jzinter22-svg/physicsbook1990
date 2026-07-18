@@ -98,6 +98,10 @@ export class AngularMomentumSim {
     this.engine.destroy();
   }
 
+  setSpeed(value) {
+    this.sim.timeScale = value;
+  }
+
   setRadius(value) {
     this.r = value;
     this._render();

@@ -87,6 +87,10 @@ export class CircularMotionSim {
     this.engine.destroy();
   }
 
+  setSpeed(value) {
+    this.sim.timeScale = value;
+  }
+
   setRadius(value) {
     this.radius = value;
     this._render();

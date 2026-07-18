@@ -96,6 +96,10 @@ export class KeplerOrbitSim {
     this.engine.destroy();
   }
 
+  setSpeed(value) {
+    this.sim.timeScale = value;
+  }
+
   setEccentricity(value) {
     this.e = value;
     this._render();

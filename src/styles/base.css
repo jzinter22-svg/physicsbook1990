@@ -29,6 +29,51 @@ body {
     color var(--duration-normal) var(--ease-standard);
 }
 
+/*
+  A barely-there physics identity — professional scientific branding, not
+  decorative animation (see the calm-UI rebuild notes in ARCHITECTURE.md).
+  A handful of scattered, low-opacity dots ("stars") drift one tile-width
+  over four minutes — far too slow to consciously perceive as motion, only
+  registering as "not a completely static page" out of the corner of the
+  eye. It's a single `background-image` on a fixed pseudo-element behind
+  everything: no JS, no canvas, no DOM nodes, GPU-cheap (a composited
+  `background-position` animation). Every card in the design system has a
+  solid (non-transparent) background, so this layer is only ever visible in
+  the page's own margins and gaps between cards — never behind text, so it
+  cannot reduce reading contrast no matter how it's tuned. If that ever
+  stops being true for some future layout, this is the first thing to cut.
+*/
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.4px 1.4px at 12% 22%, var(--color-starfield-dot), transparent 60%),
+    radial-gradient(1px 1px at 32% 68%, var(--color-starfield-dot), transparent 60%),
+    radial-gradient(1.6px 1.6px at 58% 12%, var(--color-starfield-dot), transparent 60%),
+    radial-gradient(1px 1px at 74% 46%, var(--color-starfield-dot), transparent 60%),
+    radial-gradient(1.2px 1.2px at 88% 78%, var(--color-starfield-dot), transparent 60%),
+    radial-gradient(1px 1px at 6% 88%, var(--color-starfield-dot), transparent 60%),
+    radial-gradient(1.4px 1.4px at 46% 38%, var(--color-starfield-dot), transparent 60%),
+    radial-gradient(1px 1px at 94% 30%, var(--color-starfield-dot), transparent 60%);
+  background-size: 900px 900px;
+  background-repeat: repeat;
+  animation: starfield-drift 240s linear infinite;
+  animation-play-state: var(--anim-play, running);
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes starfield-drift {
+  from { background-position: 0 0; }
+  to { background-position: 900px 900px; }
+}
+
 /* The Arabic UI is the primary language; Latin text (formulas, code) still
    needs its own font so numerals and Latin symbols don't inherit Arabic glyph shapes. */
 :lang(en) {

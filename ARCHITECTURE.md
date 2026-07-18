@@ -710,6 +710,100 @@ sim's actual internal state (`theta`/`r`) before and after a pointer
 sequence computed from that same state, not just by asserting the code
 runs; the angular-momentum bug above was only caught because of that.
 
+## Building a simulation for a new chapter
+
+A firm rule going forward: **only build a simulation for a concept an
+actual, written lesson needs.** Don't build ahead for topics (waves,
+optics, fields, ...) that don't have chapter content yet — an
+unreferenced simulation has no page to live on, no lesson context to be
+correct *for*, and nothing to verify it against. What follows is the
+pattern the three Chapter 1 simulations share, so the next chapter that
+needs one doesn't have to invent the wiring from scratch.
+
+**1. One class per concept, in `src/simulations/<name>-sim.js`.** Compose
+it from existing engine pieces — don't reach for a new rendering
+technology per simulation:
+
+- `CanvasEngine` (`src/engine/canvas-engine.js`) for the world-coordinate,
+  Y-up drawing surface. Pick `pixelsPerUnit` so the scene's natural size
+  (an orbit radius, a spring's rest length) fills most of the frame.
+- `SimulationEngine` (`src/engine/simulation-engine.js`) for the
+  fixed-timestep physics loop. Store it as `this.sim`; every simulation
+  class exposes the same `running` getter and `start()`/`pause()`/
+  `reset()`/`destroy()` methods by simply delegating to `this.sim`'s
+  methods of the same name — this is what lets `<sim-container>` drive
+  any of them with zero per-simulation adapter code.
+- The relevant pure-function formula module under `src/engine/physics/`
+  (`rotation.js`, `motion.js`, `energy.js`, ...) for the actual physics —
+  never re-derive a formula inline that already exists there.
+
+**2. Expose tunable parameters as plain setter methods** (`setRadius`,
+`setEccentricity`, ...) that mutate state and re-render. Pair each with a
+`<sim-slider>` in the chapter HTML, wired in `src/chapter-<n>.js` via its
+`sim-change` event — never bind a raw `<input type="range">` by hand.
+
+**3. Make at least one part of the scene directly draggable** if the
+concept has an obvious "thing to grab" (an orbiting body, a mass on a
+spring, a projectile's launch point) — dragging teaches faster than a
+slider alone. Use `attachDrag` (`src/engine/interactions/drag.js`) on
+`this.engine.canvas`:
+- `hitTest(event)`: convert `event.clientX/Y` via
+  `this.engine.clientToWorld(...)` and check distance to the draggable
+  point in world space (0.35–0.4 world units has worked well as a
+  forgiving-but-not-sloppy grab tolerance).
+- **Pause the relevant physics advance while `_dragging` is true** — every
+  one of the three existing sims does this, and the angular-momentum one
+  originally didn't; at higher speeds the target moved out from under the
+  pointer between `pointerdown` and the first `pointermove`, which is a
+  real usability failure, not just a test artifact (see the Phase 6
+  postmortem above). Don't repeat that mistake in a new one.
+- Resume normal motion on `onEnd`.
+
+**4. Add a speed control** — `<sim-speed-control speeds="0.25,0.5,1,2">` —
+and forward its `sim-speed-change` event to a `setSpeed(value)` method
+that just does `this.sim.timeScale = value`. This is the same three lines
+in every simulation class; there's no reason to skip it.
+
+**5. Add a live formula readout** with `<sim-formula-display
+template="...">` showing the governing equation with substituted numbers.
+Set the `template` attribute **once**, at mount time, not on every
+update — only write `.values` on each frame. Even that has to be
+throttled in the mounting code (`src/chapter-<n>.js`), not inside the
+simulation class itself, to roughly 5 updates/second:
+
+```js
+function throttled(fn, intervalMs) {
+  let last = 0;
+  return (...args) => {
+    const now = performance.now();
+    if (now - last < intervalMs) return;
+    last = now;
+    fn(...args);
+  };
+}
+```
+
+This exists because `<sim-formula-display>` re-typesets through MathJax on
+every `.values` write, and MathJax is far too expensive to run once per
+animation frame (~60/s) — throttling only the formula text, never the
+canvas's own render loop, is what keeps the simulation itself at full
+frame rate while the equation still reads as "live" to a student.
+
+**6. Labels and measurements belong on the canvas, not just beside it.**
+Draw the current value of the quantity the student is manipulating
+directly next to the relevant line/point in the scene (e.g. "r = 1.5 m"
+along a radius line) in addition to the `<sim-value-display>` readouts
+below it — seeing the number attached to the thing it measures, right
+where the thing is, is what makes the visualization teach rather than
+decorate.
+
+**7. Wire it all up in `src/chapter-<n>.js`, not inside the simulation
+class.** The simulation class only knows physics and rendering; DOM
+lookups, event wiring, and the throttled formula updates all live in the
+chapter's own bootstrap script, mounted inside
+`customElements.whenDefined('sim-container').then(...)`, exactly as
+`chapter-1.js` does for its three sims.
+
 ## What's deliberately not here yet
 
 - No chapter-authoring pipeline from the source PDFs — Chapter 1 is

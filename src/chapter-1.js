@@ -64,6 +64,7 @@ function mountCircularMotionSim() {
   radiusSlider?.addEventListener('sim-change', (event) => sim.setRadius(event.detail.value));
   omegaSlider?.addEventListener('sim-change', (event) => sim.setOmega(event.detail.value));
   document.getElementById('cm-mass')?.addEventListener('sim-change', (event) => sim.setMass(event.detail.value));
+  document.getElementById('cm-speed')?.addEventListener('sim-speed-change', (event) => sim.setSpeed(event.detail.value));
 
   sim.start();
 }
@@ -94,6 +95,7 @@ function mountKeplerOrbitSim() {
   };
 
   document.getElementById('kp-ecc')?.addEventListener('sim-change', (event) => sim.setEccentricity(event.detail.value));
+  document.getElementById('kp-speed')?.addEventListener('sim-speed-change', (event) => sim.setSpeed(event.detail.value));
 
   sim.start();
 }
@@ -129,6 +131,7 @@ function mountAngularMomentumSim() {
   };
 
   radiusSlider?.addEventListener('sim-change', (event) => sim.setRadius(event.detail.value));
+  document.getElementById('am-speed')?.addEventListener('sim-speed-change', (event) => sim.setSpeed(event.detail.value));
 
   sim.start();
 }

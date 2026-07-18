@@ -46,6 +46,9 @@
   --color-bg-raised: var(--color-white);
   --color-bg-sunken: #e7edf7;
   --color-bg-grid-line: rgba(11, 18, 32, 0.05);
+  /* The barely-there starfield background (base.css) — deliberately subtle,
+     see the comment there before increasing this. */
+  --color-starfield-dot: rgba(11, 18, 32, 0.14);
 
   --color-text: var(--color-ink-900);
   --color-text-muted: var(--color-ink-600);
@@ -189,6 +192,9 @@
   --color-bg-raised: var(--color-ink-900);
   --color-bg-sunken: var(--color-ink-800);
   --color-bg-grid-line: rgba(215, 224, 239, 0.06);
+  /* Slightly brighter than the light-mode dot: small pale dots read as
+     faint stars against a dark background, which is exactly the point. */
+  --color-starfield-dot: rgba(215, 224, 239, 0.18);
 
   --color-text: var(--color-ink-50);
   --color-text-muted: var(--color-ink-300);

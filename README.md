@@ -22,7 +22,11 @@ npm run preview   # preview the production build
   CVD-validated categorical palette for chapter domains (`src/styles/tokens.css`).
   All navigation (Home, Chapters, Search, Theme, Language) lives in one
   collapsible sidebar, off-canvas at every breakpoint — nothing else is
-  permanently docked on screen.
+  permanently docked on screen. A barely-there physics-identity background
+  (a handful of low-opacity dots drifting one screen-width every four
+  minutes, pure CSS, no JS/canvas) sits behind every page — since every
+  card has a solid background, it's only ever visible in the margins, never
+  behind text.
 - A single-focus home page: one hero (title, one line, one CTA) and the
   chapter grid — no competing panels.
 - Arabic (default, RTL) / English (LTR) language toggle.
@@ -64,14 +68,21 @@ npm run preview   # preview the production build
   motion and centripetal force/acceleration, satellite orbits and Kepler's
   three laws, rotational kinematics and moment of inertia, rotational
   energy/work/power, and angular momentum. Every worked example and every
-  end-of-chapter question/problem is solved in full, one card per question
-  with no skipped steps. Three interactive, directly draggable simulations
-  (uniform circular motion, Kepler orbits sweeping equal areas, conservation
-  of angular momentum) replace six of the book's static figures, each with a
-  live-updating formula readout; the rest of the book's diagrams are
-  hand-drawn SVGs. Supplementary asides ("did you know?", "remember") are
-  collapsed by default so the lesson's core flow stays the one thing in
-  focus. Unlocked and linked from the home page's chapter grid.
+  end-of-chapter question/problem walks through the full teacher-beside-a-
+  weak-student sequence — what each symbol/given means, why any unit
+  conversion is needed and the conversion itself, every algebra and
+  arithmetic step, a highlighted final answer — never jumping straight
+  from a formula to a number. Three interactive, directly draggable
+  simulations (uniform circular motion, Kepler orbits sweeping equal areas,
+  conservation of angular momentum) replace six of the book's static
+  figures, each with speed control and a live-updating formula readout; the
+  rest of the book's diagrams are hand-drawn SVGs. Supplementary asides
+  ("did you know?", "remember") are collapsed by default so the lesson's
+  core flow stays the one thing in focus. Unlocked and linked from the home
+  page's chapter grid. `ARCHITECTURE.md` documents the reusable pattern
+  behind these three simulations so a future chapter can add its own
+  without reinventing the wiring — built only when a lesson actually needs
+  one, never speculatively for a topic that isn't written yet.
 
 See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the reasoning behind each
 piece, including several Shadow DOM / CSS cascade gotchas worth knowing
