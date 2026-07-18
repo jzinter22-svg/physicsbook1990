@@ -13,13 +13,17 @@ const style = css`
     Off-canvas by default (Priority 3): a page's table of contents used to
     sit as a permanently-visible sticky column beside the lesson, eating
     into its reading width on desktop. It's now a drawer — hidden until the
-    tab is pressed, sliding in from the *end* edge (opposite app-sidebar's
-    start-edge drawer, so the two never visually collide), auto-closing the
-    moment a section link is picked.
+    tab is pressed, auto-closing the moment a section link is picked.
+
+    Anchored to the physical left edge, not a logical inset-inline-*
+    property — matching <app-sidebar>'s drawer (see its own comment) so both
+    of the app's navigation drawers behave identically regardless of
+    Arabic/English direction, and so the rounded corner below stays on the
+    correct (content-facing) edge in either language.
   */
   .tab {
     position: fixed;
-    inset-inline-end: 0;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
     z-index: var(--z-overlay);
@@ -27,9 +31,12 @@ const style = css`
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-3) var(--space-3);
-    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    /* Rounded on the right (content-facing) edge only — the left edge sits
+       flush against the viewport boundary, where a round corner would just
+       leak a sliver of background through. */
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
     border: 1px solid var(--glass-border);
-    border-inline-end: none;
+    border-left: none;
     background: var(--glass-bg-strong);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -57,22 +64,23 @@ const style = css`
   .panel {
     position: fixed;
     inset-block: 0;
-    inset-inline-end: -320px;
-    width: min(300px, 85vw);
+    left: -340px;
+    width: min(320px, 88vw);
     z-index: var(--z-modal);
     background: var(--glass-bg-strong);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-start-end-radius: var(--radius-lg);
-    border-end-end-radius: var(--radius-lg);
-    border-inline-start: 1px solid var(--glass-border);
+    /* Rounded right (content-facing) corners only — see the .tab comment above. */
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    border-right: 1px solid var(--glass-border);
     box-shadow: var(--shadow-float);
-    transition: inset-inline-end var(--duration-normal) var(--ease-standard);
+    transition: left var(--duration-normal) var(--ease-standard);
     padding: var(--space-5);
     overflow-y: auto;
   }
   :host([open]) .panel {
-    inset-inline-end: 0;
+    left: 0;
   }
   .head {
     display: flex;

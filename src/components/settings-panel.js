@@ -7,35 +7,35 @@ const style = css`
   /* Shadow DOM doesn't inherit the light-DOM box-sizing reset from base.css. */
   *, *::before, *::after { box-sizing: border-box; }
   :host {
-    position: fixed;
-    inset: 0;
-    z-index: var(--z-modal);
-    display: none;
-  }
-  :host([open]) {
     display: block;
   }
-  .backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(6, 11, 18, 0.5);
-  }
+  /*
+    Same drawer pattern as <app-sidebar>/<page-toc>: physically anchored to
+    the left edge (not a logical inset-inline-* property, and not a
+    display:none/block toggle — a real left transition is what makes this
+    actually slide instead of just fading in at a fixed position), a light
+    backdrop instead of a dark fullscreen one, and rounded corners only on
+    the content-facing (right) edge.
+  */
   .panel {
     position: fixed;
     inset-block: 0;
-    inset-inline-end: 0;
-    width: min(340px, 90vw);
-    background: var(--color-bg-raised);
-    border-inline-start: 1px solid var(--color-border);
-    box-shadow: var(--shadow-lg);
+    left: -340px;
+    width: min(320px, 88vw);
+    z-index: var(--z-modal);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-right: 1px solid var(--glass-border);
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    box-shadow: var(--shadow-float);
     display: flex;
     flex-direction: column;
-    transform: translateX(0);
-    animation: slide-in var(--duration-normal) var(--ease-standard);
+    transition: left var(--duration-normal) var(--ease-standard);
   }
-  @keyframes slide-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  :host([open]) .panel {
+    left: 0;
   }
   .head {
     display: flex;
@@ -51,14 +51,22 @@ const style = css`
   .close-btn {
     appearance: none;
     border: 1px solid var(--color-border);
-    background: var(--color-bg-raised);
+    background: none;
     border-radius: var(--radius-pill);
     width: 44px;
     height: 44px;
     display: grid;
     place-items: center;
     cursor: pointer;
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
+  }
+  .close-btn:hover {
     color: var(--color-text);
+    border-color: var(--color-primary);
+    transform: scale(1.06);
   }
   .body {
     padding: var(--space-5);
@@ -125,7 +133,6 @@ class SettingsPanel extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.innerHTML = `
       <style>${style}</style>
-      <div class="backdrop"></div>
       <div class="panel" role="dialog" aria-modal="true">
         <div class="head">
           <h2 data-i18n="settings.title"></h2>
@@ -141,9 +148,27 @@ class SettingsPanel extends HTMLElement {
     `;
 
     this._motionGroup = this.shadowRoot.getElementById('motion-group');
-
     this.shadowRoot.getElementById('close-btn').addEventListener('click', () => this.close());
-    this.shadowRoot.querySelector('.backdrop').addEventListener('click', () => this.close());
+
+    // A light scrim, not a fullscreen dark overlay — same fix as
+    // <app-sidebar>/<page-toc>'s backdrops, and for the same reason: a real
+    // light-DOM element (not a shadow-root child) is what lets it sit above
+    // the rest of the page reliably.
+    this._backdrop = document.createElement('div');
+    this._backdrop.setAttribute('aria-hidden', 'true');
+    Object.assign(this._backdrop.style, {
+      position: 'fixed',
+      inset: '0',
+      background: 'rgba(15, 23, 42, 0.1)',
+      backdropFilter: 'blur(1px)',
+      WebkitBackdropFilter: 'blur(1px)',
+      opacity: '0',
+      pointerEvents: 'none',
+      transition: 'opacity 220ms ease',
+      zIndex: 'var(--z-overlay)',
+    });
+    this._backdrop.addEventListener('click', () => this.close());
+    document.body.appendChild(this._backdrop);
 
     this._onOpenRequest = () => this.open();
     this._onKeydown = (event) => {
@@ -164,14 +189,19 @@ class SettingsPanel extends HTMLElement {
     document.removeEventListener('keydown', this._onKeydown);
     document.removeEventListener('langchange', this._onLangChange);
     document.removeEventListener('motionchange', this._onMotionChange);
+    this._backdrop.remove();
   }
 
   open() {
     this.setAttribute('open', '');
+    this._backdrop.style.opacity = '1';
+    this._backdrop.style.pointerEvents = 'auto';
   }
 
   close() {
     this.removeAttribute('open');
+    this._backdrop.style.opacity = '0';
+    this._backdrop.style.pointerEvents = 'none';
   }
 
   _render() {

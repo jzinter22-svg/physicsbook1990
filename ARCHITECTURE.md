@@ -973,6 +973,53 @@ confirmed a canvas's fixed `pixelsPerUnit` scale still shows the full
 scene un-clipped at default slider values, including the max-radius
 slider position.
 
+## Phase 9 — global drawer consistency pass (settings-panel was missed)
+
+A follow-up global fix, prompted by re-reading the three navigation-style
+drawers (`app-sidebar`, `page-toc`, `settings-panel`) side by side against
+an explicit "no fullscreen dark overlay, rounded corner on the
+content-facing edge" spec.
+
+**`settings-panel.js` had never been touched in the Aurora pass.** It still
+had a solid `--color-bg-raised` background and, more importantly, the
+exact same class of bug Phase 8 fixed elsewhere: a fullscreen
+`rgba(6, 11, 18, 0.5)` backdrop. Its "slide-in" was also cosmetic only — a
+`display:none`/`block` toggle plus an opacity-only `@keyframes`, so it
+popped into place rather than actually sliding. Rebuilt to the same
+pattern as the other two: always-rendered `.panel` positioned via a real
+`left` transition (−340px closed → 0 open), a light `rgba(15, 23, 42,
+0.1)` + 1px-blur backdrop appended to `<body>`, glass surface, and
+`--shadow-float`.
+
+**The rounded-corner side was backwards on both existing drawers.**
+`app-sidebar.js` and `page-toc.js` both anchor to the physical left edge,
+but their corner-rounding used *logical* properties
+(`border-start-end-radius`/`border-end-end-radius`, i.e. "round the
+inline-end side"). In the default Arabic/RTL context inline-end resolves
+to physical left — the edge flush against the viewport boundary, not the
+edge facing the lesson content — so the rounded corners were on the wrong
+side (and would silently move to the *other* wrong side in English/LTR,
+since logical properties flip with `dir` but the drawers' actual position
+is pinned with physical `left` on purpose). Fixed by switching to physical
+`border-top-right-radius`/`border-bottom-right-radius` on all three
+drawers, rounding only the content-facing right edge — stable in either
+language, matching the explicit spec. Widened all three from 300px to a
+consistent `min(320px, 88vw)`, landing centrally in the requested
+300-340px range.
+
+Re-verified with Playwright after the fix (not just re-read the CSS):
+opened each of the three drawers and read back `getComputedStyle(...)
+.borderTopRightRadius` vs `.borderTopLeftRadius` directly, rather than
+trusting the source only — the first version of this exact fix, in Phase
+8, had already gotten a very similar left/right radius call wrong once
+before it was caught, which is why this round used measurement instead of
+re-reasoning alone. Also re-confirmed click-outside-closes, ESC-closes,
+and auto-close-on-link-select for both `app-sidebar` and `page-toc` — an
+earlier combined test script produced a false negative on "click outside
+closes" purely from a timing race between chained `page.evaluate` calls,
+not a real bug; re-run in isolation with generous waits, all three
+behaviors are confirmed correct.
+
 ## What's deliberately not here yet
 
 - No chapter-authoring pipeline from the source PDFs — Chapter 1 is

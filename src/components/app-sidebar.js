@@ -23,15 +23,21 @@ const style = css`
     display: block;
     position: fixed;
     inset-block: 0;
-    left: -320px;
-    width: min(300px, 85vw);
+    left: -340px;
+    width: min(320px, 88vw);
     z-index: var(--z-modal);
     background: var(--glass-bg-strong);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border-right: 1px solid var(--glass-border);
-    border-start-end-radius: var(--radius-lg);
-    border-end-end-radius: var(--radius-lg);
+    /* Physical corners, not logical (border-*-end-radius silently flips
+       with dir, which would round the wrong — screen-edge — side the
+       moment the page switches to English). Round only the right
+       (content-facing) edge; the left edge sits flush against the
+       viewport when open, where a rounded corner would just leak a
+       sliver of the page behind it. */
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
     box-shadow: var(--shadow-float);
     transition: left var(--duration-normal) var(--ease-standard);
   }
