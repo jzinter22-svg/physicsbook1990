@@ -12,20 +12,31 @@ const NAV_ITEMS = [
 const style = css`
   /* Shadow DOM doesn't inherit the light-DOM box-sizing reset from base.css. */
   *, *::before, *::after { box-sizing: border-box; }
+  /*
+    Anchored to the physical left edge regardless of language direction
+    (Priority 3 wants a top-left hamburger opening a drawer from the same
+    side) — deliberately left, not inset-inline-start, since this is
+    global chrome meant to stay in a fixed, muscle-memory corner in either
+    Arabic or English, unlike the RTL-mirrored content everywhere else.
+  */
   :host {
     display: block;
     position: fixed;
     inset-block: 0;
-    inset-inline-start: -320px;
+    left: -320px;
     width: min(300px, 85vw);
     z-index: var(--z-modal);
-    background: var(--color-bg-raised);
-    border-inline-end: 1px solid var(--color-border);
-    box-shadow: var(--shadow-lg);
-    transition: inset-inline-start var(--duration-normal) var(--ease-standard);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-right: 1px solid var(--glass-border);
+    border-start-end-radius: var(--radius-lg);
+    border-end-end-radius: var(--radius-lg);
+    box-shadow: var(--shadow-float);
+    transition: left var(--duration-normal) var(--ease-standard);
   }
   :host([open]) {
-    inset-inline-start: 0;
+    left: 0;
   }
   .panel {
     height: 100%;
@@ -51,10 +62,14 @@ const style = css`
     display: grid;
     place-items: center;
     cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
   }
   .close-btn:hover {
     color: var(--color-text);
     border-color: var(--color-primary);
+    transform: scale(1.06);
   }
   nav, .actions {
     display: flex;
@@ -170,12 +185,17 @@ class AppSidebar extends HTMLElement {
       this.close();
     });
 
+    // A light scrim, not a fullscreen dark overlay — the page behind the
+    // drawer must stay clearly visible (Aurora UI refinement, matching the
+    // same fix applied to <page-toc>'s drawer).
     this._backdrop = document.createElement('div');
     this._backdrop.setAttribute('aria-hidden', 'true');
     Object.assign(this._backdrop.style, {
       position: 'fixed',
       inset: '0',
-      background: 'rgba(6, 11, 18, 0.4)',
+      background: 'rgba(15, 23, 42, 0.1)',
+      backdropFilter: 'blur(1px)',
+      WebkitBackdropFilter: 'blur(1px)',
       opacity: '0',
       pointerEvents: 'none',
       transition: 'opacity 220ms ease',

@@ -18,15 +18,19 @@ npm run preview   # preview the production build
 ## What's here
 
 - Vite + vanilla JS + native Web Components (no framework dependency).
-- A calm, minimal design system: generous whitespace, soft card shadows, a
-  CVD-validated categorical palette for chapter domains (`src/styles/tokens.css`).
-  All navigation (Home, Chapters, Search, Theme, Language) lives in one
-  collapsible sidebar, off-canvas at every breakpoint — nothing else is
-  permanently docked on screen. A barely-there physics-identity background
-  (a handful of low-opacity dots drifting one screen-width every four
-  minutes, pure CSS, no JS/canvas) sits behind every page — since every
-  card has a solid background, it's only ever visible in the margins, never
-  behind text.
+- An "Aurora UI" design language: soft layered gradients, subtle
+  glassmorphism on every card and floating panel, a cyan→violet gradient
+  accent, deep multi-layer shadows, generous rounded corners, and a
+  barely-there aurora-borealis gradient wash drifting behind every page
+  alongside a starfield of low-opacity dots — both pure CSS, no JS/canvas,
+  and tuned low-opacity enough to never compete with the text sitting on
+  top of them. A CVD-validated categorical palette still tags chapter
+  domains (`src/styles/tokens.css`). All navigation (Home, Chapters,
+  Search, Theme, Language) lives in one collapsible drawer, opened via a
+  circular hamburger button fixed to the top-left corner at every
+  breakpoint — nothing else is permanently docked on screen, and the
+  drawer's backdrop is a light scrim (the lesson stays visible behind it),
+  never a fullscreen dark overlay.
 - A single-focus home page: one hero (title, one line, one CTA) and the
   chapter grid — no competing panels.
 - Arabic (default, RTL) / English (LTR) language toggle.

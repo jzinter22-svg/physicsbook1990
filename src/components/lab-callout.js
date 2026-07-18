@@ -23,6 +23,9 @@ const style = css`
     color: var(--color-text);
     border-radius: var(--radius-lg);
     padding: var(--space-5) var(--space-6);
+    border: 1px solid color-mix(in srgb, var(--callout-color) 18%, transparent);
+    backdrop-filter: blur(calc(var(--glass-blur) / 2));
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) / 2));
   }
   .icon {
     flex: none;

@@ -64,6 +64,31 @@ body::before {
   animation-play-state: var(--anim-play, running);
 }
 
+/*
+  Aurora UI wash — three soft, low-opacity color blobs (the aurora-borealis
+  cyan/violet/pink trio from tokens.css) drifting almost imperceptibly
+  behind every page, layered on top of the starfield dots above. Kept at
+  8-12% opacity specifically so it reads as ambient premium atmosphere, not
+  a colored tint that would fight with text contrast — every card still has
+  its own solid-enough surface (glass cards blur what's behind them rather
+  than letting it show through at full strength). If this ever measurably
+  hurts reading comfort, cut it — the same rule the starfield above follows.
+*/
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 60% 42% at 12% -8%, color-mix(in srgb, var(--aurora-a) 12%, transparent), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 92% 8%, color-mix(in srgb, var(--aurora-b) 10%, transparent), transparent 70%),
+    radial-gradient(ellipse 55% 42% at 45% 108%, color-mix(in srgb, var(--aurora-c) 8%, transparent), transparent 70%);
+  background-repeat: no-repeat;
+  animation: aurora-drift 70s ease-in-out infinite alternate;
+  animation-play-state: var(--anim-play, running);
+}
+
 .app-shell {
   position: relative;
   z-index: 1;
@@ -72,6 +97,11 @@ body::before {
 @keyframes starfield-drift {
   from { background-position: 0 0; }
   to { background-position: 900px 900px; }
+}
+
+@keyframes aurora-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-1.5%, 2%) scale(1.04); }
 }
 
 /* The Arabic UI is the primary language; Latin text (formulas, code) still
@@ -140,32 +170,38 @@ button, input, select, textarea {
   transition: transform var(--duration-fast) var(--ease-standard),
     box-shadow var(--duration-fast) var(--ease-standard),
     border-color var(--duration-fast) var(--ease-standard),
-    background var(--duration-fast) var(--ease-standard);
+    background var(--duration-fast) var(--ease-standard),
+    filter var(--duration-fast) var(--ease-standard);
 }
 .btn:hover {
   transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(0);
 }
 .btn svg {
   width: 1.1em;
   height: 1.1em;
 }
 .btn--primary {
-  background: var(--color-primary);
+  background: var(--gradient-primary);
   color: var(--color-text-on-accent);
   box-shadow: var(--shadow-md);
 }
 .btn--primary:hover {
-  background: var(--color-primary-hover);
+  background: var(--gradient-primary-hover);
+  box-shadow: var(--shadow-float);
 }
 .btn--ghost {
   background: var(--glass-bg);
   color: var(--color-text);
-  border-color: var(--color-border);
+  border-color: var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 .btn--ghost:hover {
   border-color: var(--color-primary);
+  background: var(--glass-bg-strong);
 }
 .btn--secondary {
   background: var(--color-bg-sunken);
@@ -226,6 +262,52 @@ button, input, select, textarea {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/*
+  Priority 3: a standard circular hamburger, fixed to the physical top-left
+  corner at every breakpoint, always visible — including above an open
+  drawer/modal (see app-header.js for why this lives in global CSS as a
+  real <body> child instead of inside app-header's shadow root: a
+  position:fixed descendant only escapes a stacking-context-creating
+  ancestor visually, not in z-index comparisons). left/top, not logical
+  properties, on purpose — this is chrome meant to stay in one predictable
+  corner in either RTL or LTR, unlike the mirrored content everywhere else.
+*/
+.aurora-menu-btn {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-fab);
+  appearance: none;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-text);
+  border-radius: 50%;
+  /* 48px: comfortably above the 44px minimum touch target (Priority 3). */
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1.15rem;
+  box-shadow: var(--shadow-float);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+.aurora-menu-btn svg {
+  width: 1.2em;
+  height: 1.2em;
+}
+.aurora-menu-btn:hover {
+  border-color: var(--color-primary);
+  transform: scale(1.06);
+}
+.aurora-menu-btn:active {
+  transform: scale(0.97);
 }
 
 .skip-link {

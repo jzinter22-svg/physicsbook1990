@@ -28,31 +28,45 @@ const style = css`
     gap: var(--space-2);
     padding: var(--space-3) var(--space-3);
     border-radius: var(--radius-md) 0 0 var(--radius-md);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--glass-border);
     border-inline-end: none;
-    background: var(--color-bg-raised);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     color: var(--color-text-muted);
     box-shadow: var(--shadow-md);
     cursor: pointer;
     writing-mode: vertical-rl;
+    transition: color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
   }
   .tab:hover {
     color: var(--color-primary);
+    box-shadow: var(--shadow-float);
   }
   .tab svg {
     writing-mode: horizontal-tb;
     width: 1.1em;
     height: 1.1em;
   }
+  /*
+    A light, low-opacity scrim — not the old fullscreen dark overlay. Its
+    only job is to hint "this panel is focused" and catch a click-to-close;
+    the lesson behind it must stay clearly readable at all times.
+  */
   .panel {
     position: fixed;
     inset-block: 0;
     inset-inline-end: -320px;
     width: min(300px, 85vw);
     z-index: var(--z-modal);
-    background: var(--color-bg-raised);
-    border-inline-start: 1px solid var(--color-border);
-    box-shadow: var(--shadow-lg);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-start-end-radius: var(--radius-lg);
+    border-end-end-radius: var(--radius-lg);
+    border-inline-start: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-float);
     transition: inset-inline-end var(--duration-normal) var(--ease-standard);
     padding: var(--space-5);
     overflow-y: auto;
@@ -77,10 +91,14 @@ const style = css`
     display: grid;
     place-items: center;
     cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
   }
   .close-btn:hover {
     color: var(--color-text);
     border-color: var(--color-primary);
+    transform: scale(1.06);
   }
   .title {
     font-size: var(--fs-100);
@@ -168,12 +186,17 @@ class PageToc extends HTMLElement {
     this._tabBtn.addEventListener('click', () => this.open());
     this._closeBtn.addEventListener('click', () => this.close());
 
+    // A light scrim, not a fullscreen dark overlay — the lesson behind the
+    // drawer must stay clearly visible (Priority 2: "no fullscreen black
+    // overlay... lesson remains visible... light backdrop only if necessary").
     this._backdrop = document.createElement('div');
     this._backdrop.setAttribute('aria-hidden', 'true');
     Object.assign(this._backdrop.style, {
       position: 'fixed',
       inset: '0',
-      background: 'rgba(6, 11, 18, 0.4)',
+      background: 'rgba(15, 23, 42, 0.1)',
+      backdropFilter: 'blur(1px)',
+      WebkitBackdropFilter: 'blur(1px)',
       opacity: '0',
       pointerEvents: 'none',
       transition: 'opacity 220ms ease',

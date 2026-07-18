@@ -100,6 +100,24 @@
   */
   --shadow-card: 0 1px 3px hsl(var(--shadow-color) / 0.05), 0 1px 2px hsl(var(--shadow-color) / 0.04);
   --shadow-card-hover: 0 8px 20px hsl(var(--shadow-color) / 0.08), 0 2px 6px hsl(var(--shadow-color) / 0.05);
+  /*
+    Aurora UI: a deeper, softer multi-layer shadow for panels that should
+    read as genuinely floating above the page (drawers, the fullscreen
+    viewer's toolbar, the hamburger button) — one step up from --shadow-lg.
+  */
+  --shadow-float: 0 24px 64px hsl(var(--shadow-color) / 0.16), 0 6px 20px hsl(var(--shadow-color) / 0.08);
+
+  /* ---- Aurora UI: soft gradient accents ----
+     A restrained aurora-borealis palette (cyan -> violet -> soft pink) used
+     for premium surfaces: the primary button fill, hero underlay, and a
+     faint corner-glow on cards. Every gradient here stays low-opacity or
+     fully opaque-but-soft — never a loud, attention-grabbing wash; the
+     lesson text is always the thing actually being read. */
+  --gradient-primary: linear-gradient(135deg, var(--color-lab-cyan-500), var(--color-lab-violet-500));
+  --gradient-primary-hover: linear-gradient(135deg, var(--color-lab-cyan-600), var(--color-lab-violet-700));
+  --aurora-a: hsl(190 85% 60%);
+  --aurora-b: hsl(265 70% 66%);
+  --aurora-c: hsl(330 70% 68%);
 
   /* ---- Typography ---- */
   --font-latin: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -132,11 +150,14 @@
   --space-9: 6rem;
 
   /* ---- Shape ----
-     radius-lg bumped 20px -> 24px: softer, calmer card corners (Priority 5
-     of the calm-UI rebuild) read less "boxy/technical" than the original. */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 24px;
+     radius-lg bumped 20px -> 24px -> 28px across two redesigns: softer,
+     calmer, more "premium" card corners each time read less "boxy/
+     technical" than the last. --radius-xl is new for Aurora UI's larger
+     floating panels (drawers, the fullscreen viewer stage). */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 28px;
+  --radius-xl: 32px;
   --radius-pill: 999px;
 
   /* ---- Motion ---- */
@@ -167,6 +188,11 @@
   --z-header: 100;
   --z-overlay: 200;
   --z-modal: 300;
+  /* The fixed top-left hamburger (Priority 3) stays above drawers/modals too
+     — "always visible" means visible even while its own drawer is open,
+     toggling it closed the same way a tap on it opened it (a morphing
+     hamburger/close affordance), not just while scrolling the page. */
+  --z-fab: 350;
   --z-toast: 400;
 
   /* Subtle graph-paper texture used behind hero/lab sections */
@@ -235,6 +261,13 @@
 
   --glow-primary: radial-gradient(circle, hsl(190 90% 60% / 0.28), transparent 70%);
   --glow-accent: radial-gradient(circle, hsl(38 95% 65% / 0.22), transparent 70%);
+
+  --shadow-float: 0 24px 64px hsl(var(--shadow-color) / 0.55), 0 6px 20px hsl(var(--shadow-color) / 0.3);
+  --gradient-primary: linear-gradient(135deg, var(--color-lab-cyan-300), var(--color-lab-violet-300));
+  --gradient-primary-hover: linear-gradient(135deg, var(--color-lab-cyan-100), var(--color-lab-violet-300));
+  --aurora-a: hsl(190 90% 65%);
+  --aurora-b: hsl(265 80% 72%);
+  --aurora-c: hsl(330 75% 72%);
 }
 
 /* Respect system preference when the user hasn't chosen explicitly */

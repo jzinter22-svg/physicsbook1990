@@ -893,6 +893,86 @@ lesson content is `display:block`, full width, at every breakpoint now.
 The wrapping `<aside class="ds-toc">` in `chapter-1.html`/
 `design-system.html` was removed since the component now positions itself.
 
+## Phase 8 — Aurora UI visual language (pure UI/UX, zero content changes)
+
+A visual-only redesign: no lesson, explanation, example, exercise, formula,
+or simulation *logic* changed — only how the same content is presented.
+
+**Tokens (`tokens.css`)**: `--gradient-primary`/`--gradient-primary-hover`
+(cyan → violet, used for the primary button and the brand mark) and three
+new `--aurora-a/b/c` hues driving a soft background wash; `--shadow-float`,
+a deeper multi-layer shadow for panels that need to read as genuinely
+floating (drawers, the fixed hamburger); radii bumped again
+(`--radius-md` 12→14, `--radius-lg` 24→28, new `--radius-xl` 32) for a
+softer, more premium corner feel; a new `--z-fab: 350` sitting *above*
+`--z-modal` — see the hamburger note below for why.
+
+**Background wash (`base.css`)**: a second fixed pseudo-element,
+`body::after`, layers three low-opacity (8-12%) radial gradient blobs in
+the aurora palette on top of the existing starfield (`body::before`),
+drifting over ~70s. Same non-negotiable rule as the starfield: if it ever
+measurably hurts reading comfort, cut it.
+
+**Cards (`content-card.js`, `chapter-card.js`, `stat-tile.js`,
+`lab-callout.js`)**: glass surfaces (`--glass-bg-strong` + backdrop-filter
+blur) with a faint accent-colored radial glow in one corner, replacing the
+previous solid `--color-bg-raised` — restoring glassmorphism deliberately
+reintroduced for premium *surfaces* here (unlike the earlier calm-UI
+rebuild, which restricted glass to transient overlays only — that
+restriction predates this explicit Aurora UI request and no longer
+applies to cards). Hover now lifts (`translateY`) in addition to the
+existing shadow deepen.
+
+**Buttons (`base.css` `.btn--primary`/`.btn--ghost`)**: primary now fills
+with `--gradient-primary` instead of a flat color; ghost's border/background
+now reference the glass tokens directly instead of hardcoded ones.
+
+**The table-of-contents drawer's backdrop was a real bug, not just a
+style preference.** `<page-toc>`'s backdrop was `rgba(6, 11, 18, 0.4)` at
+full opacity when open — a genuinely dark, fullscreen-feeling scrim, even
+though the drawer itself only occupies 300px. Replaced with
+`rgba(15, 23, 42, 0.1)` + a 1px blur: barely a dim, the lesson stays
+clearly readable behind it. The exact same fix was applied to
+`<app-sidebar>`'s backdrop for consistency. Both panels also picked up the
+glass/shadow-float treatment and `page-toc`'s slide direction was already
+correct (inline-end resolves to the physical left in the default Arabic/
+RTL experience) — confirmed, not changed.
+
+**The hamburger button move surfaced a real shadow-DOM stacking bug.**
+Moving the sidebar toggle from an in-flow header button to a
+`position: fixed` circle pinned to the physical top-left corner (`left`/
+`top`, not logical properties — deliberately language-independent, like
+the drawer it opens) seemed like a one-line change: give it a high
+`z-index` and it should float above everything, including an open drawer.
+It didn't. `<app-header>`'s own `:host` has `position: sticky` plus a
+`z-index` — that combination creates a *stacking context*, and any
+`position: fixed` descendant's z-index is only compared *within* that
+context, not globally. The button's `z-index: 350` was winning against its
+header siblings, but the *header itself* (as a stacking context) was still
+just `z-index: 100`, which lost outright to `<app-sidebar>`'s `z-index:
+300` — so the "escaped" fixed button rendered fully behind the open
+drawer. Root-caused by comparing `document.elementFromPoint()` at the
+button's own coordinates against the button's own reference (not just
+eyeballing a screenshot, which alone wouldn't have distinguished "hidden
+behind the drawer" from "never rendered"). Fixed by moving the button
+entirely out of `<app-header>`'s shadow root into a real light-DOM
+`<button class="aurora-menu-btn">` appended straight to `<body>` — the
+same escape hatch `<app-sidebar>`/`<page-toc>` already use for their
+backdrop divs — styled globally in `base.css` instead of the component's
+shadow style. The lesson: a `position: fixed` element only escapes its
+ancestor's *layout*; it does not escape the ancestor's *stacking context*
+if that ancestor already created one.
+
+**Simulations (`chapter-1.html`)**: all four `<sim-container class="sim-
+frame">` instances' `max-width` reduced from 640px to 384px (~40%,
+matching the ask) — `aspect-ratio` and centering untouched. Verified this
+doesn't silently break interactivity: dragged the circular-motion
+particle at the new size and re-read the live `v`/`a_c` readouts
+(unaffected — they depend on ω and r, not screen size or drag angle), and
+confirmed a canvas's fixed `pixelsPerUnit` scale still shows the full
+scene un-clipped at default slider values, including the max-radius
+slider position.
+
 ## What's deliberately not here yet
 
 - No chapter-authoring pipeline from the source PDFs — Chapter 1 is

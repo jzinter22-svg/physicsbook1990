@@ -17,8 +17,12 @@ const style = css`
     gap: var(--space-4);
     padding: var(--space-6);
     border-radius: var(--radius-lg);
-    background: var(--color-bg-raised);
-    border: 1px solid var(--color-border);
+    background:
+      radial-gradient(120% 60% at 100% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+      var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-card);
     overflow: hidden;
     transition: transform var(--duration-normal) var(--ease-standard),
@@ -35,9 +39,9 @@ const style = css`
   }
   :host(:hover) .card,
   :host(:focus-within) .card {
-    transform: translateY(-2px);
+    transform: translateY(-4px) scale(1.01);
     border-color: var(--accent);
-    box-shadow: var(--shadow-card-hover);
+    box-shadow: var(--shadow-float);
   }
   .icon-badge {
     width: 48px;

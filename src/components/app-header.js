@@ -10,8 +10,10 @@ const style = css`
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background: var(--color-bg-raised);
-    border-block-end: 1px solid var(--color-border);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-block-end: 1px solid var(--glass-border);
   }
   .bar {
     padding-inline: var(--layout-gutter);
@@ -36,35 +38,18 @@ const style = css`
     width: 34px;
     height: 34px;
     border-radius: var(--radius-md);
-    background: var(--color-primary);
+    background: var(--gradient-primary);
     color: var(--color-white);
     font-size: 1.1rem;
-  }
-  button.icon-btn {
-    appearance: none;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-raised);
-    color: var(--color-text);
-    border-radius: var(--radius-md);
-    /* 44px: comfortable touch target (Priority 7 of the calm-UI rebuild). */
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    font-size: 1.15rem;
-    transition: border-color var(--duration-fast) var(--ease-standard);
-  }
-  button.icon-btn:hover {
-    border-color: var(--color-primary);
   }
 `;
 
 /**
  * <app-header></app-header>
- * Deliberately minimal: a menu button that opens <app-sidebar> (which now
- * holds every piece of navigation — Home, Chapters, Search, Theme,
- * Language) plus the site mark. Nothing else lives in the permanent chrome.
+ * Deliberately minimal: the site mark, plus (see below) a menu button that
+ * opens <app-sidebar> (which holds every piece of navigation — Home,
+ * Chapters, Search, Theme, Language). Nothing else lives in the permanent
+ * chrome.
  */
 class AppHeader extends HTMLElement {
   constructor() {
@@ -76,7 +61,6 @@ class AppHeader extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>${style}</style>
       <div class="bar">
-        <button class="icon-btn" id="sidebar-toggle" type="button"></button>
         <a class="brand" href="#top">
           <span class="mark" aria-hidden="true">${icon('atom')}</span>
           <span data-i18n="site.title"></span>
@@ -84,11 +68,31 @@ class AppHeader extends HTMLElement {
       </div>
     `;
 
-    this._sidebarBtn = this.shadowRoot.getElementById('sidebar-toggle');
-    this._sidebarBtn.innerHTML = icon('menu');
-    this._sidebarBtn.addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent('toggle-sidebar', { bubbles: true, composed: true }));
-    });
+    /*
+      Priority 3's hamburger is a real light-DOM element, appended to
+      <body>, not a child inside this component's own shadow root — a
+      position:fixed descendant of a stacking-context-creating ancestor
+      (this :host has position:sticky + a z-index) only escapes visually,
+      not in the z-index stacking order: its z-index is compared *within*
+      the host's own local stacking context, so the host's z-index (100)
+      still loses to app-sidebar's (300) no matter how high the button's own
+      z-index goes. Living outside any shadow root — a sibling of
+      <app-sidebar> in the real DOM, exactly like their backdrop divs — is
+      what lets --z-fab actually win against the drawers it has to sit above.
+      Styled globally in base.css as `.aurora-menu-btn`, not here.
+    */
+    if (!document.querySelector('.aurora-menu-btn')) {
+      this._menuBtn = document.createElement('button');
+      this._menuBtn.type = 'button';
+      this._menuBtn.className = 'aurora-menu-btn';
+      this._menuBtn.innerHTML = icon('menu');
+      this._menuBtn.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('toggle-sidebar'));
+      });
+      document.body.appendChild(this._menuBtn);
+    } else {
+      this._menuBtn = document.querySelector('.aurora-menu-btn');
+    }
 
     this._updateStrings();
     this._onLangChange = () => this._updateStrings();
@@ -97,11 +101,12 @@ class AppHeader extends HTMLElement {
 
   disconnectedCallback() {
     document.removeEventListener('langchange', this._onLangChange);
+    this._menuBtn?.remove();
   }
 
   _updateStrings() {
     this.shadowRoot.querySelector('[data-i18n="site.title"]').textContent = t('site.title');
-    this._sidebarBtn.setAttribute('aria-label', t('action.toggleSidebar'));
+    this._menuBtn.setAttribute('aria-label', t('action.toggleSidebar'));
   }
 }
 

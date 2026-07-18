@@ -11,14 +11,23 @@ const style = css`
   }
   .card {
     border-radius: var(--radius-lg);
-    background: var(--color-bg-raised);
-    border: 1px solid var(--color-border);
+    /* Aurora UI: a faint accent-tinted glow in the top corner, glassed over
+       a mostly-opaque translucent surface — premium without sacrificing the
+       contrast a weak student's reading needs. */
+    background:
+      radial-gradient(120% 60% at 0% 0%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
+      var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
     border-inline-start: 4px solid var(--accent);
     box-shadow: var(--shadow-card);
     overflow: hidden;
-    transition: box-shadow var(--duration-normal) var(--ease-standard);
+    transition: transform var(--duration-normal) var(--ease-standard),
+      box-shadow var(--duration-normal) var(--ease-standard);
   }
   :host(:hover) .card {
+    transform: translateY(-2px);
     box-shadow: var(--shadow-card-hover);
   }
   .head {
