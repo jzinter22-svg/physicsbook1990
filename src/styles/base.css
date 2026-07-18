@@ -184,8 +184,15 @@ button, input, select, textarea {
   height: 1.1em;
 }
 .btn--primary {
+  /* Always white, in both themes — --gradient-primary is now the same
+     cyan/indigo/purple blend regardless of theme (matching the Aurora
+     reference image, which shows it correctly against its own dark scene),
+     unlike --color-text-on-accent, which stays theme-flipped for *solid*
+     single-hue accent fills elsewhere (badges, etc). The soft shadow keeps
+     the text readable over the gradient's lighter purple end. */
   background: var(--gradient-primary);
-  color: var(--color-text-on-accent);
+  color: #fff;
+  text-shadow: 0 1px 3px hsl(260 60% 15% / 0.35);
   box-shadow: var(--shadow-md);
 }
 .btn--primary:hover {
@@ -280,8 +287,24 @@ button, input, select, textarea {
   left: var(--space-4);
   z-index: var(--z-fab);
   appearance: none;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg-strong);
+  /* Gradient-ring border (matching the reference image's hamburger): a
+     transparent border lets the border-box layer of the gradient
+     background show through as a ring, while the padding-box layer fills
+     the interior with the usual glass tint — the standard two-layer
+     gradient-border trick, since `border-image` doesn't support border-
+     radius/circles. */
+  border: 2px solid transparent;
+  /* Multiple background layers paint with the *first* listed on top — so
+     the glass interior (padding-box, must be visually on top to cover the
+     center) has to be the first layer, and the ring gradient (border-box,
+     underneath, showing only where the transparent border exposes it) the
+     second. A real background-color can only be the shorthand's *last*
+     layer, which is the opposite of what's needed here, so the "glass"
+     layer is a flat two-stop gradient of the same color instead — an
+     image, which is allowed in any position. */
+  background:
+    linear-gradient(var(--glass-bg-strong), var(--glass-bg-strong)) padding-box,
+    var(--gradient-primary) border-box;
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   color: var(--color-text);
@@ -294,8 +317,7 @@ button, input, select, textarea {
   cursor: pointer;
   font-size: 1.15rem;
   box-shadow: var(--shadow-float);
-  transition: border-color var(--duration-fast) var(--ease-standard),
-    transform var(--duration-fast) var(--ease-standard),
+  transition: transform var(--duration-fast) var(--ease-standard),
     box-shadow var(--duration-fast) var(--ease-standard);
 }
 .aurora-menu-btn svg {
@@ -303,8 +325,8 @@ button, input, select, textarea {
   height: 1.2em;
 }
 .aurora-menu-btn:hover {
-  border-color: var(--color-primary);
   transform: scale(1.06);
+  box-shadow: var(--shadow-float), 0 0 0 4px color-mix(in srgb, var(--aurora-a) 20%, transparent);
 }
 .aurora-menu-btn:active {
   transform: scale(0.97);

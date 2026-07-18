@@ -1020,6 +1020,79 @@ closes" purely from a timing race between chained `page.evaluate` calls,
 not a real bug; re-run in isolation with generous waits, all three
 behaviors are confirmed correct.
 
+## Phase 10 — the actual Aurora reference image, found and pixel-sampled
+
+The "Aurora UI reference image" the brief referenced turned out to be real,
+just not on this branch: `git log --all --diff-filter=A --name-only` found
+`assets/pdf/file_000000004e988243bfeb6daaae8aac17_edit_466417681405453.png`
+uploaded straight to `main` via GitHub's web UI, in history this feature
+branch had never merged (this repo's app code only ever existed on the
+feature branch; `main` only ever had the source PDFs). Extracted with `git
+show origin/main:<path>`, copied into this branch at
+`assets/design/aurora-reference.png`, and analyzed with Pillow
+(`img.getpixel(...)`) rather than eyeballing it — sampling the heading
+text and CTA button gradients directly turned up a **3-stop** cyan →
+indigo → purple blend (landing almost exactly on Tailwind's cyan-400
+`#22d3ee` / indigo-500 `#6366f1` / purple-400 `#c084fc`), not the 2-stop
+cyan-violet gradient Phase 8 had guessed at without the image. `--gradient-
+primary` and the `--aurora-a/b/c` hues (previously cyan/violet/*pink* —
+the image's third hue is properly purple, not magenta) were corrected to
+match.
+
+**The home page hero was rebuilt to recreate the reference's actual
+composition**, not just its color palette: a fixed near-black background
+(`--color-hero-bg`, sampled ~`#04050f` — deliberately *not* tied to the
+site's light/dark toggle, since the reference itself is a single fixed
+dark scene, like a brand moment rather than a themeable surface), flowing
+aurora-band glow, a scattered starfield, a 3-ring atom illustration
+bottom-left, a ringed planet bottom-right, a dot-and-line constellation
+top-right, and two faint tilted equation snippets ("F = ma", "E = mc²") —
+matching the reference's layout corner-for-corner. Two real bugs surfaced
+building this, both instructive beyond just this page:
+
+- **A CSS `transform` completely replaces an SVG element's `transform`
+  *attribute*, it doesn't compose with it.** The atom's three "orbit"
+  ellipses each carry a static `transform="rotate(60 12 12)"` /
+  `rotate(120 12 12)` attribute to fan them out 60° apart; animating
+  rotation via CSS directly on those same ellipses silently erased that
+  static offset, collapsing all three onto the same angle (rendering as a
+  single blob, not a flower). Fixed by wrapping each ellipse in its own
+  `<g transform="rotate(...)">` — the static offset lives on the
+  (CSS-untouched) `<g>`, the animated spin lives on the child ellipse, and
+  ordinary parent/child transform composition makes both apply.
+- **Every hero decoration was mirrored to the wrong side at first**, for
+  the exact reason Phase 9 had just documented for the drawers: using
+  logical `inset-inline-start`/`-end` for elements meant to sit in *fixed
+  physical* corners matching a reference image, not corners that should
+  flip with `dir`. Switched every decoration (atom, planet, constellation,
+  both equations) to physical `left`/`right`/`top`/`bottom`.
+- A quieter bug in the same batch: `hsl(var(--aurora-a) / 0.8)` is *nested*
+  `hsl()`, because `--aurora-a` is itself already a full `hsl(189 85% 60%)`
+  value (unlike `--shadow-color`, which is deliberately a bare `H S% L%`
+  triplet for exactly this kind of composition) — nesting a color function
+  inside another color function's channel argument is invalid, and
+  silently drops the entire declaration (computed `background-image:
+  none`, not an error). Fixed with `color-mix(in srgb, var(--aurora-a) 80%,
+  transparent)` throughout, matching the pattern `base.css`'s aurora wash
+  already used correctly.
+
+**The hamburger button gained the reference's gradient-ring border**, via
+the standard two-layer trick (`background: <ring-gradient> border-box,
+<glass-fill> padding-box` with a transparent `border`) — except a real
+`background-color` can only be the shorthand's *last* layer while this
+effect needs the *glass fill visually on top* (multiple background layers
+paint first-listed-topmost), which are contradictory constraints for an
+actual color value. Resolved by using a flat two-stop gradient of the same
+glass color as an image instead of a real color, since images (unlike
+colors) are allowed in any layer position.
+
+**The sticky header now blends into the always-dark hero** via a
+page-scoped custom-property override (`app-header { --glass-bg-strong:
+rgba(4, 6, 20, 0.55); ... }` in `index.html` only) rather than touching
+the shared component — relying on the same "custom properties inherit
+across the shadow boundary even though rule matching doesn't" mechanism
+already documented for `--anim-play` elsewhere in this file.
+
 ## What's deliberately not here yet
 
 - No chapter-authoring pipeline from the source PDFs — Chapter 1 is

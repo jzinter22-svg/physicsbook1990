@@ -108,16 +108,22 @@
   --shadow-float: 0 24px 64px hsl(var(--shadow-color) / 0.16), 0 6px 20px hsl(var(--shadow-color) / 0.08);
 
   /* ---- Aurora UI: soft gradient accents ----
-     A restrained aurora-borealis palette (cyan -> violet -> soft pink) used
-     for premium surfaces: the primary button fill, hero underlay, and a
-     faint corner-glow on cards. Every gradient here stays low-opacity or
-     fully opaque-but-soft — never a loud, attention-grabbing wash; the
-     lesson text is always the thing actually being read. */
-  --gradient-primary: linear-gradient(135deg, var(--color-lab-cyan-500), var(--color-lab-violet-500));
-  --gradient-primary-hover: linear-gradient(135deg, var(--color-lab-cyan-600), var(--color-lab-violet-700));
-  --aurora-a: hsl(190 85% 60%);
-  --aurora-b: hsl(265 70% 66%);
-  --aurora-c: hsl(330 70% 68%);
+     Colors pixel-sampled directly from the uploaded Aurora reference image
+     (assets/design/aurora-reference.png) — not eyeballed. Its heading text
+     and CTA button both use the same 3-stop cyan -> indigo -> purple blend
+     (sampled ~#22d3ee / #6366f1 / #c084fc, left to right); its aurora bands
+     live in the same three hues. Every background use of these stays
+     low-opacity or fully opaque-but-soft — never a loud, attention-grabbing
+     wash; the lesson text is always the thing actually being read. */
+  --gradient-primary: linear-gradient(120deg, #22d3ee 0%, #6366f1 50%, #c084fc 100%);
+  --gradient-primary-hover: linear-gradient(120deg, #06b6d4 0%, #4f46e5 50%, #a855f7 100%);
+  --aurora-a: hsl(189 85% 60%);
+  --aurora-b: hsl(239 75% 65%);
+  --aurora-c: hsl(272 75% 70%);
+  /* The reference's own near-black hero background — used for the home
+     page hero specifically, not the whole app (body text needs a less
+     stark surface for comfortable extended reading). */
+  --color-hero-bg: #04050f;
 
   /* ---- Typography ---- */
   --font-latin: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -263,11 +269,19 @@
   --glow-accent: radial-gradient(circle, hsl(38 95% 65% / 0.22), transparent 70%);
 
   --shadow-float: 0 24px 64px hsl(var(--shadow-color) / 0.55), 0 6px 20px hsl(var(--shadow-color) / 0.3);
-  --gradient-primary: linear-gradient(135deg, var(--color-lab-cyan-300), var(--color-lab-violet-300));
-  --gradient-primary-hover: linear-gradient(135deg, var(--color-lab-cyan-100), var(--color-lab-violet-300));
-  --aurora-a: hsl(190 90% 65%);
-  --aurora-b: hsl(265 80% 72%);
-  --aurora-c: hsl(330 75% 72%);
+  /*
+    The reference image's own scene is already a dark background — its
+    exact gradient reads correctly there without inversion, unlike the
+    previous (pre-reference) dark-mode override which lightened the stops
+    for contrast against a *solid* accent fill. Kept identical to :root's
+    on purpose; only the aurora wash hues get a touch more vivid here,
+    since near-black is what actually lets them glow.
+  */
+  --gradient-primary: linear-gradient(120deg, #22d3ee 0%, #6366f1 50%, #c084fc 100%);
+  --gradient-primary-hover: linear-gradient(120deg, #67e8f9 0%, #818cf8 50%, #d8b4fe 100%);
+  --aurora-a: hsl(189 90% 65%);
+  --aurora-b: hsl(239 85% 70%);
+  --aurora-c: hsl(272 85% 74%);
 }
 
 /* Respect system preference when the user hasn't chosen explicitly */
