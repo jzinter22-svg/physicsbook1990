@@ -27,11 +27,12 @@ const style = css`
     margin-inline: auto;
     background: var(--glass-bg-strong);
     border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
     overflow: hidden;
+    transition: box-shadow var(--duration-glass) var(--ease-standard);
   }
   .input-row {
     display: flex;

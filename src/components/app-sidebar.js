@@ -15,7 +15,9 @@ const style = css`
   :host {
     display: block;
     background: var(--glass-bg);
-    border-inline-end: 1px solid var(--color-border);
+    border-inline-end: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   }
   .panel {
     height: 100%;
@@ -85,8 +87,10 @@ const style = css`
          is appended to document.body separately so it can dim the rest of the
          page without the sidebar's own shadow tree drawing over it. */
       z-index: var(--z-modal);
-      box-shadow: var(--shadow-lg);
-      transition: inset-inline-start var(--duration-normal) var(--ease-standard);
+      box-shadow: var(--glass-shadow);
+      border-start-end-radius: var(--radius-xl);
+      border-end-end-radius: var(--radius-xl);
+      transition: inset-inline-start var(--duration-glass) var(--ease-standard);
     }
     :host([open]) {
       inset-inline-start: 0;

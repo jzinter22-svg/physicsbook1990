@@ -16,14 +16,16 @@ const style = css`
     flex-direction: column;
     gap: var(--space-4);
     padding: var(--space-5);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     background: var(--glass-bg);
-    border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     overflow: hidden;
-    transition: transform var(--duration-normal) var(--ease-standard),
-      box-shadow var(--duration-normal) var(--ease-standard),
-      border-color var(--duration-normal) var(--ease-standard);
+    transition: transform var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard),
+      border-color var(--duration-glass) var(--ease-standard);
   }
   .card::before {
     content: '';
@@ -33,11 +35,14 @@ const style = css`
     height: 4px;
     background: var(--accent);
   }
+  /* Domain-color ring stays the primary hover cue (CVD-validated categorical
+     accent — do not replace it); the cyan/violet glow layers behind it as a
+     supplementary ambient halo so hover states still read as "Aurora glass". */
   :host(:hover) .card,
   :host(:focus-within) .card {
     transform: translateY(-4px);
     border-color: var(--accent);
-    box-shadow: var(--shadow-md), 0 0 0 1px var(--accent);
+    box-shadow: var(--glass-shadow), var(--glow-hover), 0 0 0 1px var(--accent);
   }
   .icon-badge {
     width: 48px;

@@ -30,11 +30,12 @@ const style = css`
     flex-direction: column;
     background: var(--glass-bg-strong);
     border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
     overflow: hidden;
+    transition: box-shadow var(--duration-glass) var(--ease-standard);
   }
   .head {
     display: flex;
@@ -51,8 +52,10 @@ const style = css`
   .close-btn {
     flex: none;
     appearance: none;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-raised);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     border-radius: var(--radius-pill);
     width: 36px;
     height: 36px;
@@ -60,6 +63,12 @@ const style = css`
     place-items: center;
     cursor: pointer;
     color: var(--color-text);
+    transition: border-color var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard);
+  }
+  .close-btn:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--glow-hover);
   }
   .body {
     padding: var(--space-5);

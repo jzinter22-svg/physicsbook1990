@@ -30,9 +30,9 @@ const style = css`
     border-radius: var(--radius-md);
     background: var(--glass-bg-strong);
     border: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     pointer-events: auto;
     animation: slide-in var(--duration-normal) var(--ease-standard);
     animation-play-state: var(--anim-play, running);

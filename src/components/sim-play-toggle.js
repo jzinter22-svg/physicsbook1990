@@ -13,8 +13,10 @@ const style = css`
     align-items: center;
     gap: var(--space-2);
     appearance: none;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-raised);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     color: var(--color-text);
     border-radius: var(--radius-pill);
     padding: var(--space-2) var(--space-4);
@@ -22,10 +24,12 @@ const style = css`
     font-weight: 700;
     font-size: var(--fs-200);
     cursor: pointer;
-    transition: border-color var(--duration-fast) var(--ease-standard);
+    transition: border-color var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard);
   }
   button:hover {
     border-color: var(--color-primary);
+    box-shadow: var(--glow-hover);
   }
   button svg {
     width: 1em;

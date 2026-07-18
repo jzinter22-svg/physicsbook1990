@@ -13,9 +13,9 @@ const style = css`
     top: 0;
     z-index: var(--z-header);
     background: var(--glass-bg-strong);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-block-end: 1px solid var(--color-border);
+    backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+    border-block-end: 1px solid var(--glass-border);
   }
   .bar {
     padding-inline: var(--layout-gutter);
@@ -60,15 +60,19 @@ const style = css`
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-pill);
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-sunken);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     color: var(--color-text-muted);
     font-size: var(--fs-200);
     cursor: pointer;
-    transition: border-color var(--duration-fast) var(--ease-standard);
+    transition: border-color var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard);
   }
   .search-trigger:hover {
     border-color: var(--color-primary);
+    box-shadow: var(--glow-hover);
   }
   .search-trigger .label {
     flex: 1;
@@ -99,8 +103,10 @@ const style = css`
   }
   button.icon-btn {
     appearance: none;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-raised);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     color: var(--color-text);
     border-radius: var(--radius-pill);
     width: 40px;
@@ -109,11 +115,13 @@ const style = css`
     place-items: center;
     cursor: pointer;
     font-size: 1.05rem;
-    transition: border-color var(--duration-fast) var(--ease-standard),
+    transition: border-color var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard),
       transform var(--duration-fast) var(--ease-standard);
   }
   button.icon-btn:hover {
     border-color: var(--color-primary);
+    box-shadow: var(--glow-hover);
     transform: translateY(-1px);
   }
   button.lang-btn {

@@ -22,16 +22,18 @@
     .ch1-hero {
       background: var(--pattern-grid);
       background-size: var(--pattern-grid-size);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       padding: var(--space-6);
       margin-block-end: var(--space-7);
     }
     .ch1-hero-inner {
       background: var(--glass-bg);
-      backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
       border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       padding: var(--space-6);
+      box-shadow: var(--glass-shadow);
     }
     .ch1-two-col {
       display: grid;

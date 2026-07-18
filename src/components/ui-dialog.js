@@ -26,11 +26,12 @@ const style = css`
     width: min(420px, 100%);
     background: var(--glass-bg-strong);
     border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
     padding: var(--space-6);
+    transition: box-shadow var(--duration-glass) var(--ease-standard);
   }
   h2 {
     margin: 0 0 var(--space-3);

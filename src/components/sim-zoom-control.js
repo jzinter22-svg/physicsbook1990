@@ -10,8 +10,10 @@ const style = css`
   }
   button {
     appearance: none;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-raised);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     color: var(--color-text);
     border-radius: var(--radius-pill);
     width: 32px;
@@ -21,10 +23,12 @@ const style = css`
     font: inherit;
     font-weight: 700;
     cursor: pointer;
-    transition: border-color var(--duration-fast) var(--ease-standard);
+    transition: border-color var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard);
   }
   button:hover {
     border-color: var(--color-primary);
+    box-shadow: var(--glow-hover);
   }
 `;
 

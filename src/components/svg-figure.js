@@ -34,14 +34,20 @@ const style = css`
     display: grid;
     place-items: center;
     border-radius: var(--radius-pill);
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-raised);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     color: var(--color-text-muted);
     cursor: pointer;
+    transition: color var(--duration-glass) var(--ease-standard),
+      border-color var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard);
   }
   .expand-btn:hover {
     color: var(--color-primary);
     border-color: var(--color-primary);
+    box-shadow: var(--glow-hover);
   }
   figcaption {
     margin-block-start: var(--space-3);
@@ -93,10 +99,18 @@ const style = css`
     display: grid;
     place-items: center;
     border-radius: var(--radius-pill);
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-sunken);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     color: var(--color-text);
     cursor: pointer;
+    transition: border-color var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard);
+  }
+  .lightbox-close:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--glow-hover);
   }
 `;
 

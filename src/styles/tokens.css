@@ -123,7 +123,8 @@
   /* ---- Shape ---- */
   --radius-sm: 6px;
   --radius-md: 12px;
-  --radius-lg: 20px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
   --radius-pill: 999px;
 
   /* ---- Motion ---- */
@@ -131,6 +132,10 @@
   --duration-fast: 120ms;
   --duration-normal: 220ms;
   --duration-slow: 400ms;
+  /* Aurora glass hover/transition timing — kept in the 250-350ms "calm,
+     premium" range the glassmorphism design language calls for; anything
+     faster reads as a UI blip, anything slower reads as sluggish. */
+  --duration-glass: 300ms;
   /*
     Custom properties inherit across Shadow DOM boundaries even though rule
     matching doesn't — this is how decorative CSS @keyframes animations inside
@@ -157,12 +162,29 @@
     linear-gradient(90deg, var(--color-bg-grid-line) 1px, transparent 1px);
   --pattern-grid-size: 24px 24px;
 
-  /* ---- Glassmorphism ---- */
-  --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-bg-strong: rgba(255, 255, 255, 0.78);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-blur: 18px;
-  --glass-shadow: 0 8px 32px hsl(210 60% 20% / 0.12);
+  /*
+    ---- Glassmorphism (Aurora UI) ----
+    UI chrome only — nav, panels, dialogs, floating controls, chapter cards.
+    Never applied to lesson-content surfaces (content-card.js and its
+    variants stay solid/high-contrast; see --color-bg-raised usage there).
+    backdrop-filter blur + saturate is what keeps a low-opacity tint from
+    reading as murky: blur removes fine detail from whatever sits behind,
+    saturate keeps the frosted result from looking washed-out gray.
+  */
+  --glass-bg: rgba(255, 255, 255, 0.14);
+  --glass-bg-strong: rgba(255, 255, 255, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-blur: 20px;
+  --glass-blur-strong: 24px;
+  --glass-saturate: 160%;
+  --glass-shadow: 0 12px 32px hsl(210 60% 20% / 0.12), 0 2px 8px hsl(210 60% 20% / 0.08);
+
+  /* Faint cyan/violet ambient glow for glass-surface hover states (chapter
+     cards, floating controls, hero) — layered so it reads as a soft halo
+     rather than a hard ring. */
+  --glow-hover-cyan: hsl(190 85% 55% / 0.35);
+  --glow-hover-violet: hsl(262 80% 68% / 0.28);
+  --glow-hover: 0 0 24px var(--glow-hover-cyan), 0 0 44px var(--glow-hover-violet);
 
   /* Soft ambient glow blobs behind hero/lab sections */
   --glow-primary: radial-gradient(circle, hsl(190 85% 55% / 0.35), transparent 70%);
@@ -208,10 +230,13 @@
   --shadow-color: 220 60% 2%;
   --shadow-glow-primary: 0 0 0 3px hsl(190 90% 65% / 0.25);
 
-  --glass-bg: rgba(18, 27, 44, 0.55);
-  --glass-bg-strong: rgba(18, 27, 44, 0.75);
-  --glass-border: rgba(215, 224, 239, 0.12);
-  --glass-shadow: 0 8px 32px hsl(220 70% 2% / 0.45);
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-bg-strong: rgba(255, 255, 255, 0.16);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-shadow: 0 12px 32px hsl(220 70% 2% / 0.45), 0 2px 10px hsl(220 70% 2% / 0.3);
+
+  --glow-hover-cyan: hsl(190 90% 62% / 0.4);
+  --glow-hover-violet: hsl(262 85% 72% / 0.32);
 
   --glow-primary: radial-gradient(circle, hsl(190 90% 60% / 0.28), transparent 70%);
   --glow-accent: radial-gradient(circle, hsl(38 95% 65% / 0.22), transparent 70%);

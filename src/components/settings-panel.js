@@ -29,13 +29,15 @@ const style = css`
     width: min(340px, 90vw);
     background: var(--glass-bg-strong);
     border-inline-start: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-start-start-radius: var(--radius-xl);
+    border-end-start-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
     display: flex;
     flex-direction: column;
     transform: translateX(0);
-    animation: slide-in var(--duration-normal) var(--ease-standard);
+    animation: slide-in var(--duration-glass) var(--ease-standard);
   }
   @keyframes slide-in {
     from { opacity: 0; }
@@ -54,8 +56,10 @@ const style = css`
   }
   .close-btn {
     appearance: none;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-raised);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     border-radius: var(--radius-pill);
     width: 36px;
     height: 36px;
@@ -63,6 +67,12 @@ const style = css`
     place-items: center;
     cursor: pointer;
     color: var(--color-text);
+    transition: border-color var(--duration-glass) var(--ease-standard),
+      box-shadow var(--duration-glass) var(--ease-standard);
+  }
+  .close-btn:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--glow-hover);
   }
   .body {
     padding: var(--space-5);

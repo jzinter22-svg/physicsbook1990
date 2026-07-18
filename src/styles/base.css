@@ -115,12 +115,16 @@ button, input, select, textarea {
 .btn--ghost {
   background: var(--glass-bg);
   color: var(--color-text);
-  border-color: var(--color-border);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-color: var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  transition: transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-glass) var(--ease-standard),
+    border-color var(--duration-glass) var(--ease-standard);
 }
 .btn--ghost:hover {
   border-color: var(--color-primary);
+  box-shadow: var(--glow-hover);
 }
 .btn--secondary {
   background: var(--color-bg-sunken);
