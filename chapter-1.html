@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الفصل الأول: الحركة الدائرية والدورانية — كتاب الطبيعيات التفاعلي</title>
+  <meta name="description" content="الفصل الأول من كتاب الطبيعيات: الحركة الدائرية، القوة المركزية، مدارات الأقمار الاصطناعية وقوانين كبلر، الحركة الدورانية، الطاقة والشغل والقدرة والزخم الزاوي — بمحاكاات تفاعلية وأمثلة محلولة." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="src/styles/tokens.css" />
+  <link rel="stylesheet" href="src/styles/base.css" />
+  <link rel="stylesheet" href="src/styles/layout.css" />
+  <link rel="stylesheet" href="src/styles/forms.css" />
+  <link rel="stylesheet" href="src/styles/rtl.css" />
+  <style>
+    .ch1-hero {
+      background: var(--pattern-grid);
+      background-size: var(--pattern-grid-size);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-block-end: var(--space-7);
+    }
+    .ch1-hero-inner {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--glass-shadow);
+    }
+    .ch1-two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-6);
+      margin-block-start: var(--space-5);
+    }
+    @media (min-width: 720px) {
+      .ch1-two-col { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    }
+    .ch1-list {
+      margin: 0;
+      padding-inline-start: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      color: var(--color-text-muted);
+      font-size: var(--fs-300);
+      line-height: var(--lh-normal);
+    }
+    .ch1-toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+    .ch1-toc-list a {
+      display: block;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: var(--fs-300);
+    }
+    .ch1-toc-list a:hover {
+      background: var(--color-bg-sunken);
+      color: var(--color-primary);
+    }
+    .ch1-section {
+      margin-block-end: var(--space-8);
+      scroll-margin-top: calc(var(--header-height) + var(--space-4));
+    }
+    .ch1-section h2 {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--fs-700);
+      margin-block-end: var(--space-5);
+      padding-block-end: var(--space-3);
+      border-block-end: 2px solid var(--color-border);
+    }
+    .ch1-section h2 .sec-num {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--color-domain-mechanics);
+      color: var(--color-white);
+      font-size: var(--fs-400);
+      font-weight: 800;
+    }
+    .ch1-section h3 {
+      font-size: var(--fs-500);
+      margin-block: var(--space-6) var(--space-3);
+      color: var(--color-primary);
+    }
+    .ch1-card-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-5);
+      margin-block: var(--space-5);
+    }
+    .ch1-card-grid.cols-2 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    @media (min-width: 800px) {
+      .ch1-card-grid.cols-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    }
+    .ch1-final-answer {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      font-weight: 700;
+      color: var(--color-success);
+    }
+    .ch1-final-answer .label {
+      font-size: var(--fs-200);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      font-weight: 700;
+    }
+    .ch1-sim-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-4);
+      margin-block-start: var(--space-4);
+    }
+    @media (min-width: 640px) {
+      .ch1-sim-controls.cols-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .ch1-sim-controls.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    .ch1-sim-readouts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-block-start: var(--space-4);
+    }
+    .ch1-mcq-options {
+      margin: var(--space-3) 0 0;
+      padding-inline-start: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+    .ch1-fig-icon-row {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .ch1-fig-icon-row figure { margin: 0; text-align: center; }
+    .ch1-fig-icon-row figcaption {
+      font-size: var(--fs-100);
+      color: var(--color-text-muted);
+      margin-block-start: var(--space-2);
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#ch1-main" data-i18n="a11y.skipToContent">تخطي إلى المحتوى</a>
+
+  <div class="app-shell" id="top">
+    <app-header></app-header>
+    <app-sidebar></app-sidebar>
+
+    <div class="content-column">
+      <main id="main-content">
+        <div class="container section">
+          <breadcrumb-nav>
+            <a href="index.html" data-i18n="nav.home"></a>
+            <a href="index.html#chapters" data-i18n="nav.chapters"></a>
+            <span aria-current="page" data-i18n="ch1.breadcrumb.current"></span>
+          </breadcrumb-nav>
+
+          <section class="ch1-hero">
+            <div class="ch1-hero-inner stack">
+              <span class="badge-pill">الفصل الأول</span>
+              <h1 style="margin:0;">الحركة الدائرية والدورانية</h1>
+              <p style="color:var(--color-text-muted); font-size:var(--fs-400); max-width:70ch; margin:0;">
+                الحركة الدائرية، القوة المركزية، مدارات الأقمار الاصطناعية وقوانين كبلر، الحركة الدورانية، عزم القصور
+                الذاتي، الطاقة، الشغل، القدرة، والزخم الزاوي — مع محاكاات تفاعلية وأمثلة وتمارين محلولة بالكامل.
+              </p>
+
+              <div class="ch1-two-col">
+                <div>
+                  <h2 style="font-size:var(--fs-500); margin-block-end:var(--space-2);" data-i18n="ch1.objectives.title"></h2>
+                  <p style="color:var(--color-text-muted); font-size:var(--fs-200); margin-block-end:var(--space-2);">
+                    بعد إتمام دراسة هذا الفصل يكون الطالب قادرًا على:
+                  </p>
+                  <ol class="ch1-list">
+                    <li>معرفة الحركة الدائرية والدورانية، والقوة المركزية.</li>
+                    <li>معرفة القدرة والشغل والحركة الدورانية.</li>
+                    <li>استيعاب المفاهيم الآتية واستخراج قيمتها باستعمال المعادلات الرياضية: الحركة الدورانية والسرعة الزاوية والتعجيل الزاوي؛ عزم القصور الذاتي؛ القدرة والشغل والحركة الدورانية.</li>
+                    <li>معرفة قوانين كبلر في الحركة الدائرية، ومن أمثلتها حركة الأقمار الاصطناعية.</li>
+                  </ol>
+                </div>
+                <div>
+                  <h2 style="font-size:var(--fs-500); margin-block-end:var(--space-2);" data-i18n="ch1.contents.title"></h2>
+                  <ul class="ch1-toc-list">
+                    <li><a href="#sec-1-1">1-1 تمهيد</a></li>
+                    <li><a href="#sec-2-1">2-1 الحركة الدائرية</a></li>
+                    <li><a href="#sec-3-1">3-1 القوة المركزية</a></li>
+                    <li><a href="#sec-4-1">4-1 مدارات الأقمار الاصطناعية وقوانين كبلر</a></li>
+                    <li><a href="#sec-5-1">5-1 الحركة الدورانية</a></li>
+                    <li><a href="#sec-6-1">6-1 الطاقة في الحركة الدورانية</a></li>
+                    <li><a href="#sec-7-1">7-1 الشغل والقدرة في الحركة الدورانية</a></li>
+                    <li><a href="#sec-8-1">8-1 الزخم الزاوي</a></li>
+                    <li><a href="#sec-9-1">9-1 أسئلة ومسائل الفصل</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="ds-layout">
+            <div id="ch1-main">
+
+              <!-- ============================================================ -->
+              <!-- 1-1 تمهيد -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-1-1">
+                <h2><span class="sec-num">1</span>1-1 تمهيد</h2>
+
+                <lesson-card>
+                  <p>
+                    درسنا في المراحل السابقة السرعة والتعجيل في الحركة الانتقالية الخطية، ولكن إذا تأملنا الحركات
+                    المألوفة في حياتنا اليومية نجد أن الحركة التي يدور فيها الجسم حول محور ثابت أو متغير أكثر شيوعًا من
+                    الحركة على خط مستقيم؛ فالمخرطة، والمروحة الكهربائية، وعجلات السيارة، وعقارب الساعة كلها أمثلة على
+                    الحركة الدورانية.
+                  </p>
+                  <p>
+                    ولدراسة الحركة الدورانية نبدأ بعرض الحركة الدائرية، وهي حركة يدور فيها جسيم على محيط دائرة بسرعة
+                    ثابتة أو متغيرة المقدار.
+                  </p>
+                </lesson-card>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- 2-1 الحركة الدائرية -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-2-1">
+                <h2><span class="sec-num">2</span>2-1 الحركة الدائرية</h2>
+
+                <lesson-card>
+                  <p>
+                    يُعد دوران القمر حول الأرض، ودوران الإلكترون حول النواة في الذرة، من الأمثلة المهمة على الحركة
+                    الدائرية في مستوٍ واحد، إذ يبقى مقدار السرعة ثابتًا بينما يتغير اتجاهها باستمرار من نقطة إلى أخرى،
+                    ويبقى الجسم الدوّار في المستوى نفسه راسمًا دائرة تكون الأرض مركزها في حالة دوران القمر، ويكون البروتون
+                    مركزها في حالة دوران الإلكترون حول نواة ذرة الهيدروجين. لذا فإن الحركة الدائرية تمثّل حركة جسم على
+                    مسار دائري كما في الأمثلة السابقة.
+                  </p>
+                </lesson-card>
+
+                <h3 id="sec-2-1-1">1-2-1 التعجيل المركزي (aᴄ)</h3>
+                <lesson-card>
+                  <p>
+                    هو المعدل الزمني لتغير اتجاه الحركة، أي أنه ينشأ بسبب تغيّر اتجاه الحركة دون اعتماد على مقدارها، كما
+                    في الشكل (1-1). ومن صفات هذا التعجيل: أنه ثابت المقدار متغير الاتجاه إذا كانت الحركة الدائرية منتظمة
+                    (كما في جسم مربوط بخيط يتحرك أفقيًا)، ومتغير المقدار والاتجاه إذا كانت الحركة الدائرية غير منتظمة؛
+                    وفي كلتا الحالتين يكون باتجاه مركز الدوران، لذا يُسمى التعجيل المركزي، ويعتمد على عاملين: مربع سرعة
+                    الجسم ونصف قطر الدوران.
+                  </p>
+
+                  <svg-figure number="1-1" caption="محصلة تغيّر السرعة الخطية لجسم يتحرك على مسار منحنٍ من A إلى B إلى C.">
+                    <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 120 Q90 20 240 60" fill="none" stroke="currentColor" stroke-width="2" opacity="0.55" />
+                      <circle cx="30" cy="112" r="3.5" fill="currentColor" />
+                      <circle cx="120" cy="55" r="3.5" fill="currentColor" />
+                      <circle cx="220" cy="62" r="3.5" fill="currentColor" />
+                      <text x="24" y="132" font-size="13" fill="currentColor" style="font-family:var(--font-arabic)">A</text>
+                      <text x="122" y="42" font-size="13" fill="currentColor" style="font-family:var(--font-arabic)">B</text>
+                      <text x="222" y="50" font-size="13" fill="currentColor" style="font-family:var(--font-arabic)">C</text>
+                      <defs>
+                        <marker id="fig11-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                          <path d="M0 0 8 4 0 8Z" fill="var(--color-primary)" />
+                        </marker>
+                      </defs>
+                      <line x1="120" y1="55" x2="168" y2="30" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#fig11-arrow)" />
+                      <text x="172" y="28" font-size="12" fill="var(--color-primary)">v</text>
+                      <g transform="translate(60,105)">
+                        <circle cx="0" cy="0" r="32" fill="none" stroke="var(--color-border-strong)" stroke-width="1" />
+                        <line x1="0" y1="0" x2="-24" y2="-6" stroke="var(--color-accent)" stroke-width="2" marker-end="url(#fig11-arrow)" />
+                        <line x1="0" y1="0" x2="18" y2="20" stroke="var(--color-accent)" stroke-width="2" marker-end="url(#fig11-arrow)" />
+                        <text x="-30" y="-10" font-size="11" fill="var(--color-accent)">Δv</text>
+                        <text x="-6" y="-16" font-size="10" fill="currentColor" opacity="0.7">Δθ</text>
+                      </g>
+                    </svg>
+                  </svg-figure>
+
+                  <formula-card title="التعجيل المركزي">
+                    <math-block>\[ a_{c} = \frac{v^{2}}{r} \qquad \text{...(1)} \]</math-block>
+                    <p style="color:var(--color-text-muted); font-size:var(--fs-300);">حيث v سرعة الجسم، وr نصف قطر مساره الدائري.</p>
+                    <math-block>\[ a_{c} = \frac{(\omega r)^{2}}{r} = \omega^{2} r \qquad \text{...(2)} \]</math-block>
+                  </formula-card>
+                </lesson-card>
+
+                <example-card number="1" title="التعجيل المركزي لقمر صناعي">
+                  <p>
+                    قمر صناعي يدور حول الأرض بسرعة خطية (363.4 m/s)، احسب تعجيله المركزي إذا كانت المسافة بين الأرض
+                    والقمر هي (5000 km).
+                  </p>
+                  <p><strong>الحل:</strong></p>
+                  <math-block>\[ a_{c} = \frac{v^{2}}{r} = \frac{(363.4)^{2}}{5000 \times 1000} \]</math-block>
+                  <div slot="footer" class="ch1-final-answer">
+                    <span class="label">الجواب</span>
+                    <math-block>\[ a_{c} \approx 0.0264\ \text{m/s}^{2} \]</math-block>
+                  </div>
+                </example-card>
+
+                <h3 id="sec-2-1-2">2-2-1 محصلة التعجيل في الحركة الدائرية</h3>
+                <lesson-card>
+                  <p>
+                    كما لاحظنا سابقًا، فإن الجسم المتحرك على مسار دائري يمتلك تعجيلين: الأول يوازي السرعة الخطية وينشأ من
+                    تغيّر مقدارها، ويُسمى التعجيل المماسي (aᴛ = Δv/Δt)؛ والآخر عمودي على السرعة الخطية وينشأ فقط من تغيّر
+                    اتجاهها، ويُسمى التعجيل المركزي (aᴄ = v²/r)، كما في الشكل (2-1).
+                  </p>
+
+                  <simulation-card title="محاكاة الحركة الدائرية المنتظمة">
+                    <p data-i18n="ch1.sim.circular.caption"></p>
+                    <sim-container class="sim-frame" id="sim-circular" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
+                    <div class="ch1-sim-controls cols-3">
+                      <sim-slider id="cm-radius" data-i18n-attr="label:ch1.sim.circular.radius" unit="m" min="0.5" max="3" step="0.1" value="1.5"></sim-slider>
+                      <sim-slider id="cm-omega" data-i18n-attr="label:ch1.sim.circular.omega" unit="rad/s" min="0.5" max="6" step="0.1" value="2"></sim-slider>
+                      <sim-slider id="cm-mass" data-i18n-attr="label:ch1.sim.circular.mass" unit="kg" min="0.5" max="5" step="0.1" value="1"></sim-slider>
+                    </div>
+                    <div class="ch1-sim-readouts">
+                      <sim-value-display id="cm-v" data-i18n-attr="label:ch1.sim.circular.v" unit="m/s"></sim-value-display>
+                      <sim-value-display id="cm-ac" data-i18n-attr="label:ch1.sim.circular.ac" unit="m/s^2"></sim-value-display>
+                      <sim-value-display id="cm-fc" data-i18n-attr="label:ch1.sim.circular.fc" unit="N"></sim-value-display>
+                    </div>
+                  </simulation-card>
+                </lesson-card>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- 3-1 القوة المركزية -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-3-1">
+                <h2><span class="sec-num">3</span>3-1 القوة المركزية</h2>
+
+                <lesson-card>
+                  <p>
+                    على الرغم من ثبات مقدار السرعة الخطية المماسية، فإن تغيّر اتجاهها يؤدي إلى نشوء تعجيل مركزي في
+                    الحركة على المسار الدائري؛ وبما أن الحركة ذات تعجيل، فإن محصلة القوة لا يمكن أن تساوي صفرًا (حسب
+                    قانون نيوتن الثاني للحركة) — وهذا يعني وجود قوة باتجاه التعجيل المركزي تُسمى القوة المركزية (Fᴄ)، الشكل
+                    (3-1)، وتكون باتجاه مركز الدائرة، وبتطبيق قانون نيوتن الثاني:
+                  </p>
+
+                  <formula-card title="القوة المركزية">
+                    <math-block>\[ \sum \vec{F} = m\vec{a} \ \Rightarrow\ \vec{F}_{c} = m\vec{a}_{c} \ \Rightarrow\ \vec{F}_{c} = \frac{m v^{2}}{r} \qquad \text{...(3)} \]</math-block>
+                  </formula-card>
+
+                  <p>
+                    وترتبط جميع الأجسام المتحركة على مسار دائري بقوة مركزية تحاول إبقاء الجسم متحركًا على المسار
+                    الدائري — فمثلًا جزيئات الماء العالقة بالثياب أثناء دورانها في مجفف الغسالة ترتبط بقوة تلاصق مع
+                    الثياب، وهذه القوة هي قوة مركزية؛ فعندما تزداد سرعة الدوران أثناء التجفيف تصبح هذه القوة غير كافية
+                    لإبقاء جزيئات الماء ملتصقة بالثياب، فتنطلق مماسيًا لمحيط دائرة الدوران وتنفصل عن الثياب.
+                  </p>
+                  <p>
+                    والقوة المركزية هي محصلة مجموعة من القوى غير المتزنة، تُكسب الجسم المتحرك حركة دائرية تعجيلًا مركزيًا
+                    عموديًا على اتجاه السرعة اللحظية للجسم، لذا فهي لا تبذل شغلًا بالمعنى الفيزيائي، ولا تجذب الجسم نحو
+                    اتجاهها، والجسم ليس في حالة اتزان تحت تأثيرها، إذ إنها تعمل على تحويل المسار المستقيم الطبيعي للجسم
+                    إلى مسار دائري.
+                  </p>
+                </lesson-card>
+
+                <lab-callout variant="note" label="هل تعلم؟">
+                  <p>
+                    يعتمد أساس عمل جهاز الطرد المركزي (Centrifuge) على تغيّر القوة المركزية باختلاف كتلة المادة، وبذلك
+                    يمكن فصل موادّ مختلفة عن بعضها بحسب الكتلة أو الكثافة. يحتوي الجهاز على وعاء توضع فيه عيّنات مختلفة
+                    الكتلة، مثبّت على محرك يدور بسرعات متعددة. يُستعمل في الطب (فصل مكوّنات الدم)، وفي أجهزة متطورة تُستعمل
+                    في تخصيب اليورانيوم، أي فصل اليورانيوم-235 عن اليورانيوم-238.
+                  </p>
+                </lab-callout>
+
+                <example-card number="2" title="أقصى سرعة آمنة لسيارة على منعطف">
+                  <p>
+                    احسب أقصى سرعة (بوحدات km/h) تستطيع أن تدور بها سيارة حول منعطف نصف قطره (25 m) على طريق مستوٍ دون
+                    انزلاق، إذا كان معامل الاحتكاك السكوني بين الإطارات والطريق يساوي (0.8).
+                  </p>
+
+                  <svg-figure caption="سيارة تدور حول منعطف مستوٍ نصف قطره r دون انزلاق.">
+                    <svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 130 A120 120 0 0 1 210 40" fill="none" stroke="currentColor" stroke-width="18" opacity="0.12" />
+                      <path d="M10 130 A120 120 0 0 1 210 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.6" />
+                      <circle cx="118" cy="130" r="3" fill="var(--color-accent)" />
+                      <text x="126" y="134" font-size="12" fill="currentColor">C</text>
+                      <line x1="118" y1="130" x2="70" y2="100" stroke="var(--color-accent)" stroke-width="1.5" />
+                      <text x="90" y="122" font-size="11" fill="var(--color-accent)">r</text>
+                      <rect x="52" y="88" width="30" height="16" rx="3" fill="var(--color-primary)" transform="rotate(-28 67 96)" />
+                    </svg>
+                  </svg-figure>
+
+                  <p><strong>الحل:</strong></p>
+                  <p>
+                    القوة المركزية اللازمة لإبقاء السيارة على مسارها المنحني دون انزلاق (القوة المركزية) تنشأ من قوة
+                    احتكاك الإطارات مع الطريق. إذا كانت كتلة السيارة (m)، فإن أقصى قوة احتكاك:
+                  </p>
+                  <math-block>\[ F_{s(\max)} = \mu_{s} N,\quad N = mg \]</math-block>
+                  <p>بمساواة قوة الاحتكاك بالقوة المركزية:</p>
+                  <math-block>\[ F_{c} = F_{s(\max)} \ \Rightarrow\ \frac{m v^{2}}{r} = \mu_{s}\, m g \]</math-block>
+                  <math-block>\[ v = \sqrt{\mu_{s}\, r\, g} = \sqrt{0.8 \times 25 \times 9.8} \]</math-block>
+                  <p>وبتحويل الناتج إلى km/h:</p>
+                  <math-block>\[ v = 14\ \text{m/s} \times \frac{1\,\text{km}}{1000\,\text{m}} \times \frac{3600\,\text{s}}{1\,\text{h}} \]</math-block>
+                  <div slot="footer" class="ch1-final-answer">
+                    <span class="label">الجواب</span>
+                    <math-block>\[ v = 14\ \text{m/s} = 50.4\ \text{km/h} \]</math-block>
+                  </div>
+                </example-card>
+
+                <lab-callout variant="note">
+                  <p>
+                    <strong>ملاحظة:</strong> في حال حدوث الانزلاق، تتحول قوة الاحتكاك إلى احتكاك حركي وتُحسب من:
+                  </p>
+                  <math-block>\[ F_{k} = \mu_{k} N \]</math-block>
+                  <p>حيث μₖ معامل الاحتكاك الحركي.</p>
+                </lab-callout>
+
+                <lab-callout variant="note" label="هل تعلم؟">
+                  <p>
+                    تُصمَّم مخارج الطرق السريعة ومنعطفات حلبات السباق بميل طفيف (انحدار)، وذلك لزيادة القوة المركزية
+                    الجاذبة؛ إذ تتحلل قوة رد فعل الطريق المائل على السيارة إلى مركبتين: إحداهما عمودية على الطريق تساوي
+                    وزن الجسم، والأخرى باتجاه المركز تُسهم مع قوة الاحتكاك في زيادة القوة المركزية وتمنع انزلاق السيارة.
+                  </p>
+
+                  <svg-figure caption="منعطف مائل بزاوية θ: تتحلل قوة رد الفعل العمودية F_N إلى مركبتين تُسهمان في توليد القوة المركزية.">
+                    <svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <marker id="fig-bank-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                          <path d="M0 0 8 4 0 8Z" fill="currentColor" />
+                        </marker>
+                      </defs>
+                      <path d="M20 130 L240 90 L240 130 Z" fill="currentColor" opacity="0.12" />
+                      <line x1="20" y1="130" x2="240" y2="90" stroke="currentColor" stroke-width="2" />
+                      <line x1="20" y1="130" x2="240" y2="130" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.5" />
+                      <text x="150" y="122" font-size="11" fill="currentColor">θ</text>
+                      <circle cx="120" cy="108" r="7" fill="var(--color-primary)" />
+                      <line x1="120" y1="108" x2="120" y2="150" stroke="var(--color-accent)" stroke-width="2" marker-end="url(#fig-bank-arrow)" />
+                      <text x="126" y="148" font-size="11" fill="var(--color-accent)">mg</text>
+                      <line x1="120" y1="108" x2="86" y2="46" stroke="var(--color-lab-violet-500, #8c6fef)" stroke-width="2" marker-end="url(#fig-bank-arrow)" />
+                      <text x="60" y="42" font-size="11" fill="currentColor">F_N</text>
+                      <line x1="120" y1="108" x2="60" y2="108" stroke="var(--color-primary)" stroke-width="2" stroke-dasharray="3 3" marker-end="url(#fig-bank-arrow)" />
+                      <text x="34" y="104" font-size="10" fill="var(--color-primary)">F_N·sinθ</text>
+                      <line x1="120" y1="108" x2="120" y2="60" stroke="var(--color-primary)" stroke-width="1.5" stroke-dasharray="2 3" opacity="0.7" />
+                      <text x="124" y="64" font-size="10" fill="currentColor" opacity="0.8">F_N·cosθ</text>
+                    </svg>
+                  </svg-figure>
+                </lab-callout>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- 4-1 مدارات الاقمار الاصطناعية وقوانين كبلر -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-4-1">
+                <h2><span class="sec-num">4</span>4-1 مدارات الأقمار الاصطناعية وقوانين كبلر</h2>
+
+                <lesson-card>
+                  <p>
+                    تخضع حركة الأقمار الاصطناعية حول الأرض لقوانين كبلر، التي تُحدّد حركة الكواكب في مداراتها وحركة
+                    النجوم في المجرّات، وهي كما يأتي:
+                  </p>
+                </lesson-card>
+
+                <h3>القانون الأول (قانون المسارات)</h3>
+                <lesson-card>
+                  <p>
+                    تتحرك الكواكب (أو الأقمار الاصطناعية) في مسارات إهليلجية (بيضوية) حول إحدى البؤرتين، حيث يقع مركز
+                    الجاذبية، كما في الشكل (5-1).
+                  </p>
+                  <p style="color:var(--color-text-muted); font-size:var(--fs-200);">
+                    ملاحظة: تُعدّ الشمس مركز الجذب في حالة دوران كواكب المجموعة الشمسية حولها، وتُعد الأرض مركز الجذب في
+                    حالة دوران الأقمار الاصطناعية حولها.
+                  </p>
+                </lesson-card>
+
+                <h3>القانون الثاني (قانون المساحات)</h3>
+                <lesson-card>
+                  <p>
+                    الخط الواصل بين مركز الجاذبية والكوكب (أو القمر) يكنس مساحات متساوية في أزمنة متساوية، كما في الشكل
+                    (6-1).
+                  </p>
+                </lesson-card>
+
+                <h3>القانون الثالث (قانون التناسب)</h3>
+                <lesson-card>
+                  <p>
+                    مربع الزمن الدوري لحركة الكواكب (أو القمر) يتناسب طرديًا مع مكعّب نصف المحور الأكبر لمسارها. فإذا كان
+                    الزمن الدوري (t) ونصف المحور الأكبر (r)، فإن:
+                  </p>
+                  <formula-card title="قانون كبلر الثالث">
+                    <math-block>\[ t^{2} \propto r^{3} \]</math-block>
+                  </formula-card>
+                </lesson-card>
+
+                <simulation-card title="محاكاة قوانين كبلر — المسار الإهليلجي وكنس المساحات">
+                  <p data-i18n="ch1.sim.kepler.caption"></p>
+                  <sim-container class="sim-frame" id="sim-kepler" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
+                  <div class="ch1-sim-controls">
+                    <sim-slider id="kp-ecc" data-i18n-attr="label:ch1.sim.kepler.eccentricity" min="0" max="0.75" step="0.05" value="0.3"></sim-slider>
+                  </div>
+                  <div class="ch1-sim-readouts">
+                    <sim-value-display id="kp-r" data-i18n-attr="label:ch1.sim.kepler.r" unit="AU" precision="2"></sim-value-display>
+                    <sim-value-display id="kp-thetadot" data-i18n-attr="label:ch1.sim.kepler.thetadot" unit="rad/s" precision="2"></sim-value-display>
+                  </div>
+                </simulation-card>
+
+                <lab-callout variant="note" label="تذكر">
+                  <p>
+                    أيّ كتلتين في الكون تتجاذبان بقوة تتناسب طرديًا مع حاصل ضرب الكتلتين (M, m) وعكسيًا مع مربع المسافة
+                    بينهما (r) — هذا هو قانون نيوتن للجذب العام، رياضيًا:
+                  </p>
+                  <math-block>\[ F_{G} = \frac{G\,M\,m}{r^{2}} \]</math-block>
+                  <p>حيث G ثابت الجذب العام، وقيمته:</p>
+                  <math-block>\[ G = 6.67\times10^{-11}\ \text{N·m}^{2}/\text{kg}^{2} \]</math-block>
+                </lab-callout>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- 5-1 الحركة الدورانية -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-5-1">
+                <h2><span class="sec-num">5</span>5-1 الحركة الدورانية</h2>
+
+                <lesson-card>
+                  <p>
+                    تتألف معظم أنواع الحركة في حياتنا اليومية من انتقال الجسم ودورانه حول محور معيّن في الوقت نفسه، مثل
+                    دوران الأرض حول محورها مرة كل 24 ساعة، ودورانها حول الشمس مرة كل 365 يومًا. وكذلك حركة عجلة السيارة
+                    تتضمن حركة دورانية وانتقالية معًا. تُوصف الحركة الدورانية بدلالة الإزاحة الزاوية (θ)، والسرعة الزاوية
+                    (ω)، والتعجيل الزاوي (α). وفي جميع الحالات يمكن للمقادير الفيزيائية في الحركة الدورانية أن تحلّ محل
+                    المقادير الفيزيائية في الحركة الخطية، لجميع القوانين، كما في الجدول (1-1).
+                  </p>
+
+                  <data-table caption="جدول 1-1: المقادير الفيزيائية للحركة الخطية والحركة الدورانية">
+                    <table>
+                      <thead>
+                        <tr><th>المقدار الفيزيائي</th><th>الحركة الخطية</th><th>الحركة الدورانية</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>الكتلة</td><td>m</td><td>نعوّض بدل الكتلة بعزم القصور الذاتي I</td></tr>
+                        <tr><td>الإزاحة</td><td>S</td><td>θ</td></tr>
+                        <tr><td>السرعة</td><td>v</td><td>ω</td></tr>
+                        <tr><td>التعجيل</td><td>a</td><td>α</td></tr>
+                        <tr><td>القوة</td><td>F</td><td>نعوّض بدل القوة بالعزم المدوّر τ</td></tr>
+                      </tbody>
+                    </table>
+                  </data-table>
+                </lesson-card>
+
+                <h3 id="sec-5-1-1">1-5-1 الإزاحة الزاوية</h3>
+                <lesson-card>
+                  <p>
+                    هي الزاوية المركزية التي يكنسها جسم متحرك؛ فإذا تحرك جسيم حركة دورانية على مسار دائري نصف قطره (r)
+                    وانتقل من النقطة (A) إلى النقطة (B) قاطعًا قوسًا طوله (S) على المحيط، كما في الشكل (7-1)، فإن الزاوية
+                    التي يواجهها القوس تُسمى الإزاحة الزاوية، ويُرمز لها بـ (θ)، واتجاهها موجب إذا كانت عكس اتجاه دوران
+                    عقارب الساعة، وسالب إذا كانت باتجاه دوران عقارب الساعة، وتُقاس بوحدة الراديان (rad). لذا:
+                  </p>
+
+                  <svg-figure number="7-1" caption="حركة جسيم على منحنى دائرة: القوس s يقابله المركزية θ عند نصف القطر r.">
+                    <svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <marker id="fig71-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                          <path d="M0 0 8 4 0 8Z" fill="var(--color-domain-mechanics)" />
+                        </marker>
+                      </defs>
+                      <circle cx="110" cy="100" r="65" fill="none" stroke="var(--color-domain-mechanics)" stroke-width="2" opacity="0.5" />
+                      <circle cx="110" cy="100" r="2.5" fill="currentColor" />
+                      <text x="100" y="94" font-size="12" fill="currentColor">O</text>
+                      <line x1="110" y1="100" x2="175" y2="100" stroke="currentColor" stroke-width="1.5" />
+                      <text x="140" y="94" font-size="11" fill="currentColor">r</text>
+                      <path d="M175 100 A65 65 0 0 0 138 44" fill="none" stroke="var(--color-accent)" stroke-width="3" />
+                      <text x="158" y="60" font-size="11" fill="var(--color-accent)">s</text>
+                      <line x1="110" y1="100" x2="138" y2="44" stroke="currentColor" stroke-width="1.5" opacity="0.7" />
+                      <text x="120" y="76" font-size="10" fill="currentColor" opacity="0.8">θ</text>
+                      <circle cx="175" cy="100" r="3" fill="var(--color-domain-mechanics)" />
+                      <text x="178" y="114" font-size="11" fill="currentColor">A</text>
+                      <circle cx="138" cy="44" r="3" fill="var(--color-domain-mechanics)" />
+                      <text x="118" y="34" font-size="11" fill="currentColor">B</text>
+                      <line x1="138" y1="44" x2="170" y2="18" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#fig71-arrow)" />
+                      <text x="172" y="16" font-size="11" fill="var(--color-primary)">v</text>
+                    </svg>
+                  </svg-figure>
+
+                  <formula-card title="الإزاحة الزاوية">
+                    <math-block>\[ \theta_{rad} = \frac{s}{r} \qquad \text{...(1)} \]</math-block>
+                    <p style="color:var(--color-text-muted); font-size:var(--fs-300);">ومنها نستنتج العلاقة بين الإزاحة الزاوية والإزاحة الخطية (S):</p>
+                    <math-block>\[ \therefore\ S = r\theta \qquad \text{...(2)} \]</math-block>
+                  </formula-card>
+
+                  <lab-callout variant="note">
+                    <p>
+                      لا تُقاس الإزاحة الزاوية (θ) بالمتر أو مضاعفاته أو أجزائه — بل تُقاس بوحدة الراديان، ويمكن تقدير
+                      الإزاحة الزاوية بالدرجات الستينية أو بعدد الدورات، فالدورة الكاملة تساوي (°360) بالنظام الستيني
+                      وتقابل (2π) بالراديان، أي:
+                    </p>
+                    <math-block>\[ 1\ \text{revolution} = 2\pi\ \text{rad} = 360^{\circ},\qquad \text{عدد الدورات} = \frac{\theta}{2\pi} \]</math-block>
+                  </lab-callout>
+                </lesson-card>
+
+                <h3 id="sec-5-1-2">2-5-1 السرعة الزاوية</h3>
+                <lesson-card>
+                  <p>
+                    نلاحظ أيضًا أن (S) تتغيّر بتغيّر (θ) عند نصف قطر ثابت، لذا:
+                  </p>
+                  <math-block>\[ \Delta S = r\,\Delta\theta \qquad \text{...(3)} \]</math-block>
+                  <p>وبقسمة الطرفين على (Δt):</p>
+                  <math-block>\[ \frac{\Delta S}{\Delta t} = r\left(\frac{\Delta\theta}{\Delta t}\right) \qquad \text{...(4)} \]</math-block>
+                  <p>
+                    يمثّل (ΔS/Δt) السرعة الخطية المماسية على المحيط، ويُرمز لها بـ (vᴛ):
+                  </p>
+                  <math-block>\[ v_{T} = \frac{\Delta S}{\Delta t} \qquad \text{...(5)} \]</math-block>
+                  <p>ويمثّل (Δθ/Δt) معدل تغيّر الزاوية المركزية مع الزمن، ويُسمى السرعة الزاوية، ويُرمز لها بـ (ω)، وتُقاس بوحدة (rad/s):</p>
+                  <math-block>\[ \omega = \frac{\Delta\theta}{\Delta t} \qquad \text{...(6)} \]</math-block>
+                  <p>
+                    السرعة الزاوية مقدار فيزيائي متجه (اتجاهي)، عمودي على المستوى الذي يحتوي (vᴛ) و(r)، ويُحدَّد اتجاهه
+                    بقاعدة اليد اليمنى.
+                  </p>
+
+                  <svg-figure number="8-1" caption="قاعدة اليد اليمنى لتحديد اتجاه السرعة الزاوية: أصابع اليد تتبع اتجاه الدوران، والإبهام يشير إلى اتجاه ω.">
+                    <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <marker id="fig81-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                          <path d="M0 0 8 4 0 8Z" fill="var(--color-primary)" />
+                        </marker>
+                        <marker id="fig81-arrow2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                          <path d="M0 0 8 4 0 8Z" fill="var(--color-accent)" />
+                        </marker>
+                      </defs>
+                      <ellipse cx="110" cy="110" rx="70" ry="24" fill="none" stroke="currentColor" stroke-width="2" opacity="0.5" />
+                      <path d="M40 110 A70 24 0 0 1 95 87.5" fill="none" stroke="var(--color-accent)" stroke-width="3" marker-end="url(#fig81-arrow2)" />
+                      <text x="55" y="80" font-size="11" fill="var(--color-accent)">اتجاه الدوران</text>
+                      <line x1="110" y1="110" x2="110" y2="20" stroke="var(--color-primary)" stroke-width="3" marker-end="url(#fig81-arrow)" />
+                      <text x="116" y="30" font-size="13" fill="var(--color-primary)">ω</text>
+                      <text x="70" y="145" font-size="11" fill="currentColor" opacity="0.75">قاعدة اليد اليمنى</text>
+                    </svg>
+                  </svg-figure>
+
+                  <p>وبالتعويض بالمعادلتين (5) و(6) في (4):</p>
+                  <math-block>\[ v_{T} = \omega r \qquad \text{...(7)} \]</math-block>
+                  <p>
+                    عند إتمام الجسم دورة كاملة، تساوي الإزاحة الزاوية (2π)، وبالتعويض في (7): ω = 2π/t، حيث (t) يمثّل
+                    زمن الدورة الكاملة (الدور)؛ ومقلوب هذا الزمن يُسمى التردد، ويُرمز له بـ (f)، ويُقاس بوحدة (دورة/ثانية)
+                    (Hz) أو هرتز. لذا فإن السرعة الزاوية بدلالة التردد (يُسمى هنا التردد الزاوي):
+                  </p>
+                  <formula-card title="التردد الزاوي">
+                    <math-block>\[ \omega = 2\pi f \]</math-block>
+                  </formula-card>
+
+                  <lab-callout variant="note" label="هل تعلم؟">
+                    <p>
+                      تحتوي آلية مشغّل القرص المدمج (CD) على محرك يُدير القرص المرن ويتحكم بسرعته، والتي تتراوح بين 200
+                      و500 دورة في الدقيقة، حتى تتمكن حزمة الليزر من قراءة المعلومات المخزّنة على القرص.
+                    </p>
+
+                    <svg-figure caption="آلية دوران قرص CD: محرك يدير القرص عبر عمود شبه مرن، وحزمة ليزر تقرأ البيانات.">
+                      <svg viewBox="0 0 240 130" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="80" cy="65" r="45" fill="none" stroke="currentColor" stroke-width="2" opacity="0.5" />
+                        <circle cx="80" cy="65" r="8" fill="currentColor" opacity="0.6" />
+                        <rect x="60" y="95" width="40" height="18" rx="3" fill="var(--color-primary)" />
+                        <text x="66" y="108" font-size="10" fill="var(--color-white)">محرك</text>
+                        <line x1="80" y1="95" x2="80" y2="73" stroke="currentColor" stroke-width="2" />
+                        <line x1="150" y1="65" x2="200" y2="65" stroke="var(--color-danger)" stroke-width="2" stroke-dasharray="3 3" />
+                        <polygon points="200,58 220,65 200,72" fill="var(--color-danger)" />
+                        <text x="192" y="50" font-size="10" fill="var(--color-danger)">ليزر</text>
+                      </svg>
+                    </svg-figure>
+                  </lab-callout>
+                </lesson-card>
+
+                <example-card number="3" title="سرعة مروحة دوّارة">
+                  <p>
+                    مروحة تدور بمعدل (900 rpm) (أي 900 دورة/دقيقة). (أ) احسب السرعة الزاوية لأي نقطة على إحدى ريش
+                    المروحة. (ب) احسب السرعة المماسية لحافة الريشة إذا كانت المسافة من المركز إلى الحافة (20 cm).
+                  </p>
+                  <p><strong>الحل:</strong></p>
+                  <p>أ- السرعة الزاوية:</p>
+                  <math-block>\[ \omega = \frac{N \times 2\pi}{t} = \frac{900 \times 2\pi}{60} \]</math-block>
+                  <p>ب- السرعة المماسية:</p>
+                  <math-block>\[ v = \omega r = 30\pi \times \frac{20}{100} = 30 \times 3.14 \times 0.2 \]</math-block>
+                  <div slot="footer" class="ch1-final-answer">
+                    <span class="label">الجواب</span>
+                    <math-block>\[ \omega = 30\pi\ \text{rad/s},\qquad v \approx 18.84\ \text{m/s} \]</math-block>
+                  </div>
+                </example-card>
+
+                <lesson-card>
+                  <p>
+                    لنفترض أن جسمًا يتحرك على مسار دائري نصف قطره (r) كما في الشكل (9-1)؛ فإن موضعه الزاوي في أي لحظة
+                    يُحدَّد بالإزاحة الزاوية (θ). فإذا كان موضع الجسم عند الزمن (t₁) هو (θ₁) وأصبح (θ₂) عند الزمن (t₂)،
+                    فإنه دار إزاحة زاوية: Δθ = θ₂ − θ₁، خلال زمن مقداره Δt = t₂ − t₁. لذا فإن متوسط السرعة الزاوية:
+                  </p>
+
+                  <svg-figure number="9-1" caption="جسم يتحرك من A عند (t₁, ω₁) إلى B عند (t₂, ω₂) على مسار دائري.">
+                    <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="110" cy="90" r="60" fill="none" stroke="var(--color-lab-green-500, #38b76a)" stroke-width="2" opacity="0.5" />
+                      <circle cx="110" cy="90" r="2.5" fill="currentColor" />
+                      <text x="98" y="84" font-size="12" fill="currentColor">O</text>
+                      <circle cx="170" cy="90" r="3.5" fill="var(--color-primary)" />
+                      <text x="176" y="94" font-size="11" fill="currentColor">A (t₁, ω₁)</text>
+                      <circle cx="135" cy="38" r="3.5" fill="var(--color-primary)" />
+                      <text x="100" y="28" font-size="11" fill="currentColor">B (t₂, ω₂)</text>
+                      <path d="M170 90 A60 60 0 0 0 135 38" fill="none" stroke="var(--color-accent)" stroke-width="2.5" />
+                    </svg>
+                  </svg-figure>
+
+                  <formula-card title="متوسط السرعة الزاوية">
+                    <math-block>\[ \omega_{av} = \frac{\Delta\theta}{\Delta t} = \frac{\theta_{2}-\theta_{1}}{t_{2}-t_{1}} \qquad \text{...(8)} \]</math-block>
+                  </formula-card>
+                </lesson-card>
+
+                <h3 id="sec-5-1-3">3-5-1 التعجيل الزاوي</h3>
+                <lesson-card>
+                  <p>
+                    إذا حدث تغيّر في السرعة الخطية المماسية (ΔvT) على المسار المنحني (S)، وبالتبعية تتغيّر السرعة الزاوية
+                    عند نصف قطر ثابت (r)، فإن الحركة تكون ذات تعجيل، لذا تصبح المعادلة (8):
+                  </p>
+                  <math-block>\[ \Delta v_{T} = r\,\Delta\omega \qquad \text{...(9)} \]</math-block>
+                  <p>وبقسمة الطرفين على (Δt):</p>
+                  <math-block>\[ \frac{\Delta v_{T}}{\Delta t} = r\left(\frac{\Delta\omega}{\Delta t}\right) \qquad \text{...(10)} \]</math-block>
+                  <p>
+                    يمثّل (ΔvT/Δt) التعجيل المماسي (aᴛ)، ويمثّل (Δω/Δt) التعجيل الزاوي، ويُرمز له بـ (α)، ويُقاس بوحدة
+                    (rad/s²). وبالتعويض في (10):
+                  </p>
+                  <formula-card title="التعجيل الزاوي والتعجيل المماسي">
+                    <math-block>\[ a_{T} = r\alpha \qquad \text{...(11)} \]</math-block>
+                  </formula-card>
+                  <p style="color:var(--color-text-muted); font-size:var(--fs-300);">
+                    ملاحظة: تُبيّن المعادلة (11) أن التعجيل الزاوي مرتبط بالتعجيل الخطي — فالتعجيل الزاوي ينشأ من تغيّر
+                    السرعة الخطية أو الزاوية، ويصبح صفرًا إذا كانت السرعة الخطية للجسم على الدائرة ثابتة المقدار.
+                  </p>
+                </lesson-card>
+
+                <example-card number="4" title="التعجيل الزاوي والمماسي لعجلة">
+                  <p>
+                    عجلة نصف قطرها (40 cm) تدور حول محور ثابت، وتتزايد سرعتها بانتظام من السكون حتى تصل إلى (600 rpm)
+                    في زمن (20 s). أوجد: (أ) التعجيل الزاوي. (ب) التعجيل المماسي لنقطة على حافة العجلة.
+                  </p>
+                  <p><strong>الحل:</strong></p>
+                  <p>تحويل السرعة الزاوية إلى rad/s:</p>
+                  <math-block>\[ \omega = \left(600\,\frac{\text{rev}}{\text{min}}\right)\left(\frac{1\,\text{min}}{60\,\text{s}}\right)\left(\frac{2\pi\,\text{rad}}{1\,\text{rev}}\right) \]</math-block>
+                  <p>أ- التعجيل الزاوي (الجسم يبدأ من السكون، t₁ = 0):</p>
+                  <math-block>\[ \alpha = \frac{\Delta\omega}{\Delta t} = \frac{62.8-0}{20} \]</math-block>
+                  <p>ب- التعجيل المماسي لنقطة على الحافة:</p>
+                  <math-block>\[ a_{T} = r\alpha = \left(\frac{40}{100}\,\text{m}\right)(3.14\ \text{rad/s}^{2}) \]</math-block>
+                  <div slot="footer" class="ch1-final-answer">
+                    <span class="label">الجواب</span>
+                    <math-block>\[ \alpha = 3.14\ \text{rad/s}^{2},\qquad a_{T} \approx 1.3\ \text{m/s}^{2} \]</math-block>
+                  </div>
+                </example-card>
+
+                <h3 id="sec-5-1-4">4-5-1 التعجيل الزاوي المنتظم</h3>
+                <lesson-card>
+                  <p>
+                    يتحرك جسم بتعجيل زاوي (α) إذا كان العزم المدوّر المحصّل المؤثر فيه لا يساوي صفرًا. فإذا كانت السرعة
+                    الزاوية عند النقطة A هي (ω₁) وعند النقطة B هي (ω₂) كما في الشكل (9-1)، فإن متوسط السرعة الزاوية
+                    اللحظية: ω_av = (ω₁+ω₂)/2. ويُعرَّف متوسط التعجيل الزاوي بأنه معدل تغيّر السرعة الزاوية لكل وحدة زمن:
+                  </p>
+                  <math-block>\[ \alpha_{av} = \frac{\Delta\omega}{\Delta t} = \frac{\omega_{2}-\omega_{1}}{t_{2}-t_{1}} \qquad \text{...(12)} \]</math-block>
+                  <p>
+                    وبالتناظر البسيط، تُماثل قوانين الحركة الدورانية بتعجيل زاوي منتظم قوانين الحركة الخطية بتعجيل منتظم
+                    (بالتعويض x→θ، v→ω، a→α):
+                  </p>
+                  <formula-card title="قوانين الحركة الدورانية المنتظمة التعجيل">
+                    <math-block>\[ \omega = \omega_{0} + \alpha t \qquad \text{...(13)} \]</math-block>
+                    <math-block>\[ \theta - \theta_{0} = \omega_{0} t + \tfrac{1}{2}\alpha t^{2} \qquad \text{...(14)} \]</math-block>
+                    <math-block>\[ \omega^{2} = \omega_{0}^{2} + 2\alpha(\theta-\theta_{0}) \qquad \text{...(15)} \]</math-block>
+                  </formula-card>
+                  <p style="color:var(--color-text-muted); font-size:var(--fs-300);">
+                    حيث (ω₀, θ₀) تمثّلان السرعة الزاوية الابتدائية والإزاحة الزاوية الابتدائية. والعلاقة بين المقادير
+                    الفيزيائية في الحركة الدورانية والحركة الخطية (عند نصف قطر ثابت):
+                  </p>
+                  <math-block>\[ s = \theta r,\qquad v = \omega r,\qquad a_{T} = \alpha r \]</math-block>
+
+                  <data-table caption="مقارنة بين قوانين الحركة الخطية والدورانية بتعجيل منتظم">
+                    <table>
+                      <thead>
+                        <tr><th>الحركة الدورانية</th><th>الحركة الخطية</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>ω₂ = ω₁ + αt</td><td>v₂ = v₁ + at</td></tr>
+                        <tr><td>θ = ω₁t + ½αt²</td><td>s = v₁t + ½at²</td></tr>
+                        <tr><td>ω₂² = ω₁² + 2αθ</td><td>v₂² = v₁² + 2as</td></tr>
+                      </tbody>
+                    </table>
+                  </data-table>
+
+                  <ul class="ch1-list">
+                    <li>إذا بدأت الحركة من السكون، يُعوَّض عن (ω₁) بصفر.</li>
+                    <li>عندما يعاكس التعجيل الزاوي الحركة (يبطئها)، يأخذ إشارة سالبة.</li>
+                  </ul>
+                </lesson-card>
+
+                <example-card number="5" title="محرك كهربائي يبدأ من السكون">
+                  <p>
+                    بدأ محرك كهربائي دورانه من السكون وبلغت سرعته الزاوية (1200 rev/min) بعد مرور زمن مقداره (10 s)، ما
+                    مقدار تعجيله الزاوي والإزاحة الزاوية التي قطعها وعدد الدورات الكلية؟
+                  </p>
+                  <p><strong>الحل:</strong></p>
+                  <p>المحرك يبدأ من السكون: ω₀ = 0. تحويل السرعة النهائية إلى rad/s:</p>
+                  <math-block>\[ \omega = \frac{1200 \times 2\pi}{60} = 40\pi\ \text{rad/s} \]</math-block>
+                  <p>من ω = ω₀ + αt:</p>
+                  <math-block>\[ 40\pi = \alpha(10) \ \Rightarrow\ \alpha = 4\pi\ \text{rad/s}^{2} \]</math-block>
+                  <p>الإزاحة الزاوية من θ − θ₀ = ω₀t + ½αt² (وω₀ = θ₀ = 0):</p>
+                  <math-block>\[ \theta = \tfrac{1}{2}(4\pi)(10)^{2} = 200\pi\ \text{rad} \]</math-block>
+                  <p>عدد الدورات (1 دورة = 2π rad):</p>
+                  <math-block>\[ \text{عدد الدورات} = \frac{200\pi}{2\pi} \]</math-block>
+                  <div slot="footer" class="ch1-final-answer">
+                    <span class="label">الجواب</span>
+                    <math-block>\[ \alpha = 4\pi\ \text{rad/s}^{2},\quad \theta = 200\pi\ \text{rad},\quad 100\ \text{دورة} \]</math-block>
+                  </div>
+                </example-card>
+
+                <h3 id="sec-5-1-5">5-5-1 عزم القصور الذاتي</h3>
+                <lesson-card>
+                  <p>
+                    عزم القصور الذاتي لجسم يدور حول محور يمر بمركز الدائرة هو حاصل ضرب الكتلة في مربع نصف قطر الدوران،
+                    ويُرمز له بـ (I) — وهو يمثّل مقاومة الجسم لأي تغيّر في سرعته الدورانية، ويعتمد على نمط توزيع الكتلة
+                    وشكل الجسم وكتلته:
+                  </p>
+                  <formula-card title="عزم القصور الذاتي لكتلة نقطية">
+                    <math-block>\[ I = m r^{2} \qquad \text{...(16)},\quad \text{الوحدات: kg·m}^{2} \]</math-block>
+                  </formula-card>
+                  <p>قانون نيوتن الثاني: F = ma .......(17). وفي الحركة الدورانية تصبح المعادلة (17):</p>
+                  <formula-card title="قانون العزم المدوّر للحركة الدورانية">
+                    <math-block>\[ \tau = I\alpha \qquad \text{...(18)} \]</math-block>
+                  </formula-card>
+                  <p>
+                    تمثّل هذه المعادلة قانون نيوتن الثاني في الحركة الدورانية، حيث يحلّ العزم المدوّر (τ) محل القوة (F)،
+                    ويحلّ عزم القصور الذاتي (I) محل الكتلة (m)، ويحلّ التعجيل الزاوي (α) محل التعجيل الخطي (a).
+                  </p>
+
+                  <data-table caption="جدول 2-1: عزم القصور الذاتي لبعض الأنظمة">
+                    <table>
+                      <thead>
+                        <tr><th>النظام</th><th>عزم القصور الذاتي</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>عمود أو سلك طويل حول محور عمودي يمر بمركز الكتلة</td><td>I = (1/12) mL²</td></tr>
+                        <tr><td>طوق رقيق حول محور عمودي يمر بالمركز</td><td>I = m r²</td></tr>
+                        <tr><td>كرة صلدة حول القطر</td><td>I = (2/5) m r²</td></tr>
+                        <tr><td>صفيحة حول محور بمركز الكتلة</td><td>I = (1/12) m(a²+b²)</td></tr>
+                        <tr><td>قرص أو أسطوانة صلدة حول محورها المار بمركز الكتلة</td><td>I = (1/2) m r²</td></tr>
+                        <tr><td>كرة مجوّفة حول القطر</td><td>I = (2/3) m r²</td></tr>
+                        <tr><td>صفيحة حول محور موازٍ يمر بحافتها</td><td>I = (2/3) m a²</td></tr>
+                      </tbody>
+                    </table>
+                  </data-table>
+
+                  <svg-figure caption="عيّنة من الأشكال الشائعة وعزم قصورها الذاتي حول المحور المبيّن — راجع الجدول (2-1) للمعادلات الكاملة.">
+                    <svg viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg">
+                      <g transform="translate(30,55)">
+                        <line x1="-35" y1="0" x2="35" y2="0" stroke="var(--color-primary)" stroke-width="6" stroke-linecap="round" />
+                        <line x1="0" y1="-30" x2="0" y2="30" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" />
+                        <text x="-16" y="46" font-size="10" fill="currentColor">عمود/سلك</text>
+                      </g>
+                      <g transform="translate(120,55)">
+                        <ellipse cx="0" cy="0" rx="34" ry="14" fill="var(--color-domain-mechanics)" opacity="0.35" />
+                        <ellipse cx="0" cy="0" rx="34" ry="14" fill="none" stroke="var(--color-domain-mechanics)" stroke-width="2" />
+                        <line x1="0" y1="-30" x2="0" y2="30" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" />
+                        <text x="-14" y="46" font-size="10" fill="currentColor">قرص/أسطوانة</text>
+                      </g>
+                      <g transform="translate(210,55)">
+                        <circle cx="0" cy="0" r="26" fill="var(--color-accent)" opacity="0.35" />
+                        <circle cx="0" cy="0" r="26" fill="none" stroke="var(--color-accent)" stroke-width="2" />
+                        <line x1="-26" y1="0" x2="26" y2="0" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" />
+                        <text x="-16" y="46" font-size="10" fill="currentColor">كرة صلدة</text>
+                      </g>
+                      <g transform="translate(285,55)">
+                        <circle cx="0" cy="0" r="26" fill="none" stroke="var(--color-lab-green-500, #38b76a)" stroke-width="3" />
+                        <line x1="-26" y1="0" x2="26" y2="0" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" />
+                        <text x="-18" y="46" font-size="10" fill="currentColor">كرة مجوّفة</text>
+                      </g>
+                    </svg>
+                  </svg-figure>
+                </lesson-card>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- 6-1 الطاقة في الحركة الدورانية -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-6-1">
+                <h2><span class="sec-num">6</span>6-1 الطاقة في الحركة الدورانية</h2>
+                <lesson-card>
+                  <p>
+                    بما أن الطاقة الحركية في الحركة الانتقالية الخطية (Eₖ) هي: Eₖ = ½mv²، حيث m الكتلة وv السرعة. وبالتعويض
+                    v = ωr واستبدال الكتلة بعزم القصور الذاتي (I = mr²):
+                  </p>
+                  <formula-card title="الطاقة الحركية الدورانية">
+                    <math-block>\[ E_{r} = \tfrac{1}{2} I \omega^{2} \qquad \text{...(19)} \]</math-block>
+                    <p style="color:var(--color-text-muted); font-size:var(--fs-300);">حيث (I) عزم القصور الذاتي للجسم الصلد حول محور دوران معيّن.</p>
+                  </formula-card>
+                </lesson-card>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- 7-1 الشغل والقدرة في الحركة الدورانية -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-7-1">
+                <h2><span class="sec-num">7</span>7-1 الشغل والقدرة في الحركة الدورانية</h2>
+                <lesson-card>
+                  <p>
+                    لنفترض أن قوة (F) تؤثر في جسم يتحرك على مسار دائري نصف قطره (r)، فتُحدث إزاحة خطية (Δs) وإزاحة زاوية
+                    (Δθ)؛ الشغل في الحركة الخطية = القوة × الإزاحة الخطية: ΔW = FΔs. وبالتعويض Δs→Δθ وF→τ:
+                  </p>
+                  <formula-card title="الشغل في الحركة الدورانية">
+                    <math-block>\[ \Delta W = \tau\,\Delta\theta = \tau(\theta_{2}-\theta_{1}) \qquad \text{...(20)} \]</math-block>
+                  </formula-card>
+                  <p>القدرة (P) هي الشغل المبذول لكل وحدة زمن: P = ΔW/Δt؛ وفي الحركة الدورانية:</p>
+                  <formula-card title="القدرة في الحركة الدورانية">
+                    <math-block>\[ P = \frac{\tau\,\Delta\theta}{\Delta t} \ \Rightarrow\ P = \tau\omega \qquad \text{...(21)} \]</math-block>
+                  </formula-card>
+                </lesson-card>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- 8-1 الزخم الزاوي -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-8-1">
+                <h2><span class="sec-num">8</span>8-1 الزخم الزاوي</h2>
+                <lesson-card>
+                  <p>
+                    الزخم الخطي لكتلة (m) تتحرك حركة خطية = الكتلة × السرعة الخطية. وبالتعويض عن الكتلة بعزم القصور
+                    الذاتي وعن السرعة الخطية بالسرعة الزاوية: الزخم الخطي = mv؛ وبالتعويض:
+                  </p>
+                  <formula-card title="الزخم الزاوي">
+                    <math-block>\[ L = I\omega \qquad \text{...(22)},\quad \text{الوحدات: kg·m}^{2}/\text{s} \]</math-block>
+                    <math-block>\[ \Delta L = I\omega_{f} - I\omega_{i} = I(\omega_{f}-\omega_{i}) \]</math-block>
+                    <p style="color:var(--color-text-muted); font-size:var(--fs-300);">حيث ωᵢ, ω_f السرعتان الزاويتان الابتدائية والنهائية.</p>
+                    <p>ويُسمى التغيّر في الزخم الزاوي الدفع الزاوي، ويساوي العزم المدوّر × زمن التأثير:</p>
+                    <math-block>\[ \text{الدفع الزاوي} = \tau t \]</math-block>
+                  </formula-card>
+                </lesson-card>
+
+                <lab-callout variant="note" label="هل تعلم؟">
+                  <p>
+                    يصنع مصنّعو العجلات الدوّارة (Flywheel) معظم كتلة العجلة مُركّزة عند حافتها/إطارها، ليكون عزم قصورها
+                    الذاتي كبيرًا، من أجل الحفاظ على زخمها/استقرارها أثناء الحركة.
+                  </p>
+                </lab-callout>
+
+                <simulation-card title="محاكاة حفظ الزخم الزاوي">
+                  <p data-i18n="ch1.sim.angmom.caption"></p>
+                  <sim-container class="sim-frame" id="sim-angmom" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
+                  <div class="ch1-sim-controls">
+                    <sim-slider id="am-radius" data-i18n-attr="label:ch1.sim.angmom.radius" unit="m" min="0.3" max="1.2" step="0.05" value="0.9"></sim-slider>
+                  </div>
+                  <div class="ch1-sim-readouts">
+                    <sim-value-display id="am-I" data-i18n-attr="label:ch1.sim.angmom.I" unit="kg*m^2" precision="2"></sim-value-display>
+                    <sim-value-display id="am-omega" data-i18n-attr="label:ch1.sim.angmom.omega" unit="rad/s" precision="2"></sim-value-display>
+                    <sim-value-display id="am-L" data-i18n-attr="label:ch1.sim.angmom.L" unit="kg*m^2/s" precision="2"></sim-value-display>
+                    <sim-value-display id="am-ke" data-i18n-attr="label:ch1.sim.angmom.ke" unit="J" precision="2"></sim-value-display>
+                  </div>
+                </simulation-card>
+
+                <example-card number="6" title="عزم القصور الذاتي لكرة صلدة">
+                  <p>
+                    احسب عزم القصور الذاتي لكرة صلدة تدور حول أحد أقطارها، الشكل (10-1)، كتلتها (10 kg) ونصف قطرها
+                    (50 cm).
+                  </p>
+
+                  <svg-figure number="10-1" caption="كرة صلدة كتلتها m = 10 kg، نصف قطرها r = 0.5 m، تدور حول أحد أقطارها.">
+                    <svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="90" cy="65" r="48" fill="var(--color-domain-mechanics)" opacity="0.3" />
+                      <circle cx="90" cy="65" r="48" fill="none" stroke="var(--color-domain-mechanics)" stroke-width="2" />
+                      <line x1="90" y1="12" x2="90" y2="118" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7" />
+                      <text x="60" y="30" font-size="12" fill="currentColor">m = 10 kg</text>
+                    </svg>
+                  </svg-figure>
+
+                  <lab-callout variant="note" label="فكر">
+                    <p>ماذا تتوقع لو كان محور الدوران على بعد (0.25 m) من المركز؟</p>
+                  </lab-callout>
+
+                  <p><strong>الحل:</strong></p>
+                  <math-block>\[ I = \tfrac{2}{5} m r^{2} = \tfrac{2}{5}(10)(0.5)^{2} \]</math-block>
+                  <div slot="footer" class="ch1-final-answer">
+                    <span class="label">الجواب</span>
+                    <math-block>\[ I = 1\ \text{kg·m}^{2} \]</math-block>
+                  </div>
+                </example-card>
+
+                <example-card number="7" title="قرص دوّار بزخم زاوي منتظم">
+                  <p>
+                    قرص عزم قصوره الذاتي (2 kg·m²) يدور حول محوره بزخم زاوي منتظم مقداره (50 kg·m²/s)، فما مقدار: 1-
+                    سرعته الزاوية. 2- طاقته الحركية الدورانية. 3- الدفع الزاوي. 4- الشغل الزاوي.
+                  </p>
+                  <p><strong>الحل:</strong></p>
+                  <p>1- من L = Iω:</p>
+                  <math-block>\[ \omega = \frac{L}{I} = \frac{50}{2} \]</math-block>
+                  <p>2- الطاقة الحركية الدورانية:</p>
+                  <math-block>\[ E_{r} = \tfrac{1}{2} I \omega^{2} = \tfrac{1}{2}(2)(25)^{2} \]</math-block>
+                  <p>3- الدفع الزاوي يساوي صفرًا، وذلك لعدم وجود تغيّر في الزخم الزاوي (زخم منتظم).</p>
+                  <p>4- الشغل الزاوي يساوي صفرًا، وذلك لعدم وجود تغيّر في الطاقة.</p>
+                  <div slot="footer" class="ch1-final-answer">
+                    <span class="label">الجواب</span>
+                    <math-block>\[ \omega = 25\ \text{rad/s},\ \ E_{r} = 625\ \text{J},\ \ \text{الدفع الزاوي} = 0,\ \ \text{الشغل} = 0 \]</math-block>
+                  </div>
+                </example-card>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- 9-1 أسئلة الفصل الأول -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-9-1">
+                <h2><span class="sec-num">9</span>9-1 أسئلة الفصل الأول</h2>
+
+                <h3 id="sec-9-1-a">أولًا: اختر الإجابة الصحيحة</h3>
+                <div class="ch1-card-grid cols-2">
+
+                  <quiz-card number="1" title="السرعة المماسية في الحركة الدائرية المنتظمة">
+                    <p>في الحركة الدائرية المنتظمة تكون السرعة المماسية للجسم:</p>
+                    <ol type="a" class="ch1-mcq-options">
+                      <li>ثابتة المقدار والاتجاه</li>
+                      <li>ثابتة المقدار ومتغيّرة الاتجاه</li>
+                      <li>متغيّرة المقدار والاتجاه</li>
+                      <li>متغيّرة المقدار وثابتة الاتجاه</li>
+                    </ol>
+                    <div slot="footer">
+                      الجواب الصحيح: <strong>(b)</strong> ثابتة المقدار ومتغيّرة الاتجاه — لأن تغيّر اتجاه السرعة باستمرار هو ما يولّد التعجيل المركزي.
+                    </div>
+                  </quiz-card>
+
+                  <quiz-card number="2" title="تناسب القوة المركزية الجاذبة">
+                    <p>قوة الجاذبية المركزية في الحركة الدائرية تتناسب تناسبًا:</p>
+                    <ol type="a" class="ch1-mcq-options">
+                      <li>طرديًا مع نصف قطر المسار</li>
+                      <li>عكسيًا مع مربع نصف قطر المسار</li>
+                      <li>طرديًا مع مربع نصف قطر المسار</li>
+                      <li>عكسيًا مع نصف قطر المسار</li>
+                    </ol>
+                    <div slot="footer">
+                      الجواب الصحيح: <strong>(b)</strong> عكسيًا مع مربع نصف القطر — حسب قانون الجذب العام F_G = GMm/r².
+                    </div>
+                  </quiz-card>
+
+                  <quiz-card number="3" title="الزمن الدوري لمروحة">
+                    <p>عندما تدور مروحة بسرعة زاوية مقدارها (60π rad/s) فإن زمنها الدوري بالثانية يساوي:</p>
+                    <ol type="a" class="ch1-mcq-options">
+                      <li>30</li>
+                      <li>1/60</li>
+                      <li>1/30</li>
+                      <li>1/20</li>
+                    </ol>
+                    <div slot="footer">
+                      الجواب الصحيح: <strong>(c)</strong> 1/30 — من T = 2π/ω = 2π/60π = 1/30 s.
+                    </div>
+                  </quiz-card>
+
+                  <quiz-card number="4" title="التعجيل المركزي لحجر مربوط بخيط">
+                    <p>
+                      رُبط حجر بطرف خيط طوله (0.4 m) وأُدير في وضع أفقي فكان زمنه الدوري (0.2 s)؛ فإن تعجيله المركزي
+                      بوحدات (m/s²) يساوي:
+                    </p>
+                    <ol type="a" class="ch1-mcq-options">
+                      <li>20π</li>
+                      <li>40π</li>
+                      <li>20π²</li>
+                      <li>40π²</li>
+                    </ol>
+                    <div slot="footer">
+                      الجواب الصحيح: <strong>(d)</strong> 40π² — من ω = 2π/T = 2π/0.2 = 10π rad/s، ثم aᴄ = ω²r = (10π)²(0.4) = 40π².
+                    </div>
+                  </quiz-card>
+
+                  <quiz-card number="5" title="عزم القصور الذاتي لكرة صلدة ومجوّفة">
+                    <p>
+                      كرتان إحداهما صلدة والأخرى مجوّفة، لهما نفس الكتلة ونصف القطر ولكن كثافتهما مختلفة، فيكون عزم
+                      القصور الذاتي حول محور يمر بمركز الكتلة كالآتي:
+                    </p>
+                    <ol type="a" class="ch1-mcq-options">
+                      <li>الكرة المصمتة أكبر من المجوّفة</li>
+                      <li>الكرة المجوّفة أكبر من المصمتة</li>
+                      <li>متساوٍ لكليهما</li>
+                      <li>مساوٍ للصفر لكليهما</li>
+                    </ol>
+                    <div slot="footer">
+                      الجواب الصحيح: <strong>(b)</strong> الكرة المجوّفة أكبر — لأن I_مصمتة = (2/5)mr² بينما I_مجوّفة = (2/3)mr² عند الكتلة ونصف القطر نفسيهما.
+                    </div>
+                  </quiz-card>
+
+                  <quiz-card number="6" title="وحدات الزخم الزاوي">
+                    <p>واحدة من الوحدات التالية تمثّل وحدات الزخم الزاوي:</p>
+                    <ol type="a" class="ch1-mcq-options">
+                      <li>N·s</li>
+                      <li>(kg·m²)/s</li>
+                      <li>(J·s)/m</li>
+                      <li>(kg·m)/s</li>
+                    </ol>
+                    <div slot="footer">
+                      الجواب الصحيح: <strong>(b)</strong> (kg·m²)/s — من L = Iω، ووحدة I هي kg·m² ووحدة ω هي rad/s.
+                    </div>
+                  </quiz-card>
+
+                  <quiz-card number="7" title="السرعة الزاوية لدولاب الهواء">
+                    <p>يستغرق راكب في دولاب الهواء نصف دقيقة لإكمال دورة واحدة، فإن السرعة الزاوية للدولاب بوحدات (rad/s):</p>
+                    <ol type="a" class="ch1-mcq-options">
+                      <li>π/15</li>
+                      <li>π/30</li>
+                      <li>30π</li>
+                      <li>15π</li>
+                    </ol>
+                    <div slot="footer">
+                      الجواب الصحيح: <strong>(a)</strong> π/15 — من ω = 2π/T = 2π/30 = π/15 rad/s.
+                    </div>
+                  </quiz-card>
+
+                  <quiz-card number="8" title="السرعة الآمنة على منعطف مائل">
+                    <p>
+                      السرعة الخطية القصوى الآمنة لسيارة متحركة على منعطف دائري مائل تتوقف على الآتي:
+                    </p>
+                    <ol type="a" class="ch1-mcq-options">
+                      <li>نصف قطر المنعطف وكتلة الجسم</li>
+                      <li>نصف قطر المنعطف وزاوية ميل المنعطف</li>
+                      <li>زاوية ميل المنعطف وكتلة الجسم</li>
+                      <li>زاوية ميل المنعطف فقط</li>
+                    </ol>
+                    <div slot="footer">
+                      الجواب الصحيح: <strong>(b)</strong> نصف قطر المنعطف وزاوية ميله — الكتلة تُختصر من معادلة الاتزان ولا تؤثر في السرعة القصوى.
+                    </div>
+                  </quiz-card>
+                </div>
+
+                <h3 id="sec-9-1-b">ثانيًا: علّل ما يأتي</h3>
+                <div class="ch1-card-grid cols-2">
+
+                  <exercise-card number="1" title="علّل: التعجيل المركزي في الحركة الدائرية المنتظمة">
+                    <p>يمتلك الجسم الذي يتحرك حركة دائرية منتظمة تعجيلًا مركزيًا.</p>
+                    <div slot="footer">
+                      <strong>التعليل:</strong> على الرغم من ثبات مقدار السرعة، فإن اتجاهها يتغيّر باستمرار من نقطة إلى
+                      أخرى على المسار الدائري؛ وهذا المعدل الزمني لتغيّر اتجاه السرعة يمثّل بحدّ ذاته تعجيلًا، يكون
+                      باتجاه مركز الدائرة دائمًا، لذا يُسمى التعجيل المركزي (aᴄ = v²/r).
+                    </div>
+                  </exercise-card>
+
+                  <exercise-card number="2" title="علّل: ميل راكب الدراجة نحو المركز">
+                    <p>يميل راكب الدراجة نحو المركز عندما يتحرك حول مسار دائري.</p>
+                    <div slot="footer">
+                      <strong>التعليل:</strong> الميل نحو المركز يُنتج مركّبة من قوة رد فعل الأرض (ومن وزنه) باتجاه مركز
+                      المسار الدائري، فتُسهم هذه المركّبة مع قوة الاحتكاك في توفير القوة المركزية اللازمة لإبقاء الدراجة
+                      على مسارها الدائري دون انزلاق أو انقلاب.
+                    </div>
+                  </exercise-card>
+
+                  <exercise-card number="3" title="علّل: عدم بذل القوة المركزية شغلًا">
+                    <p>لا تبذل قوة الجاذبية المركزية شغلًا على جسم يتحرك حركة دائرية منتظمة.</p>
+                    <div slot="footer">
+                      <strong>التعليل:</strong> القوة المركزية عمودية دائمًا على اتجاه السرعة اللحظية (الإزاحة) للجسم؛
+                      وبما أن الشغل W = F·d·cos θ، فعند θ = °90 يكون cos θ = 0، وبالتالي فإن الشغل المبذول منها يساوي
+                      صفرًا.
+                    </div>
+                  </exercise-card>
+
+                  <exercise-card number="4" title="علّل: تكوّر السابح جسمه عند القفز">
+                    <p>يُكوّر السابح جسمه عندما يقفز من على منصة القفز.</p>
+                    <div slot="footer">
+                      <strong>التعليل:</strong> يُحافظ السابح على زخمه الزاوي (L = Iω) ثابتًا أثناء القفز الحر (لا يوجد
+                      عزم مدوّر خارجي مؤثر فيه). فعندما يُكوّر جسمه يقلّل عزم قصوره الذاتي (I)، وبما أن (L) ثابت، يجب أن
+                      تزداد سرعته الزاوية (ω) لتعويض ذلك — وهذا ما يسمح له بإكمال عدد أكبر من اللفّات قبل ملامسة الماء.
+                      جرّب محاكاة حفظ الزخم الزاوي في القسم (8-1) أعلاه لمشاهدة هذا الأثر مباشرة.
+                    </div>
+                  </exercise-card>
+                </div>
+
+                <h3 id="sec-9-1-c">ثالثًا: سؤال استيعابي</h3>
+                <div class="ch1-card-grid cols-2">
+                  <exercise-card number="1" title="ما عزم القصور الذاتي، وعلى ماذا يعتمد؟">
+                    <div slot="footer">
+                      <strong>الجواب:</strong> عزم القصور الذاتي (I) هو مقاومة الجسم الدوّار لأي تغيّر في سرعته الدورانية،
+                      ويُعرَّف لكتلة نقطية بأنه I = mr². ويعتمد على كتلة الجسم وعلى كيفية توزّع هذه الكتلة بالنسبة إلى محور
+                      الدوران (أي على شكل الجسم وهندسته) — راجع جدول (2-1) لعزم القصور الذاتي لعدد من الأشكال الشائعة.
+                    </div>
+                  </exercise-card>
+                </div>
+
+                <h3 id="sec-9-1-d">رابعًا: مسائل</h3>
+                <div class="ch1-card-grid cols-2">
+
+                  <exercise-card number="1" title="التعجيل المركزي لجسم مربوط بخيط">
+                    <p>احسب التعجيل المركزي لجسم مربوط بخيط طوله (0.5 m) يتحرك بسرعة (5 m/s).</p>
+                    <p><strong>الحل:</strong></p>
+                    <math-block>\[ a_{c} = \frac{v^{2}}{r} = \frac{(5)^{2}}{0.5} \]</math-block>
+                    <div slot="footer" class="ch1-final-answer">
+                      <span class="label">الجواب</span>
+                      <math-block>\[ a_{c} = 50\ \text{m/s}^{2} \]</math-block>
+                    </div>
+                  </exercise-card>
+
+                  <exercise-card number="2" title="تباطؤ مجفف غسالة">
+                    <p>
+                      يدور مجفف غسالة الملابس بمعدل (900 rpm)، ثم يتباطأ إلى (300 rpm) خلال دورانه (50) دورة. احسب: (أ)
+                      التعجيل الزاوي. (ب) الزمن اللازم ليدور هذه الدورات الخمسين.
+                    </p>
+                    <p><strong>الحل:</strong></p>
+                    <p>تحويل السرعتين إلى rad/s:</p>
+                    <math-block>\[ \omega_{1} = \frac{900\times2\pi}{60} = 30\pi\ \text{rad/s},\qquad \omega_{2} = \frac{300\times2\pi}{60} = 10\pi\ \text{rad/s} \]</math-block>
+                    <p>الإزاحة الزاوية عبر 50 دورة:</p>
+                    <math-block>\[ \theta = 50 \times 2\pi = 100\pi\ \text{rad} \]</math-block>
+                    <p>أ- من ω₂² = ω₁² + 2αθ:</p>
+                    <math-block>\[ (10\pi)^{2} = (30\pi)^{2} + 2\alpha(100\pi) \ \Rightarrow\ \alpha = \frac{100\pi^{2}-900\pi^{2}}{200\pi} = -4\pi\ \text{rad/s}^{2} \]</math-block>
+                    <p>ب- من ω₂ = ω₁ + αt:</p>
+                    <math-block>\[ 10\pi = 30\pi + (-4\pi)t \ \Rightarrow\ t = \frac{10\pi-30\pi}{-4\pi} \]</math-block>
+                    <div slot="footer" class="ch1-final-answer">
+                      <span class="label">الجواب</span>
+                      <math-block>\[ \alpha = -4\pi\ \text{rad/s}^{2},\qquad t = 5\ \text{s} \]</math-block>
+                    </div>
+                  </exercise-card>
+
+                  <exercise-card number="3" title="أقصى سرعة زاوية لجسم مربوط بحبل">
+                    <p>
+                      حبل طوله (2 m)، أقصى قوة شدّ يتحملها (5 kN)، احسب أقصى سرعة زاوية (بوحدات rpm) يمكن أن يدور بها
+                      جسم كتلته (10 kg) مثبَّت من أحد طرفيه.
+                    </p>
+                    <p><strong>الحل:</strong></p>
+                    <p>أقصى قوة شدّ في الحبل تساوي القوة المركزية القصوى:</p>
+                    <math-block>\[ T_{\max} = \frac{m v^{2}}{r} = m\omega^{2} r \ \Rightarrow\ \omega = \sqrt{\frac{T_{\max}}{m r}} \]</math-block>
+                    <math-block>\[ \omega = \sqrt{\frac{5000}{10 \times 2}} = \sqrt{250} \approx 15.8\ \text{rad/s} \]</math-block>
+                    <p>وبتحويلها إلى دورة/دقيقة:</p>
+                    <math-block>\[ N = \omega \times \frac{60}{2\pi} \approx 15.8 \times 9.55 \]</math-block>
+                    <div slot="footer" class="ch1-final-answer">
+                      <span class="label">الجواب</span>
+                      <math-block>\[ \omega \approx 15.8\ \text{rad/s} \approx 151\ \text{rpm} \]</math-block>
+                    </div>
+                  </exercise-card>
+
+                  <exercise-card number="4" title="قدرة محرك دوّار">
+                    <p>محرك يدور بسرعة (20 rev/s) فيعطي عزمًا قدره (75 N·m)، ما قيمة القدرة التي يعطيها المحرك مقدَّرة بالواط والقدرة الحصانية؟</p>
+                    <p><strong>الحل:</strong></p>
+                    <p>تحويل السرعة إلى rad/s:</p>
+                    <math-block>\[ \omega = 20 \times 2\pi = 125.6\ \text{rad/s} \]</math-block>
+                    <p>من P = τω:</p>
+                    <math-block>\[ P = (75)(125.6) \]</math-block>
+                    <p>وبتحويلها إلى قدرة حصانية (1 hp ≈ 746 W):</p>
+                    <math-block>\[ P_{hp} = \frac{9420}{746} \]</math-block>
+                    <div slot="footer" class="ch1-final-answer">
+                      <span class="label">الجواب</span>
+                      <math-block>\[ P = 9420\ \text{W} \approx 1.62\ \text{hp} \]</math-block>
+                    </div>
+                  </exercise-card>
+
+                  <exercise-card number="5" title="عزم القصور الذاتي لكرة صلدة (قطر معطى)">
+                    <p>احسب عزم القصور الذاتي لكرة صلدة تدور حول أحد أقطارها حيث كانت كتلتها (20 kg) وقطرها (50 cm).</p>
+                    <p><strong>الحل:</strong></p>
+                    <p>نصف القطر يساوي نصف القطر المعطى: r = 0.5/2 = 0.25 m.</p>
+                    <math-block>\[ I = \tfrac{2}{5} m r^{2} = \tfrac{2}{5}(20)(0.25)^{2} \]</math-block>
+                    <div slot="footer" class="ch1-final-answer">
+                      <span class="label">الجواب</span>
+                      <math-block>\[ I = 0.5\ \text{kg·m}^{2} \]</math-block>
+                    </div>
+                  </exercise-card>
+                </div>
+              </section>
+
+              <!-- ============================================================ -->
+              <!-- ملخص سريع -->
+              <!-- ============================================================ -->
+              <section class="ch1-section" id="sec-summary">
+                <h2><span class="sec-num">✓</span>ملخص سريع للفصل الأول</h2>
+
+                <div class="ch1-card-grid cols-2">
+                  <summary-card title="أهم القوانين والمعادلات">
+                    <ul class="ch1-list">
+                      <li>التعجيل المركزي: aᴄ = v²/r = ω²r</li>
+                      <li>القوة المركزية: Fᴄ = mv²/r</li>
+                      <li>قانون كبلر الثالث: t² ∝ r³</li>
+                      <li>قانون الجذب العام: F_G = GMm/r²</li>
+                      <li>الإزاحة الزاوية والخطية: S = rθ</li>
+                      <li>السرعة الزاوية والمماسية: vᴛ = ωr</li>
+                      <li>التعجيل الزاوي والمماسي: aᴛ = rα</li>
+                      <li>قوانين التعجيل الزاوي المنتظم: ω = ω₀+αt، θ = ω₀t+½αt²، ω² = ω₀²+2αθ</li>
+                      <li>عزم القصور الذاتي: I = mr² (وصيغ الجدول 2-1 للأشكال المختلفة)</li>
+                      <li>قانون نيوتن الثاني الدوراني: τ = Iα</li>
+                      <li>الطاقة الحركية الدورانية: Eᵣ = ½Iω²</li>
+                      <li>الشغل والقدرة الدورانية: ΔW = τΔθ، P = τω</li>
+                      <li>الزخم الزاوي: L = Iω، الدفع الزاوي = τt</li>
+                    </ul>
+                  </summary-card>
+
+                  <mindmap-card title="تسلسل مفاهيم الفصل">
+                    <ul class="ch1-list">
+                      <li>تمهيد (1-1) ← الحركة الدائرية منتشرة أكثر من الخطية في الحياة اليومية</li>
+                      <li>الحركة الدائرية (2-1) ← التعجيل المركزي aᴄ</li>
+                      <li>القوة المركزية (3-1) ← Fᴄ = maᴄ، تطبيقات: منعطفات، طرد مركزي</li>
+                      <li>مدارات الأقمار وقوانين كبلر (4-1) ← المسار الإهليلجي، المساحات المتساوية، t²∝r³</li>
+                      <li>الحركة الدورانية (5-1) ← θ, ω, α، وعزم القصور الذاتي I</li>
+                      <li>الطاقة الدورانية (6-1) ← Eᵣ = ½Iω²</li>
+                      <li>الشغل والقدرة الدورانية (7-1) ← ΔW = τΔθ، P = τω</li>
+                      <li>الزخم الزاوي (8-1) ← L = Iω، حفظ الزخم الزاوي (السابح، الفلايويل)</li>
+                    </ul>
+                  </mindmap-card>
+                </div>
+              </section>
+
+            </div>
+
+            <aside class="ds-toc">
+              <page-toc target="#ch1-main" levels="2,3"></page-toc>
+            </aside>
+          </div>
+
+          <pager-nav prev-href="index.html#chapters" prev-target="الفصول الدراسية"></pager-nav>
+        </div>
+      </main>
+
+      <app-footer></app-footer>
+    </div>
+  </div>
+
+  <app-search></app-search>
+  <settings-panel></settings-panel>
+
+  <script type="module" src="src/chapter-1.js"></script>
+</body>
+</html>

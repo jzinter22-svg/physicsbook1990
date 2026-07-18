@@ -1,0 +1,263 @@
+/*
+  Responsive page layout, mobile-first.
+  Breakpoints (referenced consistently across the project):
+    sm: 640px   md: 768px   lg: 1024px   xl: 1280px
+*/
+
+/* Dashboard shell: sticky topbar + sidebar + scrolling content column.
+   minmax(0, 1fr), not a bare 1fr — an `fr` track's automatic minimum is
+   `auto` (content-based), so a bare 1fr lets deeply nested content bubble
+   all the way up and force this outermost container wider than the
+   viewport. This is the top of that chain; see the matching comment on
+   .hero further down for the same fix applied at that nesting level. */
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 'topbar' 'main';
+  min-height: 100vh;
+}
+
+.app-shell > app-header {
+  grid-area: topbar;
+}
+
+.app-shell > app-sidebar {
+  grid-area: sidebar;
+}
+
+.content-column {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .app-shell {
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    grid-template-areas: 'topbar topbar' 'sidebar main';
+  }
+
+  .app-shell > app-sidebar {
+    position: sticky;
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block: var(--space-7);
+  min-width: 0;
+}
+
+/* Flex/grid items default to min-width:auto, which lets a long line of text or
+   an unwrapped row force the track wider than the viewport. Reset it on every
+   direct section so content can shrink instead of blowing out the layout. */
+main > * {
+  min-width: 0;
+}
+
+/* Generic responsive grid for cards / component showcases */
+.grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 640px) {
+  .grid--2-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  /* .grid--2-up isn't redeclared here: min-width media queries stack, so the
+     640px rule above already still applies at 1024px+. Redeclaring it here
+     (as an earlier version of this file did) would sit after .grid--3-up in
+     the cascade and silently win the specificity tie, capping every
+     ".grid--2-up.grid--3-up" grid at 2 columns even on wide viewports. */
+  .grid--3-up { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.section {
+  padding-block: var(--space-6);
+}
+
+.section--sunken {
+  background: var(--color-bg-sunken);
+  border-radius: var(--radius-lg);
+}
+
+/* Graph-paper texture, used sparingly behind "lab" sections */
+.lab-texture {
+  background-image: var(--pattern-grid);
+  background-size: var(--pattern-grid-size);
+}
+
+/* Fluid hero */
+.hero {
+  display: grid;
+  /* minmax(0, 1fr), not a bare 1fr/auto track — an implicit or "auto" track
+     sizes to its content's min-content by default, which lets a long
+     heading or button row push the track (and the whole page) wider than
+     the viewport instead of wrapping. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  padding-block: var(--space-8);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}
+
+/* The track cap above isn't enough on its own — grid/flex ITEMS also default
+   to min-width:auto (sized to their own content), so reset that too. */
+.hero > * {
+  min-width: 0;
+}
+
+/* Simulation containers need a stable, resizable box on every viewport */
+.sim-frame {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 220px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .sim-frame {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* Glassmorphism surface — frosted, translucent panel over the lab texture / glow blobs */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  transition: box-shadow var(--duration-glass) var(--ease-standard);
+}
+
+.glass--strong {
+  background: var(--glass-bg-strong);
+}
+
+/* Soft ambient light blobs behind hero/lab sections. Purely decorative. */
+.glow-field {
+  position: relative;
+  isolation: isolate;
+}
+
+.glow-field::before,
+.glow-field::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: min(60vw, 640px);
+  height: min(60vw, 640px);
+  border-radius: 50%;
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.glow-field::before {
+  background: var(--glow-primary);
+  inset-inline-start: -10%;
+  top: -20%;
+}
+
+.glow-field::after {
+  background: var(--glow-accent);
+  inset-inline-end: -15%;
+  bottom: -30%;
+}
+
+/* Stat tiles / progress row */
+.stat-row {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .stat-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Design-system showcase page: content column + sticky TOC aside. */
+.ds-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-7);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .ds-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+
+  .ds-toc {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-6));
+    max-height: calc(100vh - var(--header-height) - var(--space-8));
+    overflow-y: auto;
+  }
+}
+
+.ds-section {
+  padding-block: var(--space-6);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.ds-section:last-child {
+  border-block-end: none;
+}
+
+.ds-subsection + .ds-subsection {
+  margin-block-start: var(--space-7);
+}
+
+/* Utility visibility helpers keyed to the same breakpoints */
+.hide-below-md {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-below-md {
+    display: revert;
+  }
+  .hide-above-md {
+    display: none;
+  }
+}

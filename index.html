@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>كتاب الطبيعيات التفاعلي — الرئيسية</title>
+  <meta name="description" content="معمل فيزياء تفاعلي: نظام تصميم، دعم عربي/RTL كامل، MathJax، وإطار محاكاات — بدون محتوى الفصل الأول بعد." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="src/styles/tokens.css" />
+  <link rel="stylesheet" href="src/styles/base.css" />
+  <link rel="stylesheet" href="src/styles/layout.css" />
+  <link rel="stylesheet" href="src/styles/rtl.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content" data-i18n="a11y.skipToContent">تخطي إلى المحتوى</a>
+
+  <div class="app-shell" id="top">
+    <app-header></app-header>
+    <app-sidebar></app-sidebar>
+
+    <div class="content-column">
+      <main id="main-content">
+        <section class="hero glow-field lab-texture container">
+          <div class="stack">
+            <span class="badge-pill" data-i18n="hero.badge"></span>
+            <h1 data-i18n="hero.title"></h1>
+            <p style="color:var(--color-text-muted); font-size:var(--fs-400); max-width:58ch;" data-i18n="hero.body"></p>
+            <div class="cluster">
+              <a class="btn btn--primary" href="#chapters" data-i18n="hero.cta.primary"></a>
+              <a class="btn btn--ghost" href="#about" data-i18n="hero.cta.secondary"></a>
+            </div>
+          </div>
+          <hero-visual></hero-visual>
+        </section>
+
+        <section class="container section" id="chapters">
+          <div class="stack" style="margin-block-end: var(--space-5); max-width: 65ch;">
+            <h2 data-i18n="chapters.sectionTitle"></h2>
+            <p style="color:var(--color-text-muted);" data-i18n="chapters.sectionSubtitle"></p>
+          </div>
+          <div class="grid grid--2-up grid--3-up" id="chapters-grid"></div>
+        </section>
+
+        <section class="container section" id="progress">
+          <div class="glass" style="padding: var(--space-6);">
+            <div class="stack" style="margin-block-end: var(--space-6);">
+              <h2 data-i18n="progress.title"></h2>
+              <p style="color:var(--color-text-muted);" data-i18n="progress.subtitle"></p>
+            </div>
+            <div class="cluster" style="align-items:center; gap: var(--space-7);">
+              <progress-ring id="overall-progress" value="0" size="140" stroke="12"></progress-ring>
+              <div class="stat-row" style="flex:1; min-width: 260px;">
+                <stat-tile icon="beaker" id="stat-available" label-key="progress.stat.available"></stat-tile>
+                <stat-tile icon="chart" id="stat-completed" label-key="progress.stat.completed"></stat-tile>
+                <stat-tile icon="spark" id="stat-percent" label-key="progress.stat.percent"></stat-tile>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="container section" id="about">
+          <lab-callout variant="note">
+            <h3 data-i18n="about.title" style="margin-block-end: var(--space-2);"></h3>
+            <p data-i18n="about.note"></p>
+          </lab-callout>
+        </section>
+      </main>
+
+      <app-footer></app-footer>
+    </div>
+  </div>
+
+  <app-search></app-search>
+  <settings-panel></settings-panel>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

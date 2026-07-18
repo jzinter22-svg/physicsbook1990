@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نظام التصميم — كتاب الطبيعيات التفاعلي</title>
+  <meta name="description" content="مكتبة المكوّنات القابلة لإعادة الاستخدام لكتاب الطبيعيات التفاعلي — معاينة فقط." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="src/styles/tokens.css" />
+  <link rel="stylesheet" href="src/styles/base.css" />
+  <link rel="stylesheet" href="src/styles/layout.css" />
+  <link rel="stylesheet" href="src/styles/forms.css" />
+  <link rel="stylesheet" href="src/styles/rtl.css" />
+</head>
+<body>
+  <a class="skip-link" href="#ds-main" data-i18n="a11y.skipToContent">تخطي إلى المحتوى</a>
+
+  <div class="app-shell" style="grid-template-columns: minmax(0, 1fr); grid-template-areas: 'topbar' 'main';">
+    <app-header></app-header>
+
+    <div class="content-column">
+      <main class="container section">
+        <div class="stack" style="margin-block-end: var(--space-7); max-width: 70ch;">
+          <span class="badge-pill" data-i18n="hero.badge"></span>
+          <h1 data-i18n="ds.title"></h1>
+          <p style="color:var(--color-text-muted); font-size:var(--fs-400);" data-i18n="ds.subtitle"></p>
+        </div>
+
+        <div class="ds-layout">
+          <div id="ds-main">
+
+            <!-- ============ CONTENT CARDS ============ -->
+            <section class="ds-section">
+              <h2 data-i18n="ds.nav.cards"></h2>
+              <div class="grid grid--2-up grid--3-up">
+                <lesson-card number="1.1" data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></lesson-card>
+                <example-card collapsible data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></example-card>
+                <exercise-card data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></exercise-card>
+                <formula-card data-i18n-attr="title:card.placeholder.title">
+                  <math-block>\[ x = \frac{-b \pm \sqrt{b^2-4ac}}{2a} \]</math-block>
+                </formula-card>
+                <note-card data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></note-card>
+                <warning-card data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></warning-card>
+                <experiment-card collapsible collapsed data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></experiment-card>
+                <simulation-card data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></simulation-card>
+                <quiz-card data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></quiz-card>
+                <summary-card data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></summary-card>
+                <mindmap-card data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></mindmap-card>
+                <glossary-card data-i18n-attr="title:card.placeholder.title"><p data-i18n="card.placeholder.body"></p></glossary-card>
+              </div>
+            </section>
+
+            <!-- ============ NAVIGATION ============ -->
+            <section class="ds-section">
+              <h2 data-i18n="ds.nav.navigation"></h2>
+
+              <div class="ds-subsection">
+                <h3>Breadcrumb</h3>
+                <breadcrumb-nav>
+                  <a href="index.html" data-i18n="breadcrumb.demoRoot"></a>
+                  <a href="index.html" data-i18n="breadcrumb.demoParent"></a>
+                  <span aria-current="page" data-i18n="breadcrumb.demoCurrent"></span>
+                </breadcrumb-nav>
+              </div>
+
+              <div class="ds-subsection">
+                <h3>Sidebar</h3>
+                <p style="color:var(--color-text-muted); max-width:65ch;">
+                  The primary site sidebar (<code>&lt;app-sidebar&gt;</code>) is already live on the
+                  <a href="index.html">home page</a> — sticky on desktop, an off-canvas drawer on mobile.
+                </p>
+              </div>
+
+              <div class="ds-subsection">
+                <h3 data-i18n="toc.title"></h3>
+                <p style="color:var(--color-text-muted); max-width:65ch;">
+                  The sticky panel beside this page (below it on mobile) is a live
+                  <code>&lt;page-toc&gt;</code>, auto-built from this page's own headings.
+                </p>
+              </div>
+
+              <div class="ds-subsection">
+                <h3>Next / Previous</h3>
+                <pager-nav prev-href="#" next-href="#"></pager-nav>
+              </div>
+            </section>
+
+            <!-- ============ UI ELEMENTS ============ -->
+            <section class="ds-section">
+              <h2 data-i18n="ds.nav.ui"></h2>
+
+              <div class="ds-subsection">
+                <h3 data-i18n="ui.buttons.title"></h3>
+                <div class="cluster">
+                  <button class="btn btn--primary">Primary</button>
+                  <button class="btn btn--secondary">Secondary</button>
+                  <button class="btn btn--ghost">Ghost</button>
+                  <button class="btn btn--danger">Danger</button>
+                  <button class="btn btn--primary btn--sm">Small</button>
+                  <button class="btn btn--primary btn--lg">Large</button>
+                  <button class="btn btn--secondary" disabled>Disabled</button>
+                </div>
+              </div>
+
+              <div class="ds-subsection">
+                <h3 data-i18n="ui.inputs.title"></h3>
+                <div class="grid grid--2-up" style="max-width:640px;">
+                  <form-field data-i18n-attr="label:ui.inputs.textLabel;help-text:ui.inputs.helpText">
+                    <input class="input" type="text" data-i18n-attr="placeholder:ui.inputs.textPlaceholder" />
+                  </form-field>
+                  <form-field data-i18n-attr="label:ui.inputs.selectLabel">
+                    <select class="select">
+                      <option>A</option>
+                      <option>B</option>
+                      <option>C</option>
+                    </select>
+                  </form-field>
+                </div>
+                <div class="cluster" style="margin-block-start: var(--space-4);">
+                  <label class="checkbox-row">
+                    <input type="checkbox" />
+                    <span data-i18n="ui.inputs.checkboxLabel"></span>
+                  </label>
+                  <label class="radio-row">
+                    <input type="radio" name="ds-radio-demo" />
+                    <span data-i18n="ui.inputs.radioLabel"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="ds-subsection">
+                <h3>Tabs</h3>
+                <ui-tabs>
+                  <ui-tab label="One"><p data-i18n="card.placeholder.body"></p></ui-tab>
+                  <ui-tab label="Two"><p data-i18n="card.placeholder.body"></p></ui-tab>
+                </ui-tabs>
+              </div>
+
+              <div class="ds-subsection">
+                <h3 data-i18n="ui.accordion.title"></h3>
+                <ui-accordion single>
+                  <ui-accordion-item open data-i18n-attr="label:ui.accordion.item1"><p data-i18n="ui.accordion.body"></p></ui-accordion-item>
+                  <ui-accordion-item data-i18n-attr="label:ui.accordion.item2"><p data-i18n="ui.accordion.body"></p></ui-accordion-item>
+                  <ui-accordion-item data-i18n-attr="label:ui.accordion.item3"><p data-i18n="ui.accordion.body"></p></ui-accordion-item>
+                </ui-accordion>
+              </div>
+
+              <div class="ds-subsection">
+                <h3>Modal / Dialog / Tooltip / Toast</h3>
+                <div class="cluster">
+                  <button class="btn btn--secondary" id="open-modal-btn">Open modal</button>
+                  <button class="btn btn--secondary" id="open-dialog-btn">Open dialog</button>
+                  <ui-tooltip data-i18n-attr="label:tooltip.demo">
+                    <button class="btn btn--ghost">Hover me</button>
+                  </ui-tooltip>
+                  <button class="btn btn--secondary" id="show-toast-btn" data-i18n="toast.demoShow"></button>
+                </div>
+              </div>
+
+              <div class="ds-subsection">
+                <h3 data-i18n="ui.progress.title"></h3>
+                <div class="stack" style="max-width:420px;">
+                  <progress-bar value="65" data-i18n-attr="label:ui.progress.title"></progress-bar>
+                  <progress-ring value="40" size="96"></progress-ring>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ PHYSICS COMPONENTS ============ -->
+            <section class="ds-section">
+              <h2 data-i18n="ds.nav.physics"></h2>
+
+              <div class="ds-subsection">
+                <h3>Interactive simulation</h3>
+                <sim-container class="sim-frame" id="ds-sim" style="max-width:560px;"></sim-container>
+              </div>
+
+              <div class="ds-subsection">
+                <h3>SVG figure</h3>
+                <svg-figure number="1" style="max-width:420px;">
+                  <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="10" width="80" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2" />
+                    <circle cx="150" cy="40" r="30" fill="none" stroke="currentColor" stroke-width="2" />
+                    <path d="M92 40h50" stroke="currentColor" stroke-width="2" marker-end="url(#ds-arrow)" />
+                    <defs>
+                      <marker id="ds-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                        <path d="M0 0 8 4 0 8Z" fill="currentColor" />
+                      </marker>
+                    </defs>
+                  </svg>
+                </svg-figure>
+              </div>
+
+              <div class="ds-subsection">
+                <h3>Canvas animation</h3>
+                <canvas-figure id="ds-canvas-figure" style="max-width:420px;"></canvas-figure>
+              </div>
+
+              <div class="ds-subsection">
+                <h3 data-i18n="chart.title"></h3>
+                <data-chart id="ds-chart" data-i18n-attr="title:chart.title" style="max-width:480px;"></data-chart>
+              </div>
+
+              <div class="ds-subsection">
+                <h3>Mathematical equation</h3>
+                <math-block>\[ \int_0^{\infty} e^{-x^2}\,dx = \frac{\sqrt{\pi}}{2} \]</math-block>
+              </div>
+
+              <div class="ds-subsection">
+                <h3 data-i18n="table.caption"></h3>
+                <data-table data-i18n-attr="caption:table.caption" style="max-width:560px;">
+                  <table>
+                    <thead>
+                      <tr><th data-i18n="table.col1"></th><th data-i18n="table.col2"></th><th data-i18n="table.col3"></th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Sample A</td><td>A</td><td>unit</td></tr>
+                      <tr><td>Sample B</td><td>B</td><td>unit</td></tr>
+                      <tr><td>Sample C</td><td>C</td><td>unit</td></tr>
+                    </tbody>
+                  </table>
+                </data-table>
+              </div>
+            </section>
+
+          </div>
+
+          <aside class="ds-toc">
+            <page-toc target="#ds-main" levels="2,3"></page-toc>
+          </aside>
+        </div>
+      </main>
+
+      <app-footer></app-footer>
+    </div>
+  </div>
+
+  <ui-modal id="ds-demo-modal" data-i18n-attr="heading:modal.demoTitle">
+    <p data-i18n="card.placeholder.body"></p>
+  </ui-modal>
+
+  <ui-dialog id="ds-demo-dialog" data-i18n-attr="heading:dialog.demoTitle">
+    <p data-i18n="dialog.demoBody"></p>
+  </ui-dialog>
+
+  <toast-stack></toast-stack>
+  <app-search></app-search>
+  <settings-panel></settings-panel>
+
+  <script type="module" src="src/design-system.js"></script>
+</body>
+</html>

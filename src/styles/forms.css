@@ -1,0 +1,108 @@
+/*
+  Form controls — native <input>/<textarea>/<select>/checkbox/radio elements,
+  styled with utility classes so form semantics and accessibility stay
+  entirely native (no custom-element wrapper reinventing keyboard behavior).
+  <form-field> (a component) pairs these with a label + help/error text.
+*/
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field-label {
+  font-size: var(--fs-200);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.field-help {
+  font-size: var(--fs-100);
+  color: var(--color-text-muted);
+}
+
+.field-help[data-error='true'] {
+  color: var(--color-danger);
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  color: var(--color-text);
+  font-size: var(--fs-300);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:hover,
+.textarea:hover,
+.select:hover {
+  border-color: var(--color-border-strong);
+}
+
+.input:focus-visible,
+.textarea:focus-visible,
+.select:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.input[aria-invalid='true'],
+.textarea[aria-invalid='true'],
+.select[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 6rem;
+  font-family: inherit;
+}
+
+.select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 20px) center, calc(100% - 15px) center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  color: var(--color-text);
+  padding-inline-end: var(--space-7);
+}
+
+[dir='rtl'] .select {
+  background-position: 15px center, 20px center;
+  padding-inline-end: var(--space-4);
+  padding-inline-start: var(--space-7);
+}
+
+/* Checkbox / radio: native inputs, just re-colored + spaced consistently. */
+.checkbox-row,
+.radio-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-300);
+  cursor: pointer;
+}
+
+.checkbox-row input,
+.radio-row input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+  flex: none;
+}
