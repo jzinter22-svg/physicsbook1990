@@ -1,153 +1,99 @@
 import { defineOnce, css } from './utils.js';
 import { icon } from './icons.js';
 import { t } from '../lib/i18n.js';
-import { toggleTheme } from '../lib/theme.js';
-import { toggleLang } from '../lib/i18n.js';
 
 const NAV_ITEMS = [
   { href: '#top', icon: 'home', key: 'nav.home' },
   { href: '#chapters', icon: 'beaker', key: 'nav.chapters' },
+  { href: '#progress', icon: 'chart', key: 'nav.progress' },
+  { href: '#about', icon: 'spark', key: 'nav.about' },
 ];
 
 const style = css`
   /* Shadow DOM doesn't inherit the light-DOM box-sizing reset from base.css. */
   *, *::before, *::after { box-sizing: border-box; }
-  /*
-    Anchored to the physical left edge regardless of language direction
-    (Priority 3 wants a top-left hamburger opening a drawer from the same
-    side) — deliberately left, not inset-inline-start, since this is
-    global chrome meant to stay in a fixed, muscle-memory corner in either
-    Arabic or English, unlike the RTL-mirrored content everywhere else.
-  */
   :host {
     display: block;
-    position: fixed;
-    inset-block: 0;
-    left: -340px;
-    width: min(320px, 88vw);
-    z-index: var(--z-modal);
-    background: var(--glass-bg-strong);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-right: 1px solid var(--glass-border);
-    /* Physical corners, not logical (border-*-end-radius silently flips
-       with dir, which would round the wrong — screen-edge — side the
-       moment the page switches to English). Round only the right
-       (content-facing) edge; the left edge sits flush against the
-       viewport when open, where a rounded corner would just leak a
-       sliver of the page behind it. */
-    border-top-right-radius: var(--radius-lg);
-    border-bottom-right-radius: var(--radius-lg);
-    box-shadow: var(--shadow-float);
-    transition: left var(--duration-normal) var(--ease-standard);
-  }
-  :host([open]) {
-    left: 0;
+    background: var(--glass-bg);
+    border-inline-end: 1px solid var(--color-border);
   }
   .panel {
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
-    padding: var(--space-5);
+    gap: var(--space-5);
+    padding: var(--space-5) var(--space-3);
     overflow-y: auto;
   }
-  .head {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-  .close-btn {
-    appearance: none;
-    border: 1px solid var(--color-border);
-    background: none;
-    color: var(--color-text-muted);
-    border-radius: var(--radius-md);
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    transition: color var(--duration-fast) var(--ease-standard),
-      border-color var(--duration-fast) var(--ease-standard),
-      transform var(--duration-fast) var(--ease-standard);
-  }
-  .close-btn:hover {
-    color: var(--color-text);
-    border-color: var(--color-primary);
-    transform: scale(1.06);
-  }
-  nav, .actions {
+  nav {
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
   }
-  .section-label {
-    font-size: var(--fs-100);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-text-muted);
-    padding-inline: var(--space-4);
-    margin-block-end: var(--space-1);
-  }
-  a, button.nav-item {
+  a {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    /* Generous padding = a >=44px touch target, and calmer breathing room
-       per row (Priority 1 / Priority 7 of the calm-UI rebuild). */
     padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-md);
-    color: var(--color-text);
+    color: var(--color-text-muted);
     text-decoration: none;
     font-weight: 600;
-    font-size: var(--fs-400);
-    appearance: none;
-    border: none;
-    background: none;
-    font-family: inherit;
-    text-align: start;
-    cursor: pointer;
-    transition: background var(--duration-fast) var(--ease-standard);
+    font-size: var(--fs-300);
+    transition: background var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
   }
-  a svg, button.nav-item svg {
+  a svg {
     flex: none;
-    width: 1.2em;
-    height: 1.2em;
-    color: var(--color-text-muted);
+    width: 1.15em;
+    height: 1.15em;
   }
-  a:hover, button.nav-item:hover {
+  a:hover {
     background: var(--color-bg-sunken);
+    color: var(--color-text);
   }
   a[aria-current='true'] {
     background: var(--color-primary-soft);
     color: var(--color-primary);
   }
-  a[aria-current='true'] svg {
-    color: var(--color-primary);
+  button.nav-item {
+    appearance: none;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
   }
-  .divider {
-    height: 1px;
-    background: var(--color-border);
-    margin-block: var(--space-2);
-  }
-  .more-link {
+  .footnote {
     margin-top: auto;
-    font-size: var(--fs-300);
+    font-size: var(--fs-100);
     color: var(--color-text-muted);
+    padding-inline: var(--space-4);
+    line-height: var(--lh-normal);
+  }
+
+  /* Off-canvas drawer on small viewports; layout.css hands over to a static
+     sticky column at >=1024px via the external .app-shell > app-sidebar rule. */
+  @media (max-width: 1023px) {
+    :host {
+      position: fixed;
+      inset-inline-start: -300px;
+      top: var(--header-height);
+      bottom: 0;
+      width: 280px;
+      /* Above the backdrop (z-overlay) regardless of DOM order — the backdrop
+         is appended to document.body separately so it can dim the rest of the
+         page without the sidebar's own shadow tree drawing over it. */
+      z-index: var(--z-modal);
+      box-shadow: var(--shadow-lg);
+      transition: inset-inline-start var(--duration-normal) var(--ease-standard);
+    }
+    :host([open]) {
+      inset-inline-start: 0;
+    }
   }
 `;
 
-/**
- * <app-sidebar></app-sidebar>
- * The single home for navigation (Priority 2 of the calm-UI rebuild): Home,
- * Chapters, Search, Theme, and Language — nothing else. Always a
- * collapsible off-canvas drawer (opened by <app-header>'s menu button),
- * on desktop as much as mobile, so it never competes for attention with
- * the page's actual content. Anything not in that list (currently just the
- * reduced-motion preference) lives one tap away behind "More settings".
- */
 class AppSidebar extends HTMLElement {
   constructor() {
     super();
@@ -158,50 +104,27 @@ class AppSidebar extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>${style}</style>
       <div class="panel">
-        <div class="head">
-          <button class="close-btn" id="close-btn" type="button">${icon('close')}</button>
-        </div>
-        <nav id="primary-nav"></nav>
-        <div class="divider"></div>
-        <div class="actions">
-          <button class="nav-item" id="search-item" type="button"></button>
-          <button class="nav-item" id="theme-item" type="button"></button>
-          <button class="nav-item" id="lang-item" type="button"></button>
-        </div>
-        <button class="nav-item more-link" id="settings-link" type="button"></button>
+        <nav></nav>
+        <button class="nav-item" id="settings-link" type="button" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);color:var(--color-text-muted);font-weight:600;font-size:var(--fs-300);"></button>
+        <p class="footnote"></p>
       </div>
     `;
 
-    this._nav = this.shadowRoot.getElementById('primary-nav');
-    this._searchItem = this.shadowRoot.getElementById('search-item');
-    this._themeItem = this.shadowRoot.getElementById('theme-item');
-    this._langItem = this.shadowRoot.getElementById('lang-item');
+    this._nav = this.shadowRoot.querySelector('nav');
     this._settingsLink = this.shadowRoot.getElementById('settings-link');
-    this._closeBtn = this.shadowRoot.getElementById('close-btn');
+    this._footnote = this.shadowRoot.querySelector('.footnote');
 
-    this._closeBtn.addEventListener('click', () => this.close());
-    this._searchItem.addEventListener('click', () => {
-      document.dispatchEvent(new CustomEvent('open-search'));
-      this.close();
-    });
-    this._themeItem.addEventListener('click', () => toggleTheme());
-    this._langItem.addEventListener('click', () => toggleLang());
     this._settingsLink.addEventListener('click', () => {
       document.dispatchEvent(new CustomEvent('open-settings'));
       this.close();
     });
 
-    // A light scrim, not a fullscreen dark overlay — the page behind the
-    // drawer must stay clearly visible (Aurora UI refinement, matching the
-    // same fix applied to <page-toc>'s drawer).
     this._backdrop = document.createElement('div');
     this._backdrop.setAttribute('aria-hidden', 'true');
     Object.assign(this._backdrop.style, {
       position: 'fixed',
       inset: '0',
-      background: 'rgba(15, 23, 42, 0.1)',
-      backdropFilter: 'blur(1px)',
-      WebkitBackdropFilter: 'blur(1px)',
+      background: 'rgba(6, 11, 18, 0.5)',
       opacity: '0',
       pointerEvents: 'none',
       transition: 'opacity 220ms ease',
@@ -219,16 +142,13 @@ class AppSidebar extends HTMLElement {
 
     this._render();
     this._onLangChange = () => this._render();
-    this._onThemeChange = () => this._render();
     document.addEventListener('langchange', this._onLangChange);
-    document.addEventListener('themechange', this._onThemeChange);
 
     this._setupScrollSpy();
   }
 
   disconnectedCallback() {
     document.removeEventListener('langchange', this._onLangChange);
-    document.removeEventListener('themechange', this._onThemeChange);
     document.removeEventListener('toggle-sidebar', this._onToggle);
     document.removeEventListener('keydown', this._onKeydown);
     this._backdrop.remove();
@@ -256,17 +176,13 @@ class AppSidebar extends HTMLElement {
     this._nav.innerHTML = NAV_ITEMS.map(
       (item) => `<a href="${item.href}" data-href="${item.href}">${icon(item.icon)}<span>${t(item.key)}</span></a>`
     ).join('');
+
     this._nav.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => this.close());
     });
 
-    this._searchItem.innerHTML = `${icon('search')}<span>${t('search.trigger')}</span>`;
-    this._closeBtn.setAttribute('aria-label', t('action.close'));
-
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    this._themeItem.innerHTML = `${icon(isDark ? 'sun' : 'moon')}<span>${t('action.toggleTheme')}</span>`;
-    this._langItem.innerHTML = `${icon('globe')}<span>${t('action.toggleLanguage')}</span>`;
     this._settingsLink.innerHTML = `${icon('gear')}<span>${t('nav.settings')}</span>`;
+    this._footnote.textContent = `${t('nav.chapters.soon')} · v0.2`;
   }
 
   _setupScrollSpy() {

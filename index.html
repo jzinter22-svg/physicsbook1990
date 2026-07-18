@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>كتاب الطبيعيات التفاعلي — الرئيسية</title>
-  <meta name="description" content="كتاب طبيعيات تفاعلي: دروس تفاعلية، أمثلة محلولة بالكامل، ومحاكاات فيزيائية حيّة." />
+  <meta name="description" content="معمل فيزياء تفاعلي: نظام تصميم، دعم عربي/RTL كامل، MathJax، وإطار محاكاات — بدون محتوى الفصل الأول بعد." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,229 +17,6 @@
   <link rel="stylesheet" href="src/styles/base.css" />
   <link rel="stylesheet" href="src/styles/layout.css" />
   <link rel="stylesheet" href="src/styles/rtl.css" />
-  <style>
-    /*
-      Custom properties inherit across the shadow boundary even though rule
-      matching doesn't (documented in tokens.css) — this is what lets a
-      plain light-DOM selector like this one re-tint <app-header>'s shadow-
-      internal background without touching the shared component or any
-      other page. Only here, since the header sits directly above an
-      always-dark hero (below) in the light theme too: without this, the
-      header's light glass shows a stark pale seam right where it meets the
-      near-black hero underneath it.
-    */
-    app-header {
-      --glass-bg-strong: rgba(4, 6, 20, 0.55);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --color-text: #fff;
-      --color-text-muted: rgba(255, 255, 255, 0.7);
-    }
-
-    /*
-      The hero is a fixed "Aurora showcase" moment — deliberately always
-      dark, matching the uploaded reference image exactly, regardless of
-      the site-wide light/dark toggle (the rest of the page still respects
-      it normally). Every decorative layer here is pointer-events:none and
-      aria-hidden; the actual heading/body/CTA text is what carries meaning,
-      and stays high-contrast white/near-white throughout.
-    */
-    .hero-section {
-      position: relative;
-      overflow: hidden;
-      padding-block: var(--space-9) calc(var(--space-9) + var(--space-5));
-      background: var(--color-hero-bg);
-      color: #fff;
-      isolation: isolate;
-    }
-    .hero-scene {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-    /* Faint stars, denser and a little brighter than the site-wide starfield
-       since this section is always dark regardless of theme. */
-    .hero-stars {
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(1.6px 1.6px at 8% 18%, #fff, transparent 60%),
-        radial-gradient(1.2px 1.2px at 22% 62%, #fff, transparent 60%),
-        radial-gradient(2px 2px at 15% 40%, #fff, transparent 60%),
-        radial-gradient(1.2px 1.2px at 35% 12%, #fff, transparent 60%),
-        radial-gradient(1.6px 1.6px at 48% 75%, #fff, transparent 60%),
-        radial-gradient(1.2px 1.2px at 60% 30%, #fff, transparent 60%),
-        radial-gradient(2px 2px at 72% 55%, #fff, transparent 60%),
-        radial-gradient(1.2px 1.2px at 82% 15%, #fff, transparent 60%),
-        radial-gradient(1.6px 1.6px at 90% 70%, #fff, transparent 60%),
-        radial-gradient(1.2px 1.2px at 95% 40%, #fff, transparent 60%),
-        radial-gradient(1.4px 1.4px at 65% 85%, #fff, transparent 60%),
-        radial-gradient(1.2px 1.2px at 5% 85%, #fff, transparent 60%);
-      opacity: 0.55;
-      animation: hero-twinkle 6s ease-in-out infinite alternate;
-      animation-play-state: var(--anim-play, running);
-    }
-    /* Flowing aurora bands — three large, heavily-blurred gradient blobs in
-       the sampled cyan/indigo/purple hues, screen-blended so they glow
-       instead of just tinting, drifting extremely slowly. */
-    .hero-aurora {
-      position: absolute;
-      inset: 0;
-      filter: blur(50px);
-      mix-blend-mode: screen;
-      opacity: 0.85;
-      background-image:
-        radial-gradient(50% 45% at 12% 95%, color-mix(in srgb, var(--aurora-a) 80%, transparent), transparent 70%),
-        radial-gradient(45% 50% at 50% 100%, color-mix(in srgb, var(--aurora-b) 75%, transparent), transparent 70%),
-        radial-gradient(50% 45% at 88% 95%, color-mix(in srgb, var(--aurora-c) 75%, transparent), transparent 70%);
-      animation: hero-aurora-drift 50s ease-in-out infinite alternate;
-      animation-play-state: var(--anim-play, running);
-    }
-    /*
-      Every decoration below is positioned with physical left/right/top/
-      bottom, not logical inset-inline-*, on purpose: these recreate fixed
-      spots in the uploaded reference image (atom bottom-left, planet
-      bottom-right, constellation top-right, equations top-left/mid-right)
-      and must land in the same physical corners regardless of RTL/LTR —
-      logical properties would mirror them to the wrong side in Arabic.
-    */
-    .hero-atom {
-      position: absolute;
-      left: 4%;
-      bottom: 4%;
-      width: min(220px, 22vw);
-      height: min(220px, 22vw);
-      color: var(--aurora-a);
-      opacity: 0.5;
-      filter: drop-shadow(0 0 12px color-mix(in srgb, var(--aurora-a) 50%, transparent));
-    }
-    /*
-      A CSS `transform` (including one driven by @keyframes) completely
-      replaces an SVG element's own `transform` *attribute* rather than
-      composing with it — so animating rotation directly on an ellipse that
-      also carries a static rotate(60)/rotate(120) attribute erases that
-      static offset, collapsing all three "orbit" ellipses onto the same
-      angle. Each ellipse is nested inside its own <g transform="rotate(...)">
-      instead: the static 60°/120° spacing lives on the (CSS-untouched) <g>,
-      and the animated spin lives on the ellipse itself, so both apply
-      through ordinary parent/child transform composition.
-    */
-    .hero-atom .ring {
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.2;
-      transform-origin: 50% 50%;
-      animation: hero-spin 90s linear infinite;
-      animation-play-state: var(--anim-play, running);
-    }
-    .hero-atom .ring--2 { animation-duration: 130s; animation-direction: reverse; }
-    .hero-atom .ring--3 { animation-duration: 160s; }
-    .hero-planet {
-      position: absolute;
-      right: 5%;
-      bottom: 8%;
-      width: min(150px, 16vw);
-      height: min(150px, 16vw);
-      opacity: 0.45;
-    }
-    .hero-constellation {
-      position: absolute;
-      right: 8%;
-      top: 8%;
-      width: min(240px, 24vw);
-      height: min(180px, 18vw);
-      color: #fff;
-      opacity: 0.4;
-    }
-    .hero-eq {
-      position: absolute;
-      font-family: var(--font-latin);
-      font-size: var(--fs-500);
-      color: #fff;
-      opacity: 0.22;
-      user-select: none;
-    }
-    .hero-eq--1 { left: 8%; top: 20%; transform: rotate(-14deg); }
-    .hero-eq--2 { right: 10%; top: 46%; transform: rotate(10deg); }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      align-items: center;
-      text-align: center;
-      margin-inline: auto;
-      gap: var(--space-4);
-    }
-    .hero-title {
-      background: var(--gradient-primary);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: transparent;
-      margin: 0;
-      filter: drop-shadow(0 0 24px color-mix(in srgb, var(--aurora-b) 35%, transparent));
-    }
-    .hero-subtitle {
-      color: #fff;
-      font-size: var(--fs-500);
-      font-weight: 600;
-      margin: 0;
-    }
-    .hero-lede {
-      color: rgba(255, 255, 255, 0.72);
-      font-size: var(--fs-400);
-      margin: 0;
-    }
-    .hero-cta {
-      margin-block-start: var(--space-2);
-    }
-    .hero-features {
-      margin-block-start: var(--space-6);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-3);
-    }
-    .hero-feature-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-4);
-      border-radius: var(--radius-pill);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      backdrop-filter: blur(var(--glass-blur));
-      -webkit-backdrop-filter: blur(var(--glass-blur));
-      color: rgba(255, 255, 255, 0.85);
-      font-size: var(--fs-200);
-      font-weight: 600;
-    }
-    .hero-feature-pill svg {
-      width: 1.1em;
-      height: 1.1em;
-      color: var(--aurora-a);
-    }
-
-    @keyframes hero-twinkle {
-      from { opacity: 0.4; }
-      to { opacity: 0.65; }
-    }
-    @keyframes hero-aurora-drift {
-      from { transform: translate(0, 0) scale(1); }
-      to { transform: translate(-3%, 2%) scale(1.06); }
-    }
-    @keyframes hero-spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 640px) {
-      .hero-atom, .hero-planet, .hero-constellation, .hero-eq {
-        display: none;
-      }
-    }
-  </style>
 </head>
 <body>
   <a class="skip-link" href="#main-content" data-i18n="a11y.skipToContent">تخطي إلى المحتوى</a>
@@ -250,67 +27,49 @@
 
     <div class="content-column">
       <main id="main-content">
-        <section class="hero-section">
-          <div class="hero-scene" aria-hidden="true">
-            <div class="hero-stars"></div>
-            <div class="hero-aurora"></div>
-            <svg class="hero-atom" viewBox="0 0 24 24" fill="none">
-              <g>
-                <ellipse class="ring ring--1" cx="12" cy="12" rx="10" ry="4" />
-              </g>
-              <g transform="rotate(60 12 12)">
-                <ellipse class="ring ring--2" cx="12" cy="12" rx="10" ry="4" />
-              </g>
-              <g transform="rotate(120 12 12)">
-                <ellipse class="ring ring--3" cx="12" cy="12" rx="10" ry="4" />
-              </g>
-              <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
-            </svg>
-            <svg class="hero-planet" viewBox="0 0 100 100" fill="none">
-              <circle cx="50" cy="46" r="22" fill="url(#planetGrad)" opacity="0.9" />
-              <ellipse cx="50" cy="50" rx="42" ry="9" stroke="hsl(210 70% 70% / 0.6)" stroke-width="2" transform="rotate(-8 50 50)" />
-              <defs>
-                <linearGradient id="planetGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="hsl(239 75% 65%)" />
-                  <stop offset="100%" stop-color="hsl(272 75% 70%)" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <svg class="hero-constellation" viewBox="0 0 220 180" fill="none" stroke="currentColor" stroke-width="1">
-              <circle cx="30" cy="140" r="2" fill="currentColor" stroke="none" />
-              <circle cx="90" cy="90" r="2.4" fill="currentColor" stroke="none" />
-              <circle cx="150" cy="110" r="1.8" fill="currentColor" stroke="none" />
-              <circle cx="170" cy="40" r="2.2" fill="currentColor" stroke="none" />
-              <circle cx="110" cy="20" r="1.6" fill="currentColor" stroke="none" />
-              <path d="M30 140 90 90 150 110 170 40 110 20 90 90" opacity="0.6" />
-            </svg>
-            <span class="hero-eq hero-eq--1">F = ma</span>
-            <span class="hero-eq hero-eq--2">E = mc²</span>
+        <section class="hero glow-field lab-texture container">
+          <div class="stack">
+            <span class="badge-pill" data-i18n="hero.badge"></span>
+            <h1 data-i18n="hero.title"></h1>
+            <p style="color:var(--color-text-muted); font-size:var(--fs-400); max-width:58ch;" data-i18n="hero.body"></p>
+            <div class="cluster">
+              <a class="btn btn--primary" href="#chapters" data-i18n="hero.cta.primary"></a>
+              <a class="btn btn--ghost" href="#about" data-i18n="hero.cta.secondary"></a>
+            </div>
           </div>
+          <hero-visual></hero-visual>
+        </section>
 
-          <div class="hero-content stack content-max container">
-            <h1 class="hero-title" data-i18n="hero.title"></h1>
-            <p class="hero-subtitle" data-i18n="hero.subtitle"></p>
-            <p class="hero-lede" data-i18n="hero.body"></p>
-            <a class="btn btn--primary btn--lg hero-cta" href="#chapters">
-              <span aria-hidden="true">🚀</span>
-              <span data-i18n="hero.cta.primary"></span>
-            </a>
-            <div class="hero-features">
-              <span class="hero-feature-pill" id="feature-animations"></span>
-              <span class="hero-feature-pill" id="feature-exercises"></span>
-              <span class="hero-feature-pill" id="feature-explanations"></span>
-              <span class="hero-feature-pill" id="feature-simulations"></span>
+        <section class="container section" id="chapters">
+          <div class="stack" style="margin-block-end: var(--space-5); max-width: 65ch;">
+            <h2 data-i18n="chapters.sectionTitle"></h2>
+            <p style="color:var(--color-text-muted);" data-i18n="chapters.sectionSubtitle"></p>
+          </div>
+          <div class="grid grid--2-up grid--3-up" id="chapters-grid"></div>
+        </section>
+
+        <section class="container section" id="progress">
+          <div class="glass" style="padding: var(--space-6);">
+            <div class="stack" style="margin-block-end: var(--space-6);">
+              <h2 data-i18n="progress.title"></h2>
+              <p style="color:var(--color-text-muted);" data-i18n="progress.subtitle"></p>
+            </div>
+            <div class="cluster" style="align-items:center; gap: var(--space-7);">
+              <progress-ring id="overall-progress" value="0" size="140" stroke="12"></progress-ring>
+              <div class="stat-row" style="flex:1; min-width: 260px;">
+                <stat-tile icon="beaker" id="stat-available" label-key="progress.stat.available"></stat-tile>
+                <stat-tile icon="chart" id="stat-completed" label-key="progress.stat.completed"></stat-tile>
+                <stat-tile icon="spark" id="stat-percent" label-key="progress.stat.percent"></stat-tile>
+              </div>
             </div>
           </div>
         </section>
 
-        <section class="container section" id="chapters">
-          <div class="stack" style="margin-block-end: var(--space-6); max-width: 65ch;">
-            <h2 data-i18n="chapters.sectionTitle"></h2>
-            <p style="color:var(--color-text-muted);" data-i18n="chapters.sectionSubtitle"></p>
-          </div>
-          <div class="grid grid--2-up" id="chapters-grid"></div>
+        <section class="container section" id="about">
+          <lab-callout variant="note">
+            <h3 data-i18n="about.title" style="margin-block-end: var(--space-2);"></h3>
+            <p data-i18n="about.note"></p>
+          </lab-callout>
         </section>
       </main>
 

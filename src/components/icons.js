@@ -51,7 +51,6 @@ const PATHS = {
   table: `<rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="M3 9.5h18M3 14.5h18M9 4.5v15M15 4.5v15"/>`,
   checkCircle: `<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.5 2.5L16 9.5"/>`,
   xCircle: `<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/>`,
-  list: `<circle cx="4.5" cy="6" r="1.1" fill="currentColor" stroke="none"/><circle cx="4.5" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="4.5" cy="18" r="1.1" fill="currentColor" stroke="none"/><path d="M9 6h11M9 12h11M9 18h11"/>`,
 };
 
 /**

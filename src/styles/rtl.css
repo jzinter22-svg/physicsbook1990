@@ -38,20 +38,6 @@
   unicode-bidi: isolate;
 }
 
-/*
-  <math-block>'s raw TeX source is LTR-structured (backslash commands, Latin
-  operators, digits) — force it LTR *before* MathJax typesets it too, not just
-  the mjx-container rule above. If MathJax never loads (CDN blocked/offline —
-  this has no offline fallback), the raw source would otherwise sit as plain
-  text inside an RTL paragraph and get bidi-reordered into unreadable garbage
-  instead of degrading gracefully to plain (if unstyled) left-to-right TeX.
-*/
-[dir='rtl'] math-block {
-  direction: ltr;
-  unicode-bidi: isolate;
-  text-align: start;
-}
-
 /* Blockquote-style callouts use a border to mark the "start" edge */
 .lab-callout {
   border-inline-start: 4px solid var(--callout-color, var(--color-primary));

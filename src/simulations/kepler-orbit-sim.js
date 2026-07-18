@@ -1,6 +1,5 @@
 import { CanvasEngine } from '../engine/canvas-engine.js';
 import { SimulationEngine } from '../engine/simulation-engine.js';
-import { attachDrag } from '../engine/interactions/drag.js';
 
 /*
   Interactive counterpart to Figures (4-1)/(5-1)/(6-1): a body orbits a
@@ -16,17 +15,7 @@ import { attachDrag } from '../engine/interactions/drag.js';
   the body sweep equal areas in equal times (dA/dt = 1/2 r^2 dtheta/dt = k/2
   is constant by construction) — the standard result used to derive Kepler's
   second law from angular momentum conservation.
-
-  The orbiting body's true velocity vector (radial + tangential components,
-  from the analytic derivative of r(theta), not just "perpendicular to r" —
-  those only coincide at perihelion/aphelion) and the gravitational
-  acceleration vector (always toward the focus, per the inverse-square
-  central force that produces this exact orbit) are drawn live, plus a
-  slowly-spinning central body standing in for the planet's own rotation —
-  together the "satellite motion" trio Priority 6 asks for: orbit, velocity
-  vector, centripetal(-toward-focus) acceleration vector, central-body spin.
 */
-const EARTH_SPIN_RATE = 1.4; // rad/s — a readable illustrative spin, not to orbital scale.
 export class KeplerOrbitSim {
   constructor(host) {
     this.host = host;
@@ -42,8 +31,6 @@ export class KeplerOrbitSim {
     this._totalTheta = 0;
     this._history = [];
     this._lag = 1.4;
-    this._dragging = false;
-    this._earthSpin = 0;
     /** @type {((values: { r: number, thetaDot: number }) => void) | null} */
     this.onUpdate = null;
 
@@ -54,36 +41,9 @@ export class KeplerOrbitSim {
         this._theta = 0;
         this._totalTheta = 0;
         this._history = [];
-        this._earthSpin = 0;
       },
     });
     this._render();
-    this._detachDrag = attachDrag(this.engine.canvas, {
-      hitTest: (event) => this._distanceToBody(event) < 0.35,
-      onStart: () => {
-        this._dragging = true;
-      },
-      onDrag: (event) => {
-        const world = this.engine.clientToWorld(event.clientX, event.clientY);
-        this._theta = Math.atan2(world.y, world.x);
-        this._render();
-      },
-      onEnd: () => {
-        // Re-anchor the swept-area bookkeeping to the new position so the
-        // shaded sector doesn't jump across the gap the drag just skipped.
-        this._totalTheta = this._theta;
-        this._history = [];
-        this._dragging = false;
-      },
-    });
-  }
-
-  _distanceToBody(event) {
-    const world = this.engine.clientToWorld(event.clientX, event.clientY);
-    const r = this._radiusAt(this._theta);
-    const x = r * Math.cos(this._theta);
-    const y = r * Math.sin(this._theta);
-    return Math.hypot(world.x - x, world.y - y);
   }
 
   get running() {
@@ -103,13 +63,8 @@ export class KeplerOrbitSim {
   }
 
   destroy() {
-    this._detachDrag?.();
     this.sim.destroy();
     this.engine.destroy();
-  }
-
-  setSpeed(value) {
-    this.sim.timeScale = value;
   }
 
   setEccentricity(value) {
@@ -129,10 +84,6 @@ export class KeplerOrbitSim {
   }
 
   _step(dt) {
-    // The planet keeps spinning on its own axis even while the student is
-    // dragging the orbiting body around — the two rotations are independent.
-    this._earthSpin += EARTH_SPIN_RATE * dt;
-    if (this._dragging) return;
     const r = this._radiusAt(this._theta);
     const thetaDot = this._k() / (r * r);
     this._theta = (this._theta + thetaDot * dt) % (Math.PI * 2);
@@ -192,7 +143,7 @@ export class KeplerOrbitSim {
 
     // Swept-area sector trailing the body over a fixed time lag — equal in
     // area near perihelion and aphelion despite the very different arc shape.
-    if (this.sim.running && !this._dragging) {
+    if (this.sim.running) {
       const thetaLag = this._thetaAtLag();
       const sectorPts = this._sectorPoints(thetaLag, this._totalTheta, 24);
       const focusScreen = e.toScreen({ x: 0, y: 0 });
@@ -209,42 +160,16 @@ export class KeplerOrbitSim {
       ctx.restore();
     }
 
-    // Focus (center of gravity) — a small spin marker rotates with it,
-    // standing in for the planet's own axial rotation (independent of the
-    // orbiting body's motion).
+    // Focus (center of gravity).
     e.drawCircle({ x: 0, y: 0 }, 0.08, { fill: '#f5a623' });
-    const spinTip = { x: 0.14 * Math.cos(this._earthSpin), y: 0.14 * Math.sin(this._earthSpin) };
-    e.drawLine({ x: 0, y: 0 }, spinTip, { stroke: 'rgba(6,11,18,0.55)', lineWidth: 2 });
 
     // Orbiting body.
     const r = this._radiusAt(this._theta);
     const pos = { x: r * Math.cos(this._theta), y: r * Math.sin(this._theta) };
-    e.drawCircle(pos, this._dragging ? 0.1 : 0.07, { fill: '#0eb7cc' });
+    e.drawCircle(pos, 0.07, { fill: '#0eb7cc' });
     e.drawLine({ x: 0, y: 0 }, pos, { stroke: 'rgba(14,183,204,0.6)', lineWidth: 1.5, dash: [4, 4] });
-    e.drawText(`r = ${r.toFixed(2)}`, { x: pos.x / 2, y: pos.y / 2 + 0.14 }, { color: 'rgba(226,232,240,0.85)', font: '600 11px sans-serif' });
 
     const thetaDot = this._k() / (r * r);
-
-    // True velocity vector — radial + tangential components from the
-    // analytic derivative of r(theta), so it's tangent to the actual path
-    // (only perpendicular to r at perihelion/aphelion, not everywhere).
-    const L = this.a * (1 - this.e * this.e);
-    const vr = ((this.e * Math.sin(this._theta) * r * r) / L) * thetaDot;
-    const vTheta = r * thetaDot;
-    const cosT = Math.cos(this._theta);
-    const sinT = Math.sin(this._theta);
-    const vx = vr * cosT - vTheta * sinT;
-    const vy = vr * sinT + vTheta * cosT;
-    const vScale = 0.35;
-    e.drawArrow(pos, { x: pos.x + vx * vScale, y: pos.y + vy * vScale }, { stroke: '#38b76a', lineWidth: 2.5, headLength: 8 });
-    e.drawText('v', { x: pos.x + vx * vScale * 1.3, y: pos.y + vy * vScale * 1.3 }, { color: '#38b76a', font: '700 15px sans-serif' });
-
-    // Gravitational acceleration — always toward the focus, per the inverse-
-    // square central force that produces this exact elliptical orbit.
-    const gScale = Math.min(0.5, 0.55 / (r * r));
-    e.drawArrow(pos, { x: pos.x - cosT * gScale, y: pos.y - sinT * gScale }, { stroke: '#e5484d', lineWidth: 2.5, headLength: 8 });
-    e.drawText('aɢ', { x: pos.x - cosT * gScale * 1.35, y: pos.y - sinT * gScale * 1.35 }, { color: '#e5484d', font: '700 15px sans-serif' });
-
     this.onUpdate?.({ r, thetaDot });
   }
 }

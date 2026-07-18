@@ -18,21 +18,12 @@ npm run preview   # preview the production build
 ## What's here
 
 - Vite + vanilla JS + native Web Components (no framework dependency).
-- An "Aurora UI" design language: soft layered gradients, subtle
-  glassmorphism on every card and floating panel, a cyan→violet gradient
-  accent, deep multi-layer shadows, generous rounded corners, and a
-  barely-there aurora-borealis gradient wash drifting behind every page
-  alongside a starfield of low-opacity dots — both pure CSS, no JS/canvas,
-  and tuned low-opacity enough to never compete with the text sitting on
-  top of them. A CVD-validated categorical palette still tags chapter
-  domains (`src/styles/tokens.css`). All navigation (Home, Chapters,
-  Search, Theme, Language) lives in one collapsible drawer, opened via a
-  circular hamburger button fixed to the top-left corner at every
-  breakpoint — nothing else is permanently docked on screen, and the
-  drawer's backdrop is a light scrim (the lesson stays visible behind it),
-  never a fullscreen dark overlay.
-- A single-focus home page: one hero (title, one line, one CTA) and the
-  chapter grid — no competing panels.
+- Interactive Science Lab design system: glassmorphism, soft glow, a
+  CVD-validated categorical palette for chapter domains (`src/styles/tokens.css`).
+- A dashboard-style home page: sticky top nav, responsive sidebar (off-canvas
+  on mobile), hero section with an animated SVG illustration + floating
+  particles, chapter-card grid, progress section, command-palette search, and
+  a settings drawer.
 - Arabic (default, RTL) / English (LTR) language toggle.
 - Light/dark theme toggle, plus a reduced-motion override.
 - MathJax v3, lazy-loaded, with a `<math-block>` component.
@@ -72,29 +63,12 @@ npm run preview   # preview the production build
   motion and centripetal force/acceleration, satellite orbits and Kepler's
   three laws, rotational kinematics and moment of inertia, rotational
   energy/work/power, and angular momentum. Every worked example and every
-  end-of-chapter question/problem walks through the full teacher-beside-a-
-  weak-student sequence — what each symbol/given means, why any unit
-  conversion is needed and the conversion itself, every algebra and
-  arithmetic step, a highlighted final answer — never jumping straight
-  from a formula to a number. Four interactive, directly draggable
-  simulations (uniform circular motion, Kepler orbits sweeping equal areas
-  with live velocity/gravity vectors and a spinning central body,
-  conservation of angular momentum, and rotational motion/torque) replace
-  seven of the book's static figures, each with speed control and a
-  live-updating formula readout; the rest of the book's diagrams are
-  hand-drawn SVGs, and any figure whose concept already has a matching
-  simulation (e.g. the "car on a curve" figure) opens that simulation
-  instead of a redundant static image. Supplementary asides ("did you
-  know?", "remember") are collapsed by default so the lesson's core flow
-  stays the one thing in focus. A per-page table of contents lives in a
-  small off-canvas drawer (opened from an edge tab) rather than a
-  permanent sidebar, so the lesson always gets the full reading width.
-  Figures open in a fullscreen viewer with zoom (buttons/wheel/pinch),
-  drag-to-pan, and ESC/backdrop-click to close. Unlocked and linked from
-  the home page's chapter grid. `ARCHITECTURE.md` documents the reusable
-  pattern behind these simulations so a future chapter can add its own
-  without reinventing the wiring — built only when a lesson actually needs
-  one, never speculatively for a topic that isn't written yet.
+  end-of-chapter question/problem is solved in full, one card per question
+  with no skipped steps. Three interactive simulations (uniform circular
+  motion, Kepler orbits sweeping equal areas, conservation of angular
+  momentum) replace six of the book's static figures, built on the Phase 4
+  engine; the rest of the book's diagrams are hand-drawn SVGs. Unlocked and
+  linked from the home page's chapter grid.
 
 See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the reasoning behind each
 piece, including several Shadow DOM / CSS cascade gotchas worth knowing

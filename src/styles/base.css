@@ -29,81 +29,6 @@ body {
     color var(--duration-normal) var(--ease-standard);
 }
 
-/*
-  A barely-there physics identity — professional scientific branding, not
-  decorative animation (see the calm-UI rebuild notes in ARCHITECTURE.md).
-  A handful of scattered, low-opacity dots ("stars") drift one tile-width
-  over four minutes — far too slow to consciously perceive as motion, only
-  registering as "not a completely static page" out of the corner of the
-  eye. It's a single `background-image` on a fixed pseudo-element behind
-  everything: no JS, no canvas, no DOM nodes, GPU-cheap (a composited
-  `background-position` animation). Every card in the design system has a
-  solid (non-transparent) background, so this layer is only ever visible in
-  the page's own margins and gaps between cards — never behind text, so it
-  cannot reduce reading contrast no matter how it's tuned. If that ever
-  stops being true for some future layout, this is the first thing to cut.
-*/
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(1.4px 1.4px at 12% 22%, var(--color-starfield-dot), transparent 60%),
-    radial-gradient(1px 1px at 32% 68%, var(--color-starfield-dot), transparent 60%),
-    radial-gradient(1.6px 1.6px at 58% 12%, var(--color-starfield-dot), transparent 60%),
-    radial-gradient(1px 1px at 74% 46%, var(--color-starfield-dot), transparent 60%),
-    radial-gradient(1.2px 1.2px at 88% 78%, var(--color-starfield-dot), transparent 60%),
-    radial-gradient(1px 1px at 6% 88%, var(--color-starfield-dot), transparent 60%),
-    radial-gradient(1.4px 1.4px at 46% 38%, var(--color-starfield-dot), transparent 60%),
-    radial-gradient(1px 1px at 94% 30%, var(--color-starfield-dot), transparent 60%);
-  background-size: 900px 900px;
-  background-repeat: repeat;
-  animation: starfield-drift 240s linear infinite;
-  animation-play-state: var(--anim-play, running);
-}
-
-/*
-  Aurora UI wash — three soft, low-opacity color blobs (the aurora-borealis
-  cyan/violet/pink trio from tokens.css) drifting almost imperceptibly
-  behind every page, layered on top of the starfield dots above. Kept at
-  8-12% opacity specifically so it reads as ambient premium atmosphere, not
-  a colored tint that would fight with text contrast — every card still has
-  its own solid-enough surface (glass cards blur what's behind them rather
-  than letting it show through at full strength). If this ever measurably
-  hurts reading comfort, cut it — the same rule the starfield above follows.
-*/
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(ellipse 60% 42% at 12% -8%, color-mix(in srgb, var(--aurora-a) 12%, transparent), transparent 70%),
-    radial-gradient(ellipse 55% 45% at 92% 8%, color-mix(in srgb, var(--aurora-b) 10%, transparent), transparent 70%),
-    radial-gradient(ellipse 55% 42% at 45% 108%, color-mix(in srgb, var(--aurora-c) 8%, transparent), transparent 70%);
-  background-repeat: no-repeat;
-  animation: aurora-drift 70s ease-in-out infinite alternate;
-  animation-play-state: var(--anim-play, running);
-}
-
-.app-shell {
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes starfield-drift {
-  from { background-position: 0 0; }
-  to { background-position: 900px 900px; }
-}
-
-@keyframes aurora-drift {
-  from { transform: translate(0, 0) scale(1); }
-  to { transform: translate(-1.5%, 2%) scale(1.04); }
-}
-
 /* The Arabic UI is the primary language; Latin text (formulas, code) still
    needs its own font so numerals and Latin symbols don't inherit Arabic glyph shapes. */
 :lang(en) {
@@ -170,45 +95,32 @@ button, input, select, textarea {
   transition: transform var(--duration-fast) var(--ease-standard),
     box-shadow var(--duration-fast) var(--ease-standard),
     border-color var(--duration-fast) var(--ease-standard),
-    background var(--duration-fast) var(--ease-standard),
-    filter var(--duration-fast) var(--ease-standard);
+    background var(--duration-fast) var(--ease-standard);
 }
 .btn:hover {
   transform: translateY(-2px);
-}
-.btn:active {
-  transform: translateY(0);
 }
 .btn svg {
   width: 1.1em;
   height: 1.1em;
 }
 .btn--primary {
-  /* Always white, in both themes — --gradient-primary is now the same
-     cyan/indigo/purple blend regardless of theme (matching the Aurora
-     reference image, which shows it correctly against its own dark scene),
-     unlike --color-text-on-accent, which stays theme-flipped for *solid*
-     single-hue accent fills elsewhere (badges, etc). The soft shadow keeps
-     the text readable over the gradient's lighter purple end. */
-  background: var(--gradient-primary);
-  color: #fff;
-  text-shadow: 0 1px 3px hsl(260 60% 15% / 0.35);
+  background: var(--color-primary);
+  color: var(--color-text-on-accent);
   box-shadow: var(--shadow-md);
 }
 .btn--primary:hover {
-  background: var(--gradient-primary-hover);
-  box-shadow: var(--shadow-float);
+  background: var(--color-primary-hover);
 }
 .btn--ghost {
   background: var(--glass-bg);
   color: var(--color-text);
-  border-color: var(--glass-border);
+  border-color: var(--color-border);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 .btn--ghost:hover {
   border-color: var(--color-primary);
-  background: var(--glass-bg-strong);
 }
 .btn--secondary {
   background: var(--color-bg-sunken);
@@ -269,67 +181,6 @@ button, input, select, textarea {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-/*
-  Priority 3: a standard circular hamburger, fixed to the physical top-left
-  corner at every breakpoint, always visible — including above an open
-  drawer/modal (see app-header.js for why this lives in global CSS as a
-  real <body> child instead of inside app-header's shadow root: a
-  position:fixed descendant only escapes a stacking-context-creating
-  ancestor visually, not in z-index comparisons). left/top, not logical
-  properties, on purpose — this is chrome meant to stay in one predictable
-  corner in either RTL or LTR, unlike the mirrored content everywhere else.
-*/
-.aurora-menu-btn {
-  position: fixed;
-  top: var(--space-4);
-  left: var(--space-4);
-  z-index: var(--z-fab);
-  appearance: none;
-  /* Gradient-ring border (matching the reference image's hamburger): a
-     transparent border lets the border-box layer of the gradient
-     background show through as a ring, while the padding-box layer fills
-     the interior with the usual glass tint — the standard two-layer
-     gradient-border trick, since `border-image` doesn't support border-
-     radius/circles. */
-  border: 2px solid transparent;
-  /* Multiple background layers paint with the *first* listed on top — so
-     the glass interior (padding-box, must be visually on top to cover the
-     center) has to be the first layer, and the ring gradient (border-box,
-     underneath, showing only where the transparent border exposes it) the
-     second. A real background-color can only be the shorthand's *last*
-     layer, which is the opposite of what's needed here, so the "glass"
-     layer is a flat two-stop gradient of the same color instead — an
-     image, which is allowed in any position. */
-  background:
-    linear-gradient(var(--glass-bg-strong), var(--glass-bg-strong)) padding-box,
-    var(--gradient-primary) border-box;
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  color: var(--color-text);
-  border-radius: 50%;
-  /* 48px: comfortably above the 44px minimum touch target (Priority 3). */
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  font-size: 1.15rem;
-  box-shadow: var(--shadow-float);
-  transition: transform var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard);
-}
-.aurora-menu-btn svg {
-  width: 1.2em;
-  height: 1.2em;
-}
-.aurora-menu-btn:hover {
-  transform: scale(1.06);
-  box-shadow: var(--shadow-float), 0 0 0 4px color-mix(in srgb, var(--aurora-a) 20%, transparent);
-}
-.aurora-menu-btn:active {
-  transform: scale(0.97);
 }
 
 .skip-link {

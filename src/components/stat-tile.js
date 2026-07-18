@@ -14,13 +14,8 @@ const style = css`
     gap: var(--space-4);
     padding: var(--space-5);
     border-radius: var(--radius-lg);
-    background:
-      radial-gradient(120% 60% at 0% 0%, color-mix(in srgb, var(--color-primary) 6%, transparent), transparent 60%),
-      var(--glass-bg-strong);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-card);
+    background: var(--glass-bg);
+    border: 1px solid var(--color-border);
   }
   .icon-badge {
     flex: none;

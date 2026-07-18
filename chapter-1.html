@@ -20,14 +20,27 @@
   <link rel="stylesheet" href="src/styles/rtl.css" />
   <style>
     .ch1-hero {
-      margin-block-end: var(--space-8);
+      background: var(--pattern-grid);
+      background-size: var(--pattern-grid-size);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      margin-block-end: var(--space-7);
     }
     .ch1-hero-inner {
-      background: var(--color-bg-raised);
-      border: 1px solid var(--color-border);
-      box-shadow: var(--shadow-card);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
       border-radius: var(--radius-lg);
-      padding: var(--space-7);
+      padding: var(--space-6);
+    }
+    .ch1-two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-6);
+      margin-block-start: var(--space-5);
+    }
+    @media (min-width: 720px) {
+      .ch1-two-col { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
     }
     .ch1-list {
       margin: 0;
@@ -38,6 +51,26 @@
       color: var(--color-text-muted);
       font-size: var(--fs-300);
       line-height: var(--lh-normal);
+    }
+    .ch1-toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+    .ch1-toc-list a {
+      display: block;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: var(--fs-300);
+    }
+    .ch1-toc-list a:hover {
+      background: var(--color-bg-sunken);
+      color: var(--color-primary);
     }
     .ch1-section {
       margin-block-end: var(--space-8);
@@ -96,65 +129,6 @@
       color: var(--color-text-muted);
       font-weight: 700;
     }
-    /* Step-by-step worked-solution scaffold (Priority 1 of the teaching-depth
-       rebuild): every example/problem walks through the same numbered beats
-       — givens, formula + symbol meanings, unit check, substitution,
-       arithmetic — instead of jumping straight to numbers. */
-    .ch1-steps {
-      margin: var(--space-4) 0 0;
-      padding: 0;
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-4);
-    }
-    .ch1-step {
-      display: flex;
-      gap: var(--space-3);
-      align-items: flex-start;
-    }
-    .ch1-step-num {
-      flex: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--color-primary-soft);
-      color: var(--color-primary);
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: var(--fs-200);
-      margin-block-start: 2px;
-    }
-    .ch1-step-body {
-      flex: 1;
-      min-width: 0;
-    }
-    .ch1-step-title {
-      font-weight: 700;
-      margin: 0 0 var(--space-2);
-    }
-    .ch1-step-body p {
-      margin: 0 0 var(--space-2);
-      color: var(--color-text-muted);
-    }
-    .ch1-step-body p:last-child {
-      margin-block-end: 0;
-    }
-    .ch1-given-list {
-      margin: var(--space-2) 0 0;
-      padding-inline-start: var(--space-5);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
-      color: var(--color-text-muted);
-    }
-    .ch1-note-inline {
-      font-size: var(--fs-200);
-      color: var(--color-text-muted);
-      font-style: italic;
-      margin: var(--space-2) 0 0;
-    }
     .ch1-sim-controls {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
@@ -170,25 +144,6 @@
       flex-wrap: wrap;
       gap: var(--space-3);
       margin-block-start: var(--space-4);
-    }
-    .ch1-drag-hint {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      color: var(--color-text-muted);
-      font-size: var(--fs-200);
-      margin: var(--space-3) 0 0;
-    }
-    .ch1-drag-hint::before {
-      content: '👆';
-      font-size: 1em;
-    }
-    .ch1-sim-formula {
-      margin-block-start: var(--space-4);
-      padding: var(--space-4);
-      border-radius: var(--radius-md);
-      background: var(--color-bg-sunken);
-      text-align: center;
     }
     .ch1-mcq-options {
       margin: var(--space-3) 0 0;
@@ -229,23 +184,41 @@
 
           <section class="ch1-hero">
             <div class="ch1-hero-inner stack">
+              <span class="badge-pill">الفصل الأول</span>
               <h1 style="margin:0;">الحركة الدائرية والدورانية</h1>
-              <p class="content-max" style="color:var(--color-text-muted); font-size:var(--fs-400); margin:0;">
+              <p style="color:var(--color-text-muted); font-size:var(--fs-400); max-width:70ch; margin:0;">
                 الحركة الدائرية، القوة المركزية، مدارات الأقمار الاصطناعية وقوانين كبلر، الحركة الدورانية، عزم القصور
                 الذاتي، الطاقة، الشغل، القدرة، والزخم الزاوي — مع محاكاات تفاعلية وأمثلة وتمارين محلولة بالكامل.
               </p>
 
-              <ui-accordion style="margin-block-start: var(--space-2);">
-                <ui-accordion-item label="الأهداف السلوكية">
-                  <p style="margin-block-end:var(--space-2);">بعد إتمام دراسة هذا الفصل يكون الطالب قادرًا على:</p>
+              <div class="ch1-two-col">
+                <div>
+                  <h2 style="font-size:var(--fs-500); margin-block-end:var(--space-2);" data-i18n="ch1.objectives.title"></h2>
+                  <p style="color:var(--color-text-muted); font-size:var(--fs-200); margin-block-end:var(--space-2);">
+                    بعد إتمام دراسة هذا الفصل يكون الطالب قادرًا على:
+                  </p>
                   <ol class="ch1-list">
                     <li>معرفة الحركة الدائرية والدورانية، والقوة المركزية.</li>
                     <li>معرفة القدرة والشغل والحركة الدورانية.</li>
                     <li>استيعاب المفاهيم الآتية واستخراج قيمتها باستعمال المعادلات الرياضية: الحركة الدورانية والسرعة الزاوية والتعجيل الزاوي؛ عزم القصور الذاتي؛ القدرة والشغل والحركة الدورانية.</li>
                     <li>معرفة قوانين كبلر في الحركة الدائرية، ومن أمثلتها حركة الأقمار الاصطناعية.</li>
                   </ol>
-                </ui-accordion-item>
-              </ui-accordion>
+                </div>
+                <div>
+                  <h2 style="font-size:var(--fs-500); margin-block-end:var(--space-2);" data-i18n="ch1.contents.title"></h2>
+                  <ul class="ch1-toc-list">
+                    <li><a href="#sec-1-1">1-1 تمهيد</a></li>
+                    <li><a href="#sec-2-1">2-1 الحركة الدائرية</a></li>
+                    <li><a href="#sec-3-1">3-1 القوة المركزية</a></li>
+                    <li><a href="#sec-4-1">4-1 مدارات الأقمار الاصطناعية وقوانين كبلر</a></li>
+                    <li><a href="#sec-5-1">5-1 الحركة الدورانية</a></li>
+                    <li><a href="#sec-6-1">6-1 الطاقة في الحركة الدورانية</a></li>
+                    <li><a href="#sec-7-1">7-1 الشغل والقدرة في الحركة الدورانية</a></li>
+                    <li><a href="#sec-8-1">8-1 الزخم الزاوي</a></li>
+                    <li><a href="#sec-9-1">9-1 أسئلة ومسائل الفصل</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -337,65 +310,9 @@
                     والقمر هي (5000 km).
                   </p>
                   <p><strong>الحل:</strong></p>
-                  <ol class="ch1-steps">
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">1</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ماذا تعطينا المسألة؟ وماذا يعني كل رمز؟</p>
-                        <ul class="ch1-given-list">
-                          <li><strong>v = 363.4 m/s</strong>: السرعة الخطية (المماسية) للقمر الصناعي أثناء دورانه — أي مقدار سرعته وهو يتحرك على مساره الدائري.</li>
-                          <li><strong>r = 5000 km</strong>: المسافة بين الأرض والقمر الصناعي، وهذه المسافة تمثّل نصف قطر المسار الدائري الذي يدور فيه القمر.</li>
-                        </ul>
-                        <p>والمطلوب: <strong>aᴄ</strong>، أي التعجيل المركزي للقمر.</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">2</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ما القانون المناسب؟ وماذا يمثّل كل رمز فيه؟</p>
-                        <p>القانون الذي يربط بين التعجيل المركزي والسرعة ونصف القطر هو المعادلة (1) التي درسناها في القسم (1-2-1):</p>
-                        <math-block>\[ a_{c} = \frac{v^{2}}{r} \]</math-block>
-                        <p>حيث: <strong>aᴄ</strong> التعجيل المركزي (بوحدة m/s²)، <strong>v</strong> السرعة الخطية للجسم (بوحدة m/s)، <strong>r</strong> نصف قطر المسار الدائري (بوحدة m).</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">3</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">هل تحتاج القيم إلى تحويل وحدات؟ ولماذا؟</p>
-                        <p>
-                          لاحظ أن السرعة معطاة بوحدة (m/s) وهي الوحدة القياسية المطلوبة في القانون، فلا حاجة لتحويلها. أما المسافة
-                          فمعطاة بوحدة (km) وليس (m)، والقانون يتطلب أن يكون نصف القطر بوحدة الأمتار حتى يخرج الناتج بوحدة
-                          (m/s²) الصحيحة. لذلك يجب تحويل (5000 km) إلى أمتار قبل التعويض.
-                        </p>
-                        <p>وبما أن كل كيلومتر واحد يساوي 1000 متر:</p>
-                        <math-block>\[ r = 5000\ \text{km} = 5000 \times 1000\ \text{m} = 5{,}000{,}000\ \text{m} = 5\times10^{6}\ \text{m} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">4</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">التعويض بالقيم في القانون</p>
-                        <p>نعوّض عن v وr بقيمتيهما بعد توحيد الوحدات:</p>
-                        <math-block>\[ a_{c} = \frac{v^{2}}{r} = \frac{(363.4\ \text{m/s})^{2}}{5\times10^{6}\ \text{m}} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">5</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">إجراء الحساب خطوة بخطوة</p>
-                        <p>أولًا نربّع السرعة:</p>
-                        <math-block>\[ (363.4)^{2} = 363.4 \times 363.4 = 132{,}059.56 \]</math-block>
-                        <p>ثم نقسم الناتج على نصف القطر:</p>
-                        <math-block>\[ a_{c} = \frac{132{,}059.56}{5{,}000{,}000} = 0.02641...\ \text{m/s}^{2} \]</math-block>
-                        <p class="ch1-note-inline">
-                          ملاحظة: التعجيل المركزي صغير جدًا هنا لأن نصف قطر المدار (5 ملايين متر) كبير جدًا مقارنة بالحركة
-                          الدائرية المألوفة في حياتنا اليومية — وكلما كبر نصف القطر عند سرعة معيّنة قلّ التعجيل المركزي، لأن aᴄ يتناسب عكسيًا مع r.
-                        </p>
-                      </div>
-                    </li>
-                  </ol>
+                  <math-block>\[ a_{c} = \frac{v^{2}}{r} = \frac{(363.4)^{2}}{5000 \times 1000} \]</math-block>
                   <div slot="footer" class="ch1-final-answer">
-                    <span class="label">الجواب النهائي</span>
+                    <span class="label">الجواب</span>
                     <math-block>\[ a_{c} \approx 0.0264\ \text{m/s}^{2} \]</math-block>
                   </div>
                 </example-card>
@@ -410,11 +327,7 @@
 
                   <simulation-card title="محاكاة الحركة الدائرية المنتظمة">
                     <p data-i18n="ch1.sim.circular.caption"></p>
-                    <sim-container class="sim-frame" id="sim-circular" style="aspect-ratio:16/9; max-width:384px; margin-inline:auto;"></sim-container>
-                    <p class="ch1-drag-hint" data-i18n="ch1.sim.circular.dragHint"></p>
-                    <div class="cluster" style="margin-block-start: var(--space-3);">
-                      <sim-speed-control id="cm-speed" speeds="0.25,0.5,1,2" value="1"></sim-speed-control>
-                    </div>
+                    <sim-container class="sim-frame" id="sim-circular" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
                     <div class="ch1-sim-controls cols-3">
                       <sim-slider id="cm-radius" data-i18n-attr="label:ch1.sim.circular.radius" unit="m" min="0.5" max="3" step="0.1" value="1.5"></sim-slider>
                       <sim-slider id="cm-omega" data-i18n-attr="label:ch1.sim.circular.omega" unit="rad/s" min="0.5" max="6" step="0.1" value="2"></sim-slider>
@@ -425,7 +338,6 @@
                       <sim-value-display id="cm-ac" data-i18n-attr="label:ch1.sim.circular.ac" unit="m/s^2"></sim-value-display>
                       <sim-value-display id="cm-fc" data-i18n-attr="label:ch1.sim.circular.fc" unit="N"></sim-value-display>
                     </div>
-                    <sim-formula-display id="cm-formula" class="ch1-sim-formula"></sim-formula-display>
                   </simulation-card>
                 </lesson-card>
               </section>
@@ -462,7 +374,7 @@
                   </p>
                 </lesson-card>
 
-                <lab-callout variant="note" label="هل تعلم؟" collapsible collapsed>
+                <lab-callout variant="note" label="هل تعلم؟">
                   <p>
                     يعتمد أساس عمل جهاز الطرد المركزي (Centrifuge) على تغيّر القوة المركزية باختلاف كتلة المادة، وبذلك
                     يمكن فصل موادّ مختلفة عن بعضها بحسب الكتلة أو الكثافة. يحتوي الجهاز على وعاء توضع فيه عيّنات مختلفة
@@ -477,7 +389,7 @@
                     انزلاق، إذا كان معامل الاحتكاك السكوني بين الإطارات والطريق يساوي (0.8).
                   </p>
 
-                  <svg-figure caption="سيارة تدور حول منعطف مستوٍ نصف قطره r دون انزلاق." sim-target="#sim-circular">
+                  <svg-figure caption="سيارة تدور حول منعطف مستوٍ نصف قطره r دون انزلاق.">
                     <svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
                       <path d="M10 130 A120 120 0 0 1 210 40" fill="none" stroke="currentColor" stroke-width="18" opacity="0.12" />
                       <path d="M10 130 A120 120 0 0 1 210 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.6" />
@@ -490,78 +402,18 @@
                   </svg-figure>
 
                   <p><strong>الحل:</strong></p>
-                  <ol class="ch1-steps">
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">1</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ماذا تعطينا المسألة؟</p>
-                        <ul class="ch1-given-list">
-                          <li><strong>r = 25 m</strong>: نصف قطر المنعطف (الطريق دائري الشكل بهذا النصف).</li>
-                          <li><strong>μₛ = 0.8</strong>: معامل الاحتكاك السكوني بين الإطارات والطريق — رقم بلا وحدة يصف مدى "تشبّث" الإطار بالطريق قبل أن ينزلق.</li>
-                          <li><strong>g = 9.8 m/s²</strong>: تسارع الجاذبية الأرضية، وهو ثابت معروف نستعمله دائمًا في مسائل الوزن.</li>
-                        </ul>
-                        <p>والمطلوب: أقصى سرعة v يمكن أن تدور بها السيارة دون انزلاق، والجواب مطلوب بوحدة km/h تحديدًا.</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">2</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">من أين تأتي القوة المركزية هنا؟</p>
-                        <p>
-                          الطريق مستوٍ (غير مائل)، فلا توجد قوة تدفع السيارة نحو المركز إلا الاحتكاك بين الإطارات والطريق —
-                          أي أن قوة الاحتكاك هي نفسها القوة المركزية في هذه المسألة. عند أقصى سرعة ممكنة دون انزلاق، تكون
-                          قوة الاحتكاك عند حدّها الأقصى:
-                        </p>
-                        <math-block>\[ F_{s(\max)} = \mu_{s} N \]</math-block>
-                        <p>
-                          حيث N هي قوة رد فعل الطريق العمودية على السيارة؛ وبما أن الطريق أفقي، فإن هذه القوة تساوي وزن
-                          السيارة تمامًا (اتزان رأسي): N = mg، حيث m كتلة السيارة.
-                        </p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">3</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">مساواة القوة المركزية بأقصى قوة احتكاك</p>
-                        <math-block>\[ F_{c} = F_{s(\max)} \ \Rightarrow\ \frac{m v^{2}}{r} = \mu_{s}\, (mg) \]</math-block>
-                        <p>
-                          لاحظ أن كتلة السيارة (m) موجودة في طرفي المعادلة، لذا يمكن حذفها بالقسمة على m من الطرفين — وهذا
-                          يعني أن السرعة القصوى الآمنة <strong>لا تعتمد على كتلة السيارة</strong>، بل فقط على نصف قطر
-                          المنعطف ومعامل الاحتكاك (وعلى g الثابتة):
-                        </p>
-                        <math-block>\[ v^{2} = \mu_{s}\, r\, g \ \Rightarrow\ v = \sqrt{\mu_{s}\, r\, g} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">4</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">التعويض بالقيم والحساب</p>
-                        <p>نعوّض عن μₛ وr وg بقيمها المعطاة (وكلها بوحدات SI متوافقة، فلا حاجة لأي تحويل وحدات هنا):</p>
-                        <math-block>\[ v = \sqrt{0.8 \times 25 \times 9.8} \]</math-block>
-                        <p>نحسب حاصل الضرب داخل الجذر أولًا خطوة بخطوة:</p>
-                        <math-block>\[ 0.8 \times 25 = 20 \]</math-block>
-                        <math-block>\[ 20 \times 9.8 = 196 \]</math-block>
-                        <p>ثم نأخذ الجذر التربيعي للناتج:</p>
-                        <math-block>\[ v = \sqrt{196} = 14\ \text{m/s} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">5</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">لماذا نحوّل الوحدة، وكيف؟</p>
-                        <p>
-                          حصلنا على السرعة بوحدة (m/s) لأننا استعملنا r وg بوحداتهما القياسية (متر، متر/ثانية²)، لكن
-                          المسألة تطلب الجواب بوحدة (km/h) تحديدًا. للتحويل من m/s إلى km/h نستعمل حقيقتين: كل 1 km يساوي
-                          1000 m، وكل 1 h يساوي 3600 s:
-                        </p>
-                        <math-block>\[ v = 14\ \frac{\text{m}}{\text{s}} \times \frac{1\,\text{km}}{1000\,\text{m}} \times \frac{3600\,\text{s}}{1\,\text{h}} \]</math-block>
-                        <p>الأمتار والثواني تُختصر، ويتبقى معامل التحويل (3600/1000 = 3.6)، أي:</p>
-                        <math-block>\[ v = 14 \times 3.6 = 50.4\ \text{km/h} \]</math-block>
-                      </div>
-                    </li>
-                  </ol>
+                  <p>
+                    القوة المركزية اللازمة لإبقاء السيارة على مسارها المنحني دون انزلاق (القوة المركزية) تنشأ من قوة
+                    احتكاك الإطارات مع الطريق. إذا كانت كتلة السيارة (m)، فإن أقصى قوة احتكاك:
+                  </p>
+                  <math-block>\[ F_{s(\max)} = \mu_{s} N,\quad N = mg \]</math-block>
+                  <p>بمساواة قوة الاحتكاك بالقوة المركزية:</p>
+                  <math-block>\[ F_{c} = F_{s(\max)} \ \Rightarrow\ \frac{m v^{2}}{r} = \mu_{s}\, m g \]</math-block>
+                  <math-block>\[ v = \sqrt{\mu_{s}\, r\, g} = \sqrt{0.8 \times 25 \times 9.8} \]</math-block>
+                  <p>وبتحويل الناتج إلى km/h:</p>
+                  <math-block>\[ v = 14\ \text{m/s} \times \frac{1\,\text{km}}{1000\,\text{m}} \times \frac{3600\,\text{s}}{1\,\text{h}} \]</math-block>
                   <div slot="footer" class="ch1-final-answer">
-                    <span class="label">الجواب النهائي</span>
+                    <span class="label">الجواب</span>
                     <math-block>\[ v = 14\ \text{m/s} = 50.4\ \text{km/h} \]</math-block>
                   </div>
                 </example-card>
@@ -574,7 +426,7 @@
                   <p>حيث μₖ معامل الاحتكاك الحركي.</p>
                 </lab-callout>
 
-                <lab-callout variant="note" label="هل تعلم؟" collapsible collapsed>
+                <lab-callout variant="note" label="هل تعلم؟">
                   <p>
                     تُصمَّم مخارج الطرق السريعة ومنعطفات حلبات السباق بميل طفيف (انحدار)، وذلك لزيادة القوة المركزية
                     الجاذبة؛ إذ تتحلل قوة رد فعل الطريق المائل على السيارة إلى مركبتين: إحداهما عمودية على الطريق تساوي
@@ -652,11 +504,7 @@
 
                 <simulation-card title="محاكاة قوانين كبلر — المسار الإهليلجي وكنس المساحات">
                   <p data-i18n="ch1.sim.kepler.caption"></p>
-                  <sim-container class="sim-frame" id="sim-kepler" style="aspect-ratio:16/9; max-width:384px; margin-inline:auto;"></sim-container>
-                  <p class="ch1-drag-hint" data-i18n="ch1.sim.kepler.dragHint"></p>
-                  <div class="cluster" style="margin-block-start: var(--space-3);">
-                    <sim-speed-control id="kp-speed" speeds="0.25,0.5,1,2" value="1"></sim-speed-control>
-                  </div>
+                  <sim-container class="sim-frame" id="sim-kepler" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
                   <div class="ch1-sim-controls">
                     <sim-slider id="kp-ecc" data-i18n-attr="label:ch1.sim.kepler.eccentricity" min="0" max="0.75" step="0.05" value="0.3"></sim-slider>
                   </div>
@@ -664,10 +512,9 @@
                     <sim-value-display id="kp-r" data-i18n-attr="label:ch1.sim.kepler.r" unit="AU" precision="2"></sim-value-display>
                     <sim-value-display id="kp-thetadot" data-i18n-attr="label:ch1.sim.kepler.thetadot" unit="rad/s" precision="2"></sim-value-display>
                   </div>
-                  <sim-formula-display id="kp-formula" class="ch1-sim-formula"></sim-formula-display>
                 </simulation-card>
 
-                <lab-callout variant="note" label="تذكر" collapsible collapsed>
+                <lab-callout variant="note" label="تذكر">
                   <p>
                     أيّ كتلتين في الكون تتجاذبان بقوة تتناسب طرديًا مع حاصل ضرب الكتلتين (M, m) وعكسيًا مع مربع المسافة
                     بينهما (r) — هذا هو قانون نيوتن للجذب العام، رياضيًا:
@@ -808,7 +655,7 @@
                     <math-block>\[ \omega = 2\pi f \]</math-block>
                   </formula-card>
 
-                  <lab-callout variant="note" label="هل تعلم؟" collapsible collapsed>
+                  <lab-callout variant="note" label="هل تعلم؟">
                     <p>
                       تحتوي آلية مشغّل القرص المدمج (CD) على محرك يُدير القرص المرن ويتحكم بسرعته، والتي تتراوح بين 200
                       و500 دورة في الدقيقة، حتى تتمكن حزمة الليزر من قراءة المعلومات المخزّنة على القرص.
@@ -835,54 +682,13 @@
                     المروحة. (ب) احسب السرعة المماسية لحافة الريشة إذا كانت المسافة من المركز إلى الحافة (20 cm).
                   </p>
                   <p><strong>الحل:</strong></p>
-                  <ol class="ch1-steps">
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">1</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ماذا تعني (900 rpm)؟</p>
-                        <p>
-                          (rpm) اختصار لعبارة "دورة في الدقيقة" (rev/min). فقول إن المروحة تدور بمعدل 900 rpm يعني أنها
-                          تكمل <strong>N = 900</strong> دورة كاملة كل <strong>t = 1 دقيقة</strong>. وكل دورة كاملة تقابل
-                          زاوية مقدارها 2π راديان (كما ذكرنا في ملاحظة القسم 1-5-1). والمطلوب: (أ) السرعة الزاوية ω،
-                          (ب) السرعة المماسية v عند حافة الريشة حيث <strong>r = 20 cm</strong>.
-                        </p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">2</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">أ- لماذا نحوّل الوحدات هنا؟</p>
-                        <p>
-                          السرعة الزاوية ω يجب أن تكون بوحدة (rad/s)، لكن معطياتنا بوحدات "دورة" و"دقيقة" — فيجب تحويل
-                          كل دورة إلى راديان (× 2π)، وتحويل الدقيقة إلى ثوانٍ (× 60، لأن كل دقيقة = 60 ثانية) حتى نحصل على
-                          الوحدة الصحيحة:
-                        </p>
-                        <math-block>\[ \omega = \frac{\text{الزاوية الكلية (rad)}}{\text{الزمن (s)}} = \frac{N \times 2\pi}{t} = \frac{900 \times 2\pi}{60} \]</math-block>
-                        <p>نبسّط الكسر أولًا (900 ÷ 60 = 15)، ثم نضرب في 2π:</p>
-                        <math-block>\[ \omega = 15 \times 2\pi = 30\pi\ \text{rad/s} \]</math-block>
-                        <p>وبأخذ π ≈ 3.14:</p>
-                        <math-block>\[ \omega = 30 \times 3.14 \approx 94.2\ \text{rad/s} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">3</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ب- السرعة المماسية عند حافة الريشة</p>
-                        <p>نستعمل القانون vᴛ = ωr (المعادلة 7) الذي يربط السرعة المماسية بالسرعة الزاوية ونصف القطر:</p>
-                        <p>
-                          لكن r معطى بوحدة (cm) بينما القانون يتطلب المتر؛ وبما أن كل 100 سم تساوي مترًا واحدًا:
-                        </p>
-                        <math-block>\[ r = 20\ \text{cm} = \frac{20}{100}\ \text{m} = 0.2\ \text{m} \]</math-block>
-                        <p>الآن نعوّض بقيمتي ω (بصيغتها 30π) وr:</p>
-                        <math-block>\[ v = \omega r = 30\pi \times 0.2 = 6\pi\ \text{m/s} \]</math-block>
-                        <p>وبأخذ π ≈ 3.14:</p>
-                        <math-block>\[ v = 6 \times 3.14 \approx 18.84\ \text{m/s} \]</math-block>
-                      </div>
-                    </li>
-                  </ol>
+                  <p>أ- السرعة الزاوية:</p>
+                  <math-block>\[ \omega = \frac{N \times 2\pi}{t} = \frac{900 \times 2\pi}{60} \]</math-block>
+                  <p>ب- السرعة المماسية:</p>
+                  <math-block>\[ v = \omega r = 30\pi \times \frac{20}{100} = 30 \times 3.14 \times 0.2 \]</math-block>
                   <div slot="footer" class="ch1-final-answer">
-                    <span class="label">الجواب النهائي</span>
-                    <math-block>\[ \omega = 30\pi \approx 94.2\ \text{rad/s},\qquad v \approx 18.84\ \text{m/s} \]</math-block>
+                    <span class="label">الجواب</span>
+                    <math-block>\[ \omega = 30\pi\ \text{rad/s},\qquad v \approx 18.84\ \text{m/s} \]</math-block>
                   </div>
                 </example-card>
 
@@ -939,60 +745,14 @@
                     في زمن (20 s). أوجد: (أ) التعجيل الزاوي. (ب) التعجيل المماسي لنقطة على حافة العجلة.
                   </p>
                   <p><strong>الحل:</strong></p>
-                  <ol class="ch1-steps">
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">1</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ماذا تعطينا المسألة؟</p>
-                        <ul class="ch1-given-list">
-                          <li><strong>r = 40 cm</strong>: نصف قطر العجلة.</li>
-                          <li>العجلة "تبدأ من السكون"، أي أن سرعتها الزاوية الابتدائية <strong>ω₀ = 0</strong>.</li>
-                          <li>تصل سرعتها إلى <strong>600 rpm</strong> بعد زمن <strong>t = 20 s</strong>.</li>
-                        </ul>
-                        <p>والمطلوب: (أ) التعجيل الزاوي α، (ب) التعجيل المماسي aᴛ لنقطة على حافة العجلة.</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">2</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">تحويل السرعة النهائية من rpm إلى rad/s</p>
-                        <p>
-                          مثل المثال السابق، (600 rpm) تعني 600 دورة كل دقيقة، ويجب تحويلها إلى راديان/ثانية: نحوّل
-                          الدورات إلى راديان (كل دورة = 2π rad) والدقائق إلى ثوانٍ (كل دقيقة = 60 ثانية):
-                        </p>
-                        <math-block>\[ \omega = \left(600\,\frac{\text{rev}}{\text{min}}\right)\left(\frac{1\,\text{min}}{60\,\text{s}}\right)\left(\frac{2\pi\,\text{rad}}{1\,\text{rev}}\right) = \frac{600}{60}\times 2\pi = 20\pi\ \text{rad/s} \]</math-block>
-                        <p>وبأخذ π ≈ 3.14:</p>
-                        <math-block>\[ \omega = 20 \times 3.14 = 62.8\ \text{rad/s} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">3</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">أ- إيجاد التعجيل الزاوي α</p>
-                        <p>
-                          التعجيل الزاوي هو معدل تغيّر السرعة الزاوية مع الزمن (المعادلة 12). بما أن العجلة بدأت من
-                          السكون فإن ω₁ = 0، وأصبحت ω₂ = 62.8 rad/s بعد t = 20 s:
-                        </p>
-                        <math-block>\[ \alpha = \frac{\Delta\omega}{\Delta t} = \frac{\omega_{2}-\omega_{1}}{t} = \frac{62.8-0}{20} = 3.14\ \text{rad/s}^{2} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">4</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ب- إيجاد التعجيل المماسي aᴛ</p>
-                        <p>
-                          نستعمل العلاقة aᴛ = rα (المعادلة 11) التي تربط التعجيل المماسي بالتعجيل الزاوي عند نصف قطر
-                          ثابت. لكن r معطى بالسنتيمتر ويجب تحويله إلى المتر أولًا (لأن α بوحدة rad/s² القياسية، والراديان
-                          كمّية بلا أبعاد، لذا يجب أن يكون r بالمتر ليخرج aᴛ بوحدة m/s²):
-                        </p>
-                        <math-block>\[ r = 40\ \text{cm} = \frac{40}{100}\ \text{m} = 0.4\ \text{m} \]</math-block>
-                        <p>نعوّض الآن بقيمتي r وα:</p>
-                        <math-block>\[ a_{T} = r\alpha = (0.4\ \text{m})(3.14\ \text{rad/s}^{2}) \approx 1.3\ \text{m/s}^{2} \]</math-block>
-                      </div>
-                    </li>
-                  </ol>
+                  <p>تحويل السرعة الزاوية إلى rad/s:</p>
+                  <math-block>\[ \omega = \left(600\,\frac{\text{rev}}{\text{min}}\right)\left(\frac{1\,\text{min}}{60\,\text{s}}\right)\left(\frac{2\pi\,\text{rad}}{1\,\text{rev}}\right) \]</math-block>
+                  <p>أ- التعجيل الزاوي (الجسم يبدأ من السكون، t₁ = 0):</p>
+                  <math-block>\[ \alpha = \frac{\Delta\omega}{\Delta t} = \frac{62.8-0}{20} \]</math-block>
+                  <p>ب- التعجيل المماسي لنقطة على الحافة:</p>
+                  <math-block>\[ a_{T} = r\alpha = \left(\frac{40}{100}\,\text{m}\right)(3.14\ \text{rad/s}^{2}) \]</math-block>
                   <div slot="footer" class="ch1-final-answer">
-                    <span class="label">الجواب النهائي</span>
+                    <span class="label">الجواب</span>
                     <math-block>\[ \alpha = 3.14\ \text{rad/s}^{2},\qquad a_{T} \approx 1.3\ \text{m/s}^{2} \]</math-block>
                   </div>
                 </example-card>
@@ -1045,63 +805,16 @@
                     مقدار تعجيله الزاوي والإزاحة الزاوية التي قطعها وعدد الدورات الكلية؟
                   </p>
                   <p><strong>الحل:</strong></p>
-                  <ol class="ch1-steps">
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">1</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ماذا تعطينا المسألة؟</p>
-                        <ul class="ch1-given-list">
-                          <li>المحرك "يبدأ من السكون"، أي <strong>ω₀ = 0</strong> و<strong>θ₀ = 0</strong> عند بداية القياس.</li>
-                          <li>يبلغ سرعة زاوية نهائية <strong>1200 rev/min</strong> بعد زمن <strong>t = 10 s</strong>.</li>
-                        </ul>
-                        <p>والمطلوب: التعجيل الزاوي α، والإزاحة الزاوية θ، وعدد الدورات الكلية.</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">2</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">تحويل السرعة النهائية إلى rad/s</p>
-                        <p>
-                          كما في الأمثلة السابقة، نحوّل الدورات إلى راديان (× 2π) والدقائق إلى ثوانٍ (÷ 60) لنحصل على
-                          وحدة rad/s القياسية:
-                        </p>
-                        <math-block>\[ \omega = \frac{1200 \times 2\pi}{60} = 20 \times 2\pi = 40\pi\ \text{rad/s} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">3</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">إيجاد التعجيل الزاوي α</p>
-                        <p>نستعمل قانون الحركة الدورانية المنتظمة التعجيل رقم (13): ω = ω₀ + αt. وبما أن ω₀ = 0:</p>
-                        <math-block>\[ \omega = \alpha t \ \Rightarrow\ 40\pi = \alpha(10) \]</math-block>
-                        <p>نقسم الطرفين على 10 لنعزل α:</p>
-                        <math-block>\[ \alpha = \frac{40\pi}{10} = 4\pi\ \text{rad/s}^{2} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">4</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">إيجاد الإزاحة الزاوية θ</p>
-                        <p>نستعمل القانون رقم (14): θ − θ₀ = ω₀t + ½αt². وبما أن θ₀ = 0 وω₀ = 0، يبسّط القانون إلى:</p>
-                        <math-block>\[ \theta = \tfrac{1}{2}\alpha t^{2} = \tfrac{1}{2}(4\pi)(10)^{2} \]</math-block>
-                        <p>نحسب (10)² أولًا، ثم نضرب بالترتيب:</p>
-                        <math-block>\[ \theta = \tfrac{1}{2}(4\pi)(100) = 2\pi \times 100 = 200\pi\ \text{rad} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">5</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">تحويل الإزاحة الزاوية إلى عدد دورات</p>
-                        <p>
-                          الإزاحة الزاوية θ حصلنا عليها بوحدة الراديان، لكن السؤال يطلب "عدد الدورات". وبما أن كل دورة
-                          كاملة تقابل 2π راديان (كما في ملاحظة القسم 1-5-1)، فإن عدد الدورات يساوي θ مقسومة على 2π:
-                        </p>
-                        <math-block>\[ \text{عدد الدورات} = \frac{\theta}{2\pi} = \frac{200\pi}{2\pi} = 100\ \text{دورة} \]</math-block>
-                      </div>
-                    </li>
-                  </ol>
+                  <p>المحرك يبدأ من السكون: ω₀ = 0. تحويل السرعة النهائية إلى rad/s:</p>
+                  <math-block>\[ \omega = \frac{1200 \times 2\pi}{60} = 40\pi\ \text{rad/s} \]</math-block>
+                  <p>من ω = ω₀ + αt:</p>
+                  <math-block>\[ 40\pi = \alpha(10) \ \Rightarrow\ \alpha = 4\pi\ \text{rad/s}^{2} \]</math-block>
+                  <p>الإزاحة الزاوية من θ − θ₀ = ω₀t + ½αt² (وω₀ = θ₀ = 0):</p>
+                  <math-block>\[ \theta = \tfrac{1}{2}(4\pi)(10)^{2} = 200\pi\ \text{rad} \]</math-block>
+                  <p>عدد الدورات (1 دورة = 2π rad):</p>
+                  <math-block>\[ \text{عدد الدورات} = \frac{200\pi}{2\pi} \]</math-block>
                   <div slot="footer" class="ch1-final-answer">
-                    <span class="label">الجواب النهائي</span>
+                    <span class="label">الجواب</span>
                     <math-block>\[ \alpha = 4\pi\ \text{rad/s}^{2},\quad \theta = 200\pi\ \text{rad},\quad 100\ \text{دورة} \]</math-block>
                   </div>
                 </example-card>
@@ -1169,27 +882,6 @@
                     </svg>
                   </svg-figure>
                 </lesson-card>
-
-                <simulation-card title="محاكاة الحركة الدورانية والعزم المدوّر">
-                  <p data-i18n="ch1.sim.rotation.caption"></p>
-                  <sim-container class="sim-frame" id="sim-rotation" style="aspect-ratio:16/9; max-width:384px; margin-inline:auto;"></sim-container>
-                  <p class="ch1-drag-hint" data-i18n="ch1.sim.rotation.dragHint"></p>
-                  <div class="cluster" style="margin-block-start: var(--space-3);">
-                    <sim-speed-control id="rm-speed" speeds="0.25,0.5,1,2" value="1"></sim-speed-control>
-                  </div>
-                  <div class="ch1-sim-controls cols-3">
-                    <sim-slider id="rm-mass" data-i18n-attr="label:ch1.sim.rotation.mass" unit="kg" min="0.5" max="5" step="0.1" value="2"></sim-slider>
-                    <sim-slider id="rm-radius" data-i18n-attr="label:ch1.sim.rotation.radius" unit="m" min="0.5" max="2" step="0.1" value="1.2"></sim-slider>
-                    <sim-slider id="rm-force" data-i18n-attr="label:ch1.sim.rotation.force" unit="N" min="-5" max="5" step="0.1" value="3"></sim-slider>
-                  </div>
-                  <div class="ch1-sim-readouts">
-                    <sim-value-display id="rm-I" data-i18n-attr="label:ch1.sim.rotation.I" unit="kg*m^2" precision="2"></sim-value-display>
-                    <sim-value-display id="rm-torque" data-i18n-attr="label:ch1.sim.rotation.torque" unit="N*m" precision="2"></sim-value-display>
-                    <sim-value-display id="rm-alpha" data-i18n-attr="label:ch1.sim.rotation.alpha" unit="rad/s^2" precision="2"></sim-value-display>
-                    <sim-value-display id="rm-omega" data-i18n-attr="label:ch1.sim.rotation.omega" unit="rad/s" precision="2"></sim-value-display>
-                  </div>
-                  <sim-formula-display id="rm-formula" class="ch1-sim-formula"></sim-formula-display>
-                </simulation-card>
               </section>
 
               <!-- ============================================================ -->
@@ -1248,7 +940,7 @@
                   </formula-card>
                 </lesson-card>
 
-                <lab-callout variant="note" label="هل تعلم؟" collapsible collapsed>
+                <lab-callout variant="note" label="هل تعلم؟">
                   <p>
                     يصنع مصنّعو العجلات الدوّارة (Flywheel) معظم كتلة العجلة مُركّزة عند حافتها/إطارها، ليكون عزم قصورها
                     الذاتي كبيرًا، من أجل الحفاظ على زخمها/استقرارها أثناء الحركة.
@@ -1257,11 +949,7 @@
 
                 <simulation-card title="محاكاة حفظ الزخم الزاوي">
                   <p data-i18n="ch1.sim.angmom.caption"></p>
-                  <sim-container class="sim-frame" id="sim-angmom" style="aspect-ratio:16/9; max-width:384px; margin-inline:auto;"></sim-container>
-                  <p class="ch1-drag-hint" data-i18n="ch1.sim.angmom.dragHint"></p>
-                  <div class="cluster" style="margin-block-start: var(--space-3);">
-                    <sim-speed-control id="am-speed" speeds="0.25,0.5,1,2" value="1"></sim-speed-control>
-                  </div>
+                  <sim-container class="sim-frame" id="sim-angmom" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
                   <div class="ch1-sim-controls">
                     <sim-slider id="am-radius" data-i18n-attr="label:ch1.sim.angmom.radius" unit="m" min="0.3" max="1.2" step="0.05" value="0.9"></sim-slider>
                   </div>
@@ -1271,7 +959,6 @@
                     <sim-value-display id="am-L" data-i18n-attr="label:ch1.sim.angmom.L" unit="kg*m^2/s" precision="2"></sim-value-display>
                     <sim-value-display id="am-ke" data-i18n-attr="label:ch1.sim.angmom.ke" unit="J" precision="2"></sim-value-display>
                   </div>
-                  <sim-formula-display id="am-formula" class="ch1-sim-formula"></sim-formula-display>
                 </simulation-card>
 
                 <example-card number="6" title="عزم القصور الذاتي لكرة صلدة">
@@ -1294,53 +981,9 @@
                   </lab-callout>
 
                   <p><strong>الحل:</strong></p>
-                  <ol class="ch1-steps">
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">1</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ماذا تعطينا المسألة؟</p>
-                        <ul class="ch1-given-list">
-                          <li><strong>m = 10 kg</strong>: كتلة الكرة الصلدة.</li>
-                          <li><strong>r = 50 cm</strong>: نصف قطر الكرة.</li>
-                          <li>محور الدوران يمر بمركز الكرة (أحد أقطارها)، كما في الشكل (10-1).</li>
-                        </ul>
-                        <p>والمطلوب: عزم القصور الذاتي I لهذه الكرة حول محور يمر بمركزها.</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">2</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">اختيار القانون المناسب من جدول (2-1)</p>
-                        <p>
-                          الجسم هنا "كرة صلدة" (مصمتة، وليست مجوّفة)، والمحور يمر بمركزها، وهذا يطابق تمامًا الحالة
-                          الثانية في جدول (2-1):
-                        </p>
-                        <math-block>\[ I = \tfrac{2}{5} m r^{2} \]</math-block>
-                        <p>حيث m كتلة الكرة (kg) وr نصف قطرها (m)، والناتج I بوحدة (kg·m²).</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">3</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">تحويل الوحدات قبل التعويض</p>
-                        <p>نصف القطر معطى بالسنتيمتر، ويجب تحويله إلى المتر لأن القانون يستعمل وحدات SI (كي يخرج I بوحدة kg·m² الصحيحة):</p>
-                        <math-block>\[ r = 50\ \text{cm} = \frac{50}{100}\ \text{m} = 0.5\ \text{m} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">4</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">التعويض والحساب خطوة بخطوة</p>
-                        <math-block>\[ I = \tfrac{2}{5} m r^{2} = \tfrac{2}{5}(10)(0.5)^{2} \]</math-block>
-                        <p>نحسب (0.5)² أولًا:</p>
-                        <math-block>\[ (0.5)^{2} = 0.25 \]</math-block>
-                        <p>ثم نضرب بالترتيب: 2/5 = 0.4، و0.4 × 10 = 4، ثم 4 × 0.25:</p>
-                        <math-block>\[ I = 0.4 \times 10 \times 0.25 = 1\ \text{kg·m}^{2} \]</math-block>
-                      </div>
-                    </li>
-                  </ol>
+                  <math-block>\[ I = \tfrac{2}{5} m r^{2} = \tfrac{2}{5}(10)(0.5)^{2} \]</math-block>
                   <div slot="footer" class="ch1-final-answer">
-                    <span class="label">الجواب النهائي</span>
+                    <span class="label">الجواب</span>
                     <math-block>\[ I = 1\ \text{kg·m}^{2} \]</math-block>
                   </div>
                 </example-card>
@@ -1351,64 +994,14 @@
                     سرعته الزاوية. 2- طاقته الحركية الدورانية. 3- الدفع الزاوي. 4- الشغل الزاوي.
                   </p>
                   <p><strong>الحل:</strong></p>
-                  <ol class="ch1-steps">
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">1</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">ماذا تعطينا المسألة؟</p>
-                        <ul class="ch1-given-list">
-                          <li><strong>I = 2 kg·m²</strong>: عزم القصور الذاتي للقرص.</li>
-                          <li><strong>L = 50 kg·m²/s</strong>: زخمه الزاوي، وهو "منتظم" أي ثابت المقدار طوال الحركة.</li>
-                        </ul>
-                        <p>والمطلوب أربعة أشياء: (1) السرعة الزاوية ω، (2) الطاقة الحركية الدورانية Eᵣ، (3) الدفع الزاوي، (4) الشغل الزاوي.</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">2</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">1- إيجاد السرعة الزاوية ω</p>
-                        <p>من تعريف الزخم الزاوي (المعادلة 22): L = Iω. نعزل ω بقسمة الطرفين على I:</p>
-                        <math-block>\[ \omega = \frac{L}{I} = \frac{50}{2} = 25\ \text{rad/s} \]</math-block>
-                        <p class="ch1-note-inline">القيم هنا معطاة مباشرة بوحدات SI (kg·m²، kg·m²/s)، فلا حاجة لأي تحويل وحدات.</p>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">3</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">2- إيجاد الطاقة الحركية الدورانية Eᵣ</p>
-                        <p>نستعمل المعادلة (19) بعد أن أصبحت ω معلومة من الخطوة السابقة:</p>
-                        <math-block>\[ E_{r} = \tfrac{1}{2} I \omega^{2} = \tfrac{1}{2}(2)(25)^{2} \]</math-block>
-                        <p>نحسب (25)² أولًا:</p>
-                        <math-block>\[ (25)^{2} = 625 \]</math-block>
-                        <p>ثم: ½ × 2 = 1، وأخيرًا 1 × 625:</p>
-                        <math-block>\[ E_{r} = 1 \times 625 = 625\ \text{J} \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">4</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">3- الدفع الزاوي</p>
-                        <p>
-                          الدفع الزاوي (τt) يساوي التغيّر في الزخم الزاوي: ΔL = L_نهائي − L_ابتدائي. وبما أن الزخم الزاوي
-                          هنا "منتظم" (ثابت لا يتغيّر طوال الحركة)، فإن L_نهائي = L_ابتدائي، وبالتالي:
-                        </p>
-                        <math-block>\[ \text{الدفع الزاوي} = \Delta L = 0 \]</math-block>
-                      </div>
-                    </li>
-                    <li class="ch1-step">
-                      <span class="ch1-step-num">5</span>
-                      <div class="ch1-step-body">
-                        <p class="ch1-step-title">4- الشغل الزاوي</p>
-                        <p>
-                          الشغل الزاوي يساوي التغيّر في الطاقة الحركية الدورانية. وبما أن ω ثابتة طوال الحركة (لأن L
-                          وI كلاهما ثابتان)، فإن Eᵣ لا تتغيّر أيضًا، وبالتالي الشغل الزاوي المبذول:
-                        </p>
-                        <math-block>\[ \text{الشغل الزاوي} = \Delta E_{r} = 0 \]</math-block>
-                      </div>
-                    </li>
-                  </ol>
+                  <p>1- من L = Iω:</p>
+                  <math-block>\[ \omega = \frac{L}{I} = \frac{50}{2} \]</math-block>
+                  <p>2- الطاقة الحركية الدورانية:</p>
+                  <math-block>\[ E_{r} = \tfrac{1}{2} I \omega^{2} = \tfrac{1}{2}(2)(25)^{2} \]</math-block>
+                  <p>3- الدفع الزاوي يساوي صفرًا، وذلك لعدم وجود تغيّر في الزخم الزاوي (زخم منتظم).</p>
+                  <p>4- الشغل الزاوي يساوي صفرًا، وذلك لعدم وجود تغيّر في الطاقة.</p>
                   <div slot="footer" class="ch1-final-answer">
-                    <span class="label">الجواب النهائي</span>
+                    <span class="label">الجواب</span>
                     <math-block>\[ \omega = 25\ \text{rad/s},\ \ E_{r} = 625\ \text{J},\ \ \text{الدفع الزاوي} = 0,\ \ \text{الشغل} = 0 \]</math-block>
                   </div>
                 </example-card>
@@ -1594,31 +1187,9 @@
                   <exercise-card number="1" title="التعجيل المركزي لجسم مربوط بخيط">
                     <p>احسب التعجيل المركزي لجسم مربوط بخيط طوله (0.5 m) يتحرك بسرعة (5 m/s).</p>
                     <p><strong>الحل:</strong></p>
-                    <ol class="ch1-steps">
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">1</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">المعطيات والمطلوب</p>
-                          <p>
-                            طول الخيط هنا هو نفسه نصف قطر المسار الدائري الذي يتحركه الجسم، أي <strong>r = 0.5 m</strong>؛
-                            وسرعة الجسم الخطية <strong>v = 5 m/s</strong>. كلتا القيمتين بوحدات SI جاهزتين، فلا حاجة لأي
-                            تحويل وحدات. المطلوب: التعجيل المركزي aᴄ.
-                          </p>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">2</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">التعويض والحساب</p>
-                          <p>نستعمل قانون التعجيل المركزي (المعادلة 1) مباشرة:</p>
-                          <math-block>\[ a_{c} = \frac{v^{2}}{r} = \frac{(5)^{2}}{0.5} \]</math-block>
-                          <p>نحسب (5)² أولًا، ثم نقسم على 0.5 (أي نضرب في 2):</p>
-                          <math-block>\[ a_{c} = \frac{25}{0.5} = 50\ \text{m/s}^{2} \]</math-block>
-                        </div>
-                      </li>
-                    </ol>
+                    <math-block>\[ a_{c} = \frac{v^{2}}{r} = \frac{(5)^{2}}{0.5} \]</math-block>
                     <div slot="footer" class="ch1-final-answer">
-                      <span class="label">الجواب النهائي</span>
+                      <span class="label">الجواب</span>
                       <math-block>\[ a_{c} = 50\ \text{m/s}^{2} \]</math-block>
                     </div>
                   </exercise-card>
@@ -1629,67 +1200,16 @@
                       التعجيل الزاوي. (ب) الزمن اللازم ليدور هذه الدورات الخمسين.
                     </p>
                     <p><strong>الحل:</strong></p>
-                    <ol class="ch1-steps">
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">1</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">المعطيات والمطلوب</p>
-                          <ul class="ch1-given-list">
-                            <li>السرعة الابتدائية: <strong>900 rpm</strong>.</li>
-                            <li>السرعة النهائية: <strong>300 rpm</strong> (أبطأ، لذا نتوقع تعجيلًا زاويًا سالبًا).</li>
-                            <li>عدد الدورات أثناء هذا التباطؤ: <strong>50 دورة</strong>.</li>
-                          </ul>
-                          <p>والمطلوب: (أ) التعجيل الزاوي α، (ب) الزمن اللازم لهذه الدورات الخمسين.</p>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">2</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">تحويل كل القيم إلى وحدات SI أولًا</p>
-                          <p>
-                            كل المعطيات بوحدات "دورة/دقيقة" و"دورة"، لكن قوانين الحركة الدورانية المنتظمة التعجيل تتطلب
-                            الراديان والراديان/ثانية. نحوّل السرعتين (× 2π للدورات، ÷ 60 للدقائق):
-                          </p>
-                          <math-block>\[ \omega_{1} = \frac{900\times2\pi}{60} = 30\pi\ \text{rad/s},\qquad \omega_{2} = \frac{300\times2\pi}{60} = 10\pi\ \text{rad/s} \]</math-block>
-                          <p>ونحوّل عدد الدورات (50 دورة) إلى إزاحة زاوية بالراديان (× 2π لكل دورة):</p>
-                          <math-block>\[ \theta = 50 \times 2\pi = 100\pi\ \text{rad} \]</math-block>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">3</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">أ- إيجاد التعجيل الزاوي α</p>
-                          <p>
-                            نختار القانون (15) لأنه يربط بين السرعتين الابتدائية والنهائية والإزاحة الزاوية مباشرة، دون
-                            الحاجة لمعرفة الزمن:
-                          </p>
-                          <math-block>\[ \omega_{2}^{2} = \omega_{1}^{2} + 2\alpha\theta \]</math-block>
-                          <p>نعوّض بالقيم:</p>
-                          <math-block>\[ (10\pi)^{2} = (30\pi)^{2} + 2\alpha(100\pi) \]</math-block>
-                          <p>نحسب المربعات أولًا: (10π)² = 100π²، و(30π)² = 900π²:</p>
-                          <math-block>\[ 100\pi^{2} = 900\pi^{2} + 200\pi\alpha \]</math-block>
-                          <p>ننقل 900π² إلى الطرف الأيسر (بطرحها من الطرفين):</p>
-                          <math-block>\[ 100\pi^{2} - 900\pi^{2} = 200\pi\alpha \ \Rightarrow\ -800\pi^{2} = 200\pi\alpha \]</math-block>
-                          <p>نقسم الطرفين على 200π لعزل α:</p>
-                          <math-block>\[ \alpha = \frac{-800\pi^{2}}{200\pi} = -4\pi\ \text{rad/s}^{2} \]</math-block>
-                          <p class="ch1-note-inline">الإشارة السالبة متوقعة تمامًا: العجلة تتباطأ (تفقد سرعتها)، فتعجيلها الزاوي يعاكس اتجاه دورانها.</p>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">4</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">ب- إيجاد الزمن t</p>
-                          <p>الآن بعد أن عرفنا α، نستعمل القانون (13) الذي يربط السرعتين بالزمن:</p>
-                          <math-block>\[ \omega_{2} = \omega_{1} + \alpha t \ \Rightarrow\ 10\pi = 30\pi + (-4\pi)t \]</math-block>
-                          <p>ننقل 30π إلى الطرف الأيسر:</p>
-                          <math-block>\[ 10\pi - 30\pi = -4\pi t \ \Rightarrow\ -20\pi = -4\pi t \]</math-block>
-                          <p>نقسم الطرفين على (−4π) لعزل t:</p>
-                          <math-block>\[ t = \frac{-20\pi}{-4\pi} = 5\ \text{s} \]</math-block>
-                        </div>
-                      </li>
-                    </ol>
+                    <p>تحويل السرعتين إلى rad/s:</p>
+                    <math-block>\[ \omega_{1} = \frac{900\times2\pi}{60} = 30\pi\ \text{rad/s},\qquad \omega_{2} = \frac{300\times2\pi}{60} = 10\pi\ \text{rad/s} \]</math-block>
+                    <p>الإزاحة الزاوية عبر 50 دورة:</p>
+                    <math-block>\[ \theta = 50 \times 2\pi = 100\pi\ \text{rad} \]</math-block>
+                    <p>أ- من ω₂² = ω₁² + 2αθ:</p>
+                    <math-block>\[ (10\pi)^{2} = (30\pi)^{2} + 2\alpha(100\pi) \ \Rightarrow\ \alpha = \frac{100\pi^{2}-900\pi^{2}}{200\pi} = -4\pi\ \text{rad/s}^{2} \]</math-block>
+                    <p>ب- من ω₂ = ω₁ + αt:</p>
+                    <math-block>\[ 10\pi = 30\pi + (-4\pi)t \ \Rightarrow\ t = \frac{10\pi-30\pi}{-4\pi} \]</math-block>
                     <div slot="footer" class="ch1-final-answer">
-                      <span class="label">الجواب النهائي</span>
+                      <span class="label">الجواب</span>
                       <math-block>\[ \alpha = -4\pi\ \text{rad/s}^{2},\qquad t = 5\ \text{s} \]</math-block>
                     </div>
                   </exercise-card>
@@ -1700,67 +1220,13 @@
                       جسم كتلته (10 kg) مثبَّت من أحد طرفيه.
                     </p>
                     <p><strong>الحل:</strong></p>
-                    <ol class="ch1-steps">
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">1</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">المعطيات ومعناها</p>
-                          <ul class="ch1-given-list">
-                            <li><strong>طول الحبل = 2 m</strong>: وهو نفسه نصف قطر المسار الدائري، أي r = 2 m.</li>
-                            <li><strong>أقصى قوة شدّ = 5 kN</strong>: أكبر قوة يتحملها الحبل قبل أن ينقطع — وهذه القوة هي التي تزوّد الجسم بالقوة المركزية اللازمة لإبقائه على مساره الدائري.</li>
-                            <li><strong>m = 10 kg</strong>: كتلة الجسم المربوط بطرف الحبل.</li>
-                          </ul>
-                          <p>والمطلوب: أقصى سرعة زاوية ω يمكن أن يدور بها الجسم دون أن ينقطع الحبل، والجواب مطلوب بوحدة rpm.</p>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">2</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">لماذا نحوّل (kN) إلى (N)؟</p>
-                          <p>
-                            جميع قوانين الفصل مبنية على وحدة القوة القياسية (نيوتن N)، وليس كيلونيوتن. وبما أن كل
-                            كيلونيوتن يساوي 1000 نيوتن:
-                          </p>
-                          <math-block>\[ T_{\max} = 5\ \text{kN} = 5 \times 1000 = 5000\ \text{N} \]</math-block>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">3</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">اختيار القانون وعزل ω</p>
-                          <p>
-                            الحد الأقصى لسرعة الدوران يحدث عندما تصل قوة الشدّ إلى أقصى قيمة يتحملها الحبل، أي عندما
-                            تساوي القوة المركزية القصوى. نكتب القوة المركزية بدلالة السرعة الزاوية (بالتعويض v = ωr في
-                            القانون Fᴄ = mv²/r):
-                          </p>
-                          <math-block>\[ T_{\max} = \frac{m v^{2}}{r} = m\omega^{2} r \]</math-block>
-                          <p>نعزل ω بقسمة الطرفين على (mr) ثم أخذ الجذر التربيعي:</p>
-                          <math-block>\[ \omega^{2} = \frac{T_{\max}}{mr} \ \Rightarrow\ \omega = \sqrt{\frac{T_{\max}}{mr}} \]</math-block>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">4</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">التعويض والحساب</p>
-                          <math-block>\[ \omega = \sqrt{\frac{5000}{10 \times 2}} \]</math-block>
-                          <p>نحسب المقام أولًا: 10 × 2 = 20، ثم نقسم:</p>
-                          <math-block>\[ \omega = \sqrt{\frac{5000}{20}} = \sqrt{250} \approx 15.8\ \text{rad/s} \]</math-block>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">5</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">لماذا وكيف نحوّل rad/s إلى rpm؟</p>
-                          <p>
-                            السؤال يطلب الجواب بوحدة (rpm) وليس (rad/s)، لذا يجب التحويل. بما أن دورة واحدة = 2π راديان،
-                            ودقيقة واحدة = 60 ثانية، فإن معامل تحويل السرعة الزاوية من rad/s إلى rpm هو (60/2π):
-                          </p>
-                          <math-block>\[ N = \omega \times \frac{60}{2\pi} \approx 15.8 \times 9.55 \approx 151\ \text{rpm} \]</math-block>
-                        </div>
-                      </li>
-                    </ol>
+                    <p>أقصى قوة شدّ في الحبل تساوي القوة المركزية القصوى:</p>
+                    <math-block>\[ T_{\max} = \frac{m v^{2}}{r} = m\omega^{2} r \ \Rightarrow\ \omega = \sqrt{\frac{T_{\max}}{m r}} \]</math-block>
+                    <math-block>\[ \omega = \sqrt{\frac{5000}{10 \times 2}} = \sqrt{250} \approx 15.8\ \text{rad/s} \]</math-block>
+                    <p>وبتحويلها إلى دورة/دقيقة:</p>
+                    <math-block>\[ N = \omega \times \frac{60}{2\pi} \approx 15.8 \times 9.55 \]</math-block>
                     <div slot="footer" class="ch1-final-answer">
-                      <span class="label">الجواب النهائي</span>
+                      <span class="label">الجواب</span>
                       <math-block>\[ \omega \approx 15.8\ \text{rad/s} \approx 151\ \text{rpm} \]</math-block>
                     </div>
                   </exercise-card>
@@ -1768,95 +1234,25 @@
                   <exercise-card number="4" title="قدرة محرك دوّار">
                     <p>محرك يدور بسرعة (20 rev/s) فيعطي عزمًا قدره (75 N·m)، ما قيمة القدرة التي يعطيها المحرك مقدَّرة بالواط والقدرة الحصانية؟</p>
                     <p><strong>الحل:</strong></p>
-                    <ol class="ch1-steps">
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">1</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">المعطيات ومعناها</p>
-                          <ul class="ch1-given-list">
-                            <li><strong>السرعة = 20 rev/s</strong>: عدد الدورات التي يدورها المحرك كل ثانية.</li>
-                            <li><strong>τ = 75 N·m</strong>: العزم المدوّر الذي يبذله المحرك.</li>
-                          </ul>
-                          <p>والمطلوب: القدرة P بوحدتي الواط (W) والقدرة الحصانية (hp).</p>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">2</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">لماذا نحوّل السرعة إلى rad/s؟</p>
-                          <p>
-                            قانون القدرة الدورانية (P = τω) يتطلب أن تكون ω بوحدة (rad/s)، بينما السرعة معطاة بوحدة
-                            "دورة/ثانية". نحوّل الدورات إلى راديان (كل دورة = 2π rad):
-                          </p>
-                          <math-block>\[ \omega = 20 \times 2\pi = 40\pi \approx 125.6\ \text{rad/s} \]</math-block>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">3</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">التعويض في قانون القدرة الدورانية</p>
-                          <p>نستعمل المعادلة (21): P = τω، ونعوّض بقيمتي τ وω:</p>
-                          <math-block>\[ P = \tau\omega = (75)(125.6) \approx 9420\ \text{W} \]</math-block>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">4</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">لماذا وكيف نحوّل الواط إلى قدرة حصانية؟</p>
-                          <p>
-                            القدرة الحصانية (hp) وحدة شائعة الاستعمال لوصف قدرة المحركات، والسؤال يطلبها صراحة. بما أن كل
-                            قدرة حصانية واحدة تعادل تقريبًا 746 واط، فإننا نقسم القدرة بالواط على 746 لنحصل على القيمة
-                            بوحدة hp:
-                          </p>
-                          <math-block>\[ P_{hp} = \frac{P}{746} = \frac{9420}{746} \approx 12.6\ \text{hp} \]</math-block>
-                        </div>
-                      </li>
-                    </ol>
+                    <p>تحويل السرعة إلى rad/s:</p>
+                    <math-block>\[ \omega = 20 \times 2\pi = 125.6\ \text{rad/s} \]</math-block>
+                    <p>من P = τω:</p>
+                    <math-block>\[ P = (75)(125.6) \]</math-block>
+                    <p>وبتحويلها إلى قدرة حصانية (1 hp ≈ 746 W):</p>
+                    <math-block>\[ P_{hp} = \frac{9420}{746} \]</math-block>
                     <div slot="footer" class="ch1-final-answer">
-                      <span class="label">الجواب النهائي</span>
-                      <math-block>\[ P = 9420\ \text{W} \approx 12.6\ \text{hp} \]</math-block>
+                      <span class="label">الجواب</span>
+                      <math-block>\[ P = 9420\ \text{W} \approx 1.62\ \text{hp} \]</math-block>
                     </div>
                   </exercise-card>
 
                   <exercise-card number="5" title="عزم القصور الذاتي لكرة صلدة (قطر معطى)">
                     <p>احسب عزم القصور الذاتي لكرة صلدة تدور حول أحد أقطارها حيث كانت كتلتها (20 kg) وقطرها (50 cm).</p>
                     <p><strong>الحل:</strong></p>
-                    <ol class="ch1-steps">
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">1</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">تنبيه مهم: القطر ليس نصف القطر</p>
-                          <p>
-                            المعطى هنا هو <strong>قطر</strong> الكرة (50 cm)، لكن قانون عزم القصور الذاتي I = (2/5)mr² يستعمل
-                            <strong>نصف القطر r</strong>، وليس القطر — وهذا فرق مفاهيمي، وليس مجرد تحويل وحدات. ولأن نصف
-                            القطر يساوي نصف القطر الكامل دائمًا:
-                          </p>
-                          <math-block>\[ r = \frac{\text{القطر}}{2} = \frac{50\ \text{cm}}{2} = 25\ \text{cm} \]</math-block>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">2</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">تحويل نصف القطر إلى المتر</p>
-                          <p>الآن نحوّل الناتج من سنتيمتر إلى متر (كل 100 سم = متر واحد) حتى يخرج I بوحدة (kg·m²) الصحيحة:</p>
-                          <math-block>\[ r = 25\ \text{cm} = \frac{25}{100}\ \text{m} = 0.25\ \text{m} \]</math-block>
-                        </div>
-                      </li>
-                      <li class="ch1-step">
-                        <span class="ch1-step-num">3</span>
-                        <div class="ch1-step-body">
-                          <p class="ch1-step-title">التعويض والحساب</p>
-                          <p>الجسم كرة صلدة (مصمتة) تدور حول قطرها، فنستعمل نفس قانون المثال (6): I = (2/5)mr²، مع m = 20 kg:</p>
-                          <math-block>\[ I = \tfrac{2}{5} m r^{2} = \tfrac{2}{5}(20)(0.25)^{2} \]</math-block>
-                          <p>نحسب (0.25)² أولًا:</p>
-                          <math-block>\[ (0.25)^{2} = 0.0625 \]</math-block>
-                          <p>ثم نضرب بالترتيب: 2/5 = 0.4، و0.4 × 20 = 8، وأخيرًا 8 × 0.0625:</p>
-                          <math-block>\[ I = 0.4 \times 20 \times 0.0625 = 0.5\ \text{kg·m}^{2} \]</math-block>
-                        </div>
-                      </li>
-                    </ol>
+                    <p>نصف القطر يساوي نصف القطر المعطى: r = 0.5/2 = 0.25 m.</p>
+                    <math-block>\[ I = \tfrac{2}{5} m r^{2} = \tfrac{2}{5}(20)(0.25)^{2} \]</math-block>
                     <div slot="footer" class="ch1-final-answer">
-                      <span class="label">الجواب النهائي</span>
+                      <span class="label">الجواب</span>
                       <math-block>\[ I = 0.5\ \text{kg·m}^{2} \]</math-block>
                     </div>
                   </exercise-card>
@@ -1905,7 +1301,9 @@
 
             </div>
 
-            <page-toc target="#ch1-main" levels="2,3"></page-toc>
+            <aside class="ds-toc">
+              <page-toc target="#ch1-main" levels="2,3"></page-toc>
+            </aside>
           </div>
 
           <pager-nav prev-href="index.html#chapters" prev-target="الفصول الدراسية"></pager-nav>

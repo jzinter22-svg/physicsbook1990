@@ -46,9 +46,6 @@
   --color-bg-raised: var(--color-white);
   --color-bg-sunken: #e7edf7;
   --color-bg-grid-line: rgba(11, 18, 32, 0.05);
-  /* The barely-there starfield background (base.css) — deliberately subtle,
-     see the comment there before increasing this. */
-  --color-starfield-dot: rgba(11, 18, 32, 0.14);
 
   --color-text: var(--color-ink-900);
   --color-text-muted: var(--color-ink-600);
@@ -88,42 +85,10 @@
   --color-domain-thermo: #eda100;
 
   --shadow-color: 220 60% 12%;
-  --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.06);
-  --shadow-md: 0 4px 12px hsl(var(--shadow-color) / 0.08);
-  --shadow-lg: 0 12px 32px hsl(var(--shadow-color) / 0.12);
+  --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.08);
+  --shadow-md: 0 4px 12px hsl(var(--shadow-color) / 0.10);
+  --shadow-lg: 0 12px 32px hsl(var(--shadow-color) / 0.14);
   --shadow-glow-primary: 0 0 0 3px hsl(190 80% 45% / 0.25);
-  /*
-    A calmer, single soft shadow for the "resting" state of lesson/example/
-    exercise cards (Priority 5 of the calm-UI rebuild) — noticeably lighter
-    than --shadow-md, which stays reserved for header/modal chrome that
-    actually needs to read as "floating above" the page.
-  */
-  --shadow-card: 0 1px 3px hsl(var(--shadow-color) / 0.05), 0 1px 2px hsl(var(--shadow-color) / 0.04);
-  --shadow-card-hover: 0 8px 20px hsl(var(--shadow-color) / 0.08), 0 2px 6px hsl(var(--shadow-color) / 0.05);
-  /*
-    Aurora UI: a deeper, softer multi-layer shadow for panels that should
-    read as genuinely floating above the page (drawers, the fullscreen
-    viewer's toolbar, the hamburger button) — one step up from --shadow-lg.
-  */
-  --shadow-float: 0 24px 64px hsl(var(--shadow-color) / 0.16), 0 6px 20px hsl(var(--shadow-color) / 0.08);
-
-  /* ---- Aurora UI: soft gradient accents ----
-     Colors pixel-sampled directly from the uploaded Aurora reference image
-     (assets/design/aurora-reference.png) — not eyeballed. Its heading text
-     and CTA button both use the same 3-stop cyan -> indigo -> purple blend
-     (sampled ~#22d3ee / #6366f1 / #c084fc, left to right); its aurora bands
-     live in the same three hues. Every background use of these stays
-     low-opacity or fully opaque-but-soft — never a loud, attention-grabbing
-     wash; the lesson text is always the thing actually being read. */
-  --gradient-primary: linear-gradient(120deg, #22d3ee 0%, #6366f1 50%, #c084fc 100%);
-  --gradient-primary-hover: linear-gradient(120deg, #06b6d4 0%, #4f46e5 50%, #a855f7 100%);
-  --aurora-a: hsl(189 85% 60%);
-  --aurora-b: hsl(239 75% 65%);
-  --aurora-c: hsl(272 75% 70%);
-  /* The reference's own near-black hero background — used for the home
-     page hero specifically, not the whole app (body text needs a less
-     stark surface for comfortable extended reading). */
-  --color-hero-bg: #04050f;
 
   /* ---- Typography ---- */
   --font-latin: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -155,15 +120,10 @@
   --space-8: 4rem;
   --space-9: 6rem;
 
-  /* ---- Shape ----
-     radius-lg bumped 20px -> 24px -> 28px across two redesigns: softer,
-     calmer, more "premium" card corners each time read less "boxy/
-     technical" than the last. --radius-xl is new for Aurora UI's larger
-     floating panels (drawers, the fullscreen viewer stage). */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 28px;
-  --radius-xl: 32px;
+  /* ---- Shape ---- */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
   --radius-pill: 999px;
 
   /* ---- Motion ---- */
@@ -182,23 +142,14 @@
 
   /* ---- Layout ---- */
   --layout-max-width: 1200px;
-  --layout-gutter: clamp(1.25rem, 4vw, 3rem);
+  --layout-gutter: clamp(1rem, 3vw, 2.5rem);
   --header-height: 64px;
-  --sidebar-width: 280px;
-  /* Comfortable reading measure for lesson prose — long lines are part of
-     what makes a page feel noisy; capping width is one of the cheapest
-     "calm reading experience" wins (Priority 6 of the calm-UI rebuild). */
-  --content-max-width: 68ch;
+  --sidebar-width: 264px;
 
   /* ---- Z-index scale ---- */
   --z-header: 100;
   --z-overlay: 200;
   --z-modal: 300;
-  /* The fixed top-left hamburger (Priority 3) stays above drawers/modals too
-     — "always visible" means visible even while its own drawer is open,
-     toggling it closed the same way a tap on it opened it (a morphing
-     hamburger/close affordance), not just while scrolling the page. */
-  --z-fab: 350;
   --z-toast: 400;
 
   /* Subtle graph-paper texture used behind hero/lab sections */
@@ -224,9 +175,6 @@
   --color-bg-raised: var(--color-ink-900);
   --color-bg-sunken: var(--color-ink-800);
   --color-bg-grid-line: rgba(215, 224, 239, 0.06);
-  /* Slightly brighter than the light-mode dot: small pale dots read as
-     faint stars against a dark background, which is exactly the point. */
-  --color-starfield-dot: rgba(215, 224, 239, 0.18);
 
   --color-text: var(--color-ink-50);
   --color-text-muted: var(--color-ink-300);
@@ -267,21 +215,6 @@
 
   --glow-primary: radial-gradient(circle, hsl(190 90% 60% / 0.28), transparent 70%);
   --glow-accent: radial-gradient(circle, hsl(38 95% 65% / 0.22), transparent 70%);
-
-  --shadow-float: 0 24px 64px hsl(var(--shadow-color) / 0.55), 0 6px 20px hsl(var(--shadow-color) / 0.3);
-  /*
-    The reference image's own scene is already a dark background — its
-    exact gradient reads correctly there without inversion, unlike the
-    previous (pre-reference) dark-mode override which lightened the stops
-    for contrast against a *solid* accent fill. Kept identical to :root's
-    on purpose; only the aurora wash hues get a touch more vivid here,
-    since near-black is what actually lets them glow.
-  */
-  --gradient-primary: linear-gradient(120deg, #22d3ee 0%, #6366f1 50%, #c084fc 100%);
-  --gradient-primary-hover: linear-gradient(120deg, #67e8f9 0%, #818cf8 50%, #d8b4fe 100%);
-  --aurora-a: hsl(189 90% 65%);
-  --aurora-b: hsl(239 85% 70%);
-  --aurora-c: hsl(272 85% 74%);
 }
 
 /* Respect system preference when the user hasn't chosen explicitly */

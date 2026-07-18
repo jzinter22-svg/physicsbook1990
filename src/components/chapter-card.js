@@ -15,15 +15,11 @@ const style = css`
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    padding: var(--space-6);
+    padding: var(--space-5);
     border-radius: var(--radius-lg);
-    background:
-      radial-gradient(120% 60% at 100% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
-      var(--glass-bg-strong);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-card);
+    background: var(--glass-bg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
     transition: transform var(--duration-normal) var(--ease-standard),
       box-shadow var(--duration-normal) var(--ease-standard),
@@ -39,9 +35,9 @@ const style = css`
   }
   :host(:hover) .card,
   :host(:focus-within) .card {
-    transform: translateY(-4px) scale(1.01);
+    transform: translateY(-4px);
     border-color: var(--accent);
-    box-shadow: var(--shadow-float);
+    box-shadow: var(--shadow-md), 0 0 0 1px var(--accent);
   }
   .icon-badge {
     width: 48px;
@@ -88,6 +84,11 @@ const style = css`
   .badge svg {
     width: 0.9em;
     height: 0.9em;
+  }
+  .progress-text {
+    font-size: var(--fs-200);
+    color: var(--color-text-muted);
+    font-weight: 600;
   }
   a.card-link {
     text-decoration: none;
@@ -140,6 +141,7 @@ class ChapterCard extends HTMLElement {
               ? `<span class="badge">${icon('lock')}${t('nav.chapters.soon')}</span>`
               : `<span class="badge badge--start">${icon('play')}${t('chapters.start')}</span>`
           }
+          <span class="progress-text">0%</span>
         </div>
       </div>
     `;

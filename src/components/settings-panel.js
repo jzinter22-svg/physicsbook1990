@@ -1,41 +1,45 @@
 import { defineOnce, css } from './utils.js';
 import { icon } from './icons.js';
 import { t } from '../lib/i18n.js';
+import { getStoredTheme, setTheme } from '../lib/theme.js';
+import { getStoredLang, setLang } from '../lib/i18n.js';
 import { getStoredMotion, setMotion } from '../lib/motion.js';
 
 const style = css`
   /* Shadow DOM doesn't inherit the light-DOM box-sizing reset from base.css. */
   *, *::before, *::after { box-sizing: border-box; }
   :host {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: none;
+  }
+  :host([open]) {
     display: block;
   }
-  /*
-    Same drawer pattern as <app-sidebar>/<page-toc>: physically anchored to
-    the left edge (not a logical inset-inline-* property, and not a
-    display:none/block toggle — a real left transition is what makes this
-    actually slide instead of just fading in at a fixed position), a light
-    backdrop instead of a dark fullscreen one, and rounded corners only on
-    the content-facing (right) edge.
-  */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 11, 18, 0.5);
+  }
   .panel {
     position: fixed;
     inset-block: 0;
-    left: -340px;
-    width: min(320px, 88vw);
-    z-index: var(--z-modal);
+    inset-inline-end: 0;
+    width: min(340px, 90vw);
     background: var(--glass-bg-strong);
+    border-inline-start: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-lg);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-right: 1px solid var(--glass-border);
-    border-top-right-radius: var(--radius-lg);
-    border-bottom-right-radius: var(--radius-lg);
-    box-shadow: var(--shadow-float);
     display: flex;
     flex-direction: column;
-    transition: left var(--duration-normal) var(--ease-standard);
+    transform: translateX(0);
+    animation: slide-in var(--duration-normal) var(--ease-standard);
   }
-  :host([open]) .panel {
-    left: 0;
+  @keyframes slide-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   .head {
     display: flex;
@@ -51,22 +55,14 @@ const style = css`
   .close-btn {
     appearance: none;
     border: 1px solid var(--color-border);
-    background: none;
+    background: var(--color-bg-raised);
     border-radius: var(--radius-pill);
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     display: grid;
     place-items: center;
     cursor: pointer;
-    color: var(--color-text-muted);
-    transition: color var(--duration-fast) var(--ease-standard),
-      border-color var(--duration-fast) var(--ease-standard),
-      transform var(--duration-fast) var(--ease-standard);
-  }
-  .close-btn:hover {
     color: var(--color-text);
-    border-color: var(--color-primary);
-    transform: scale(1.06);
   }
   .body {
     padding: var(--space-5);
@@ -119,6 +115,14 @@ const style = css`
   }
 `;
 
+const THEME_OPTIONS = [
+  { value: 'light', icon: 'sun', key: 'settings.theme.light' },
+  { value: 'dark', icon: 'moon', key: 'settings.theme.dark' },
+];
+const LANG_OPTIONS = [
+  { value: 'ar', label: 'العربية' },
+  { value: 'en', label: 'English' },
+];
 const MOTION_OPTIONS = [
   { value: 'full', key: 'settings.motion.full' },
   { value: 'reduced', key: 'settings.motion.reduced' },
@@ -133,12 +137,21 @@ class SettingsPanel extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.innerHTML = `
       <style>${style}</style>
+      <div class="backdrop"></div>
       <div class="panel" role="dialog" aria-modal="true">
         <div class="head">
           <h2 data-i18n="settings.title"></h2>
           <button class="close-btn" id="close-btn" type="button">${icon('close')}</button>
         </div>
         <div class="body">
+          <div class="field">
+            <label class="field-label" data-i18n="settings.theme.label"></label>
+            <div class="segmented" id="theme-group"></div>
+          </div>
+          <div class="field">
+            <label class="field-label" data-i18n="settings.language.label"></label>
+            <div class="segmented" id="lang-group"></div>
+          </div>
           <div class="field">
             <label class="field-label" data-i18n="settings.motion.label"></label>
             <div class="segmented" id="motion-group"></div>
@@ -147,28 +160,12 @@ class SettingsPanel extends HTMLElement {
       </div>
     `;
 
+    this._themeGroup = this.shadowRoot.getElementById('theme-group');
+    this._langGroup = this.shadowRoot.getElementById('lang-group');
     this._motionGroup = this.shadowRoot.getElementById('motion-group');
-    this.shadowRoot.getElementById('close-btn').addEventListener('click', () => this.close());
 
-    // A light scrim, not a fullscreen dark overlay — same fix as
-    // <app-sidebar>/<page-toc>'s backdrops, and for the same reason: a real
-    // light-DOM element (not a shadow-root child) is what lets it sit above
-    // the rest of the page reliably.
-    this._backdrop = document.createElement('div');
-    this._backdrop.setAttribute('aria-hidden', 'true');
-    Object.assign(this._backdrop.style, {
-      position: 'fixed',
-      inset: '0',
-      background: 'rgba(15, 23, 42, 0.1)',
-      backdropFilter: 'blur(1px)',
-      WebkitBackdropFilter: 'blur(1px)',
-      opacity: '0',
-      pointerEvents: 'none',
-      transition: 'opacity 220ms ease',
-      zIndex: 'var(--z-overlay)',
-    });
-    this._backdrop.addEventListener('click', () => this.close());
-    document.body.appendChild(this._backdrop);
+    this.shadowRoot.getElementById('close-btn').addEventListener('click', () => this.close());
+    this.shadowRoot.querySelector('.backdrop').addEventListener('click', () => this.close());
 
     this._onOpenRequest = () => this.open();
     this._onKeydown = (event) => {
@@ -179,8 +176,10 @@ class SettingsPanel extends HTMLElement {
 
     this._render();
     this._onLangChange = () => this._render();
+    this._onThemeChange = () => this._render();
     this._onMotionChange = () => this._render();
     document.addEventListener('langchange', this._onLangChange);
+    document.addEventListener('themechange', this._onThemeChange);
     document.addEventListener('motionchange', this._onMotionChange);
   }
 
@@ -188,26 +187,40 @@ class SettingsPanel extends HTMLElement {
     document.removeEventListener('open-settings', this._onOpenRequest);
     document.removeEventListener('keydown', this._onKeydown);
     document.removeEventListener('langchange', this._onLangChange);
+    document.removeEventListener('themechange', this._onThemeChange);
     document.removeEventListener('motionchange', this._onMotionChange);
-    this._backdrop.remove();
   }
 
   open() {
     this.setAttribute('open', '');
-    this._backdrop.style.opacity = '1';
-    this._backdrop.style.pointerEvents = 'auto';
   }
 
   close() {
     this.removeAttribute('open');
-    this._backdrop.style.opacity = '0';
-    this._backdrop.style.pointerEvents = 'none';
   }
 
   _render() {
     this.shadowRoot.querySelector('[data-i18n="settings.title"]').textContent = t('settings.title');
+    this.shadowRoot.querySelector('[data-i18n="settings.theme.label"]').textContent = t('settings.theme.label');
+    this.shadowRoot.querySelector('[data-i18n="settings.language.label"]').textContent = t('settings.language.label');
     this.shadowRoot.querySelector('[data-i18n="settings.motion.label"]').textContent = t('settings.motion.label');
     this.shadowRoot.getElementById('close-btn').setAttribute('aria-label', t('settings.close'));
+
+    const theme = getStoredTheme();
+    this._themeGroup.innerHTML = THEME_OPTIONS.map(
+      (opt) => `<button type="button" data-value="${opt.value}" aria-pressed="${opt.value === theme}">${icon(opt.icon)}${t(opt.key)}</button>`
+    ).join('');
+    this._themeGroup.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => setTheme(btn.dataset.value));
+    });
+
+    const lang = getStoredLang();
+    this._langGroup.innerHTML = LANG_OPTIONS.map(
+      (opt) => `<button type="button" data-value="${opt.value}" aria-pressed="${opt.value === lang}">${opt.label}</button>`
+    ).join('');
+    this._langGroup.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => setLang(btn.dataset.value));
+    });
 
     const motion = getStoredMotion();
     this._motionGroup.innerHTML = MOTION_OPTIONS.map(
