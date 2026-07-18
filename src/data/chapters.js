@@ -14,7 +14,7 @@ export const CHAPTERS = [
     titleKey: 'chapters.mechanics.title',
     descKey: 'chapters.mechanics.desc',
     locked: false,
-    href: '/chapter-1.html',
+    href: 'chapter-1.html',
   },
   {
     id: 'thermo',

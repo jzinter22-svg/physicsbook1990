@@ -36,7 +36,7 @@ src/
     demo-simulation.js          Tech-demo subclass (NOT chapter content, not mounted)
     progress.js                 localStorage-backed chapter-completion stats
   locales/
-    ar.json, en.json           UI string dictionaries
+    ar.js, en.js               UI string dictionaries (plain JS modules, not .json — see below)
   data/
     chapters.js                 Placeholder chapter catalogue (category names only)
   components/
@@ -100,9 +100,10 @@ Rules for future contributors:
   mirror automatically when `dir` flips — `rtl.css` only needs to cover the
   handful of things logical properties can't express (icon mirroring,
   directional shadows, isolating embedded LTR fragments like formulas).
-- Any UI string goes in `src/locales/ar.json` / `en.json`, not inline in
+- Any UI string goes in `src/locales/ar.js` / `en.js`, not inline in
   markup. Light-DOM text uses `data-i18n="key"` and is re-rendered by
-  `applyLang()` in `i18n.js`. **Components with a Shadow DOM cannot rely on
+  `applyLang()` in `i18n.js`. **Components with a Shadow DOM
+  cannot rely on
   `data-i18n`** (the global scanner can't reach across the shadow boundary) —
   they import `t()` directly and re-render on the `langchange` event (see
   `app-header.js`, `app-sidebar.js`, `lab-callout.js` for the pattern).
@@ -563,6 +564,57 @@ identically on the pre-existing home page). MathJax itself couldn't be
 verified rendering in this sandboxed environment (no route to the CDN) —
 `<math-block>`'s existing error handling was confirmed to fail gracefully
 rather than break the page.
+
+## Deploying to GitHub Pages
+
+This project ships to GitHub Pages as raw source with **no build step** —
+Pages is configured to "deploy from a branch" (root folder), serving
+`index.html`/`chapter-1.html`/`design-system.html` and `src/**` exactly as
+committed. That works because nothing in the codebase needs bundling (no
+bare npm-package imports in browser-loaded code, every import is a relative
+path) — but it also means two classes of bug only show up under this
+hosting mode, not in local dev (`vite`) or a local production build
+(`vite preview`), both of which mask them:
+
+- **Root-absolute paths break under a project-page subpath.** A GitHub
+  Pages *project* site (as opposed to a `<user>.github.io` *user* site) is
+  served at `https://<user>.github.io/<repo>/`, not at the domain root. Any
+  `href`/`src` written as `/src/...` or `/chapter-1.html` resolves against
+  the domain root (`https://<user>.github.io/src/...` — a 404) instead of
+  the actual page. The Vite dev server masks this entirely (it *is* the
+  domain root at `localhost:5173/`), so every entry HTML file's `<link>`/
+  `<script>` tags, and every internal nav link (breadcrumb, pager, the
+  chapter-card `href` in `src/data/chapters.js`), had to be relative
+  (`src/styles/tokens.css`, `index.html#chapters`, `chapter-1.html`) instead
+  of root-absolute. Since all three HTML entry points live at the repo
+  root, plain relative paths (no leading `/`) resolve correctly both in dev
+  and under any Pages subpath — no environment-specific base-path logic
+  needed.
+- **A bare `.json` ES module import fails outright with no bundler.**
+  `src/lib/i18n.js` used to `import ar from '../locales/ar.json'`. Vite
+  transparently supports that in dev and in a production build, but a
+  browser loading raw, unbundled ES modules requires an explicit import
+  attribute (`with { type: 'json' }`) for a JSON module — without it, the
+  request still succeeds (200, correct `application/json` content type)
+  but the module loader itself rejects it: *"Failed to load module
+  script... Strict MIME type checking is enforced for module scripts"*.
+  Because ES module graphs fail atomically, that one bad import took down
+  all of `i18n.js` and therefore every module that imports it — `main.js`
+  and `chapter-1.js` both never finished loading, which is why the home
+  page rendered as a fully blank white page (its content is entirely
+  JS-rendered custom elements) while `chapter-1.html` still showed its
+  static Arabic prose but with every interactive piece (simulations,
+  language/theme toggles) silently dead. Fixed by converting
+  `src/locales/ar.json`/`en.json` into `src/locales/ar.js`/`en.js` — plain
+  `export default { ... }` modules holding the identical dictionaries — so
+  the import is just a normal, unassisted ES module import with no
+  bundler-only or browser-version-dependent behavior involved.
+
+Lesson for anything added later: verify a from-scratch deploy by serving
+the raw repo tree with a plain static file server *rooted one directory
+above the repo* (so entry files sit behind a `/physicsbook1990/`-style
+subpath, matching a Pages project site), not by trusting `vite`/
+`vite preview` alone — both hide exactly the two bug classes above.
 
 ## What's deliberately not here yet
 

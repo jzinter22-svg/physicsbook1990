@@ -13,11 +13,11 @@
     rel="stylesheet"
   />
 
-  <link rel="stylesheet" href="/src/styles/tokens.css" />
-  <link rel="stylesheet" href="/src/styles/base.css" />
-  <link rel="stylesheet" href="/src/styles/layout.css" />
-  <link rel="stylesheet" href="/src/styles/forms.css" />
-  <link rel="stylesheet" href="/src/styles/rtl.css" />
+  <link rel="stylesheet" href="src/styles/tokens.css" />
+  <link rel="stylesheet" href="src/styles/base.css" />
+  <link rel="stylesheet" href="src/styles/layout.css" />
+  <link rel="stylesheet" href="src/styles/forms.css" />
+  <link rel="stylesheet" href="src/styles/rtl.css" />
 </head>
 <body>
   <a class="skip-link" href="#ds-main" data-i18n="a11y.skipToContent">تخطي إلى المحتوى</a>
@@ -64,8 +64,8 @@
               <div class="ds-subsection">
                 <h3>Breadcrumb</h3>
                 <breadcrumb-nav>
-                  <a href="/" data-i18n="breadcrumb.demoRoot"></a>
-                  <a href="/" data-i18n="breadcrumb.demoParent"></a>
+                  <a href="index.html" data-i18n="breadcrumb.demoRoot"></a>
+                  <a href="index.html" data-i18n="breadcrumb.demoParent"></a>
                   <span aria-current="page" data-i18n="breadcrumb.demoCurrent"></span>
                 </breadcrumb-nav>
               </div>
@@ -74,7 +74,7 @@
                 <h3>Sidebar</h3>
                 <p style="color:var(--color-text-muted); max-width:65ch;">
                   The primary site sidebar (<code>&lt;app-sidebar&gt;</code>) is already live on the
-                  <a href="/">home page</a> — sticky on desktop, an off-canvas drawer on mobile.
+                  <a href="index.html">home page</a> — sticky on desktop, an off-canvas drawer on mobile.
                 </p>
               </div>
 
@@ -254,6 +254,6 @@
   <app-search></app-search>
   <settings-panel></settings-panel>
 
-  <script type="module" src="/src/design-system.js"></script>
+  <script type="module" src="src/design-system.js"></script>
 </body>
 </html>

@@ -13,11 +13,11 @@
     rel="stylesheet"
   />
 
-  <link rel="stylesheet" href="/src/styles/tokens.css" />
-  <link rel="stylesheet" href="/src/styles/base.css" />
-  <link rel="stylesheet" href="/src/styles/layout.css" />
-  <link rel="stylesheet" href="/src/styles/forms.css" />
-  <link rel="stylesheet" href="/src/styles/rtl.css" />
+  <link rel="stylesheet" href="src/styles/tokens.css" />
+  <link rel="stylesheet" href="src/styles/base.css" />
+  <link rel="stylesheet" href="src/styles/layout.css" />
+  <link rel="stylesheet" href="src/styles/forms.css" />
+  <link rel="stylesheet" href="src/styles/rtl.css" />
   <style>
     .ch1-hero {
       background: var(--pattern-grid);
@@ -177,8 +177,8 @@
       <main id="main-content">
         <div class="container section">
           <breadcrumb-nav>
-            <a href="/" data-i18n="nav.home"></a>
-            <a href="/#chapters" data-i18n="nav.chapters"></a>
+            <a href="index.html" data-i18n="nav.home"></a>
+            <a href="index.html#chapters" data-i18n="nav.chapters"></a>
             <span aria-current="page" data-i18n="ch1.breadcrumb.current"></span>
           </breadcrumb-nav>
 
@@ -1306,7 +1306,7 @@
             </aside>
           </div>
 
-          <pager-nav prev-href="/#chapters" prev-target="الفصول الدراسية"></pager-nav>
+          <pager-nav prev-href="index.html#chapters" prev-target="الفصول الدراسية"></pager-nav>
         </div>
       </main>
 
@@ -1317,6 +1317,6 @@
   <app-search></app-search>
   <settings-panel></settings-panel>
 
-  <script type="module" src="/src/chapter-1.js"></script>
+  <script type="module" src="src/chapter-1.js"></script>
 </body>
 </html>

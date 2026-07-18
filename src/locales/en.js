@@ -1,4 +1,4 @@
-{
+export default {
   "site.title": "Interactive Physics Book",
   "site.tagline": "An interactive physics lab — text, equations, and live simulations",
   "nav.home": "Home",
@@ -161,4 +161,4 @@
   "ch1.sim.angmom.L": "Angular momentum L",
   "ch1.sim.angmom.ke": "Rotational kinetic energy Eᵣ",
   "ch1.think.label": "Think"
-}
+};

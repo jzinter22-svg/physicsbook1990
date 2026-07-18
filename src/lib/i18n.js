@@ -1,5 +1,16 @@
-import ar from '../locales/ar.json';
-import en from '../locales/en.json';
+/*
+  Plain JS modules (not .json) on purpose: a bare `import x from './y.json'`
+  requires an import-attribute (`with { type: 'json' }`) to load as a native
+  ES module in a browser with no bundler — Vite's dev/build pipeline papers
+  over that, but this project is also served as raw static files (GitHub
+  Pages, no build step), where the unassisted JSON import fails outright
+  ("Failed to load module script... MIME type of application/json") and
+  aborts the whole module graph, silently blanking every page that imports
+  i18n.js. A `.js` file exporting the same object sidesteps the whole
+  import-attribute question — it's just a normal module.
+*/
+import ar from '../locales/ar.js';
+import en from '../locales/en.js';
 
 const STORAGE_KEY = 'physicsbook:lang';
 
