@@ -477,7 +477,7 @@
                     انزلاق، إذا كان معامل الاحتكاك السكوني بين الإطارات والطريق يساوي (0.8).
                   </p>
 
-                  <svg-figure caption="سيارة تدور حول منعطف مستوٍ نصف قطره r دون انزلاق.">
+                  <svg-figure caption="سيارة تدور حول منعطف مستوٍ نصف قطره r دون انزلاق." sim-target="#sim-circular">
                     <svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
                       <path d="M10 130 A120 120 0 0 1 210 40" fill="none" stroke="currentColor" stroke-width="18" opacity="0.12" />
                       <path d="M10 130 A120 120 0 0 1 210 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.6" />
@@ -1169,6 +1169,27 @@
                     </svg>
                   </svg-figure>
                 </lesson-card>
+
+                <simulation-card title="محاكاة الحركة الدورانية والعزم المدوّر">
+                  <p data-i18n="ch1.sim.rotation.caption"></p>
+                  <sim-container class="sim-frame" id="sim-rotation" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
+                  <p class="ch1-drag-hint" data-i18n="ch1.sim.rotation.dragHint"></p>
+                  <div class="cluster" style="margin-block-start: var(--space-3);">
+                    <sim-speed-control id="rm-speed" speeds="0.25,0.5,1,2" value="1"></sim-speed-control>
+                  </div>
+                  <div class="ch1-sim-controls cols-3">
+                    <sim-slider id="rm-mass" data-i18n-attr="label:ch1.sim.rotation.mass" unit="kg" min="0.5" max="5" step="0.1" value="2"></sim-slider>
+                    <sim-slider id="rm-radius" data-i18n-attr="label:ch1.sim.rotation.radius" unit="m" min="0.5" max="2" step="0.1" value="1.2"></sim-slider>
+                    <sim-slider id="rm-force" data-i18n-attr="label:ch1.sim.rotation.force" unit="N" min="-5" max="5" step="0.1" value="3"></sim-slider>
+                  </div>
+                  <div class="ch1-sim-readouts">
+                    <sim-value-display id="rm-I" data-i18n-attr="label:ch1.sim.rotation.I" unit="kg*m^2" precision="2"></sim-value-display>
+                    <sim-value-display id="rm-torque" data-i18n-attr="label:ch1.sim.rotation.torque" unit="N*m" precision="2"></sim-value-display>
+                    <sim-value-display id="rm-alpha" data-i18n-attr="label:ch1.sim.rotation.alpha" unit="rad/s^2" precision="2"></sim-value-display>
+                    <sim-value-display id="rm-omega" data-i18n-attr="label:ch1.sim.rotation.omega" unit="rad/s" precision="2"></sim-value-display>
+                  </div>
+                  <sim-formula-display id="rm-formula" class="ch1-sim-formula"></sim-formula-display>
+                </simulation-card>
               </section>
 
               <!-- ============================================================ -->
@@ -1884,9 +1905,7 @@
 
             </div>
 
-            <aside class="ds-toc">
-              <page-toc target="#ch1-main" levels="2,3"></page-toc>
-            </aside>
+            <page-toc target="#ch1-main" levels="2,3"></page-toc>
           </div>
 
           <pager-nav prev-href="index.html#chapters" prev-target="الفصول الدراسية"></pager-nav>

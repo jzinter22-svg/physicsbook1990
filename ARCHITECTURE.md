@@ -804,6 +804,95 @@ chapter's own bootstrap script, mounted inside
 `customElements.whenDefined('sim-container').then(...)`, exactly as
 `chapter-1.js` does for its three sims.
 
+## Phase 7 — fullscreen viewer, a fourth simulation, and a real Arabic-rendering bug
+
+**Fullscreen image viewer rewrite (`svg-figure.js`).** The old lightbox
+opened to a dark screen with only a close button visible — root-caused
+with Playwright by reading computed styles: `.lightbox-content` (a flex
+item with no explicit width) shrank to fit only its sized children, and
+the cloned `<svg>` (viewBox only, no explicit `width`/`height`) computed to
+`0×0` inside an unstyled wrapper, collapsing the whole content box to the
+close button's own ~64×64px. **The fix**: give the stage a definite,
+non-shrink-to-fit size (`width:min(85vw,1000px); height:min(78vh,800px)`)
+and let the SVG fill it at `width:100%;height:100%` (default
+`preserveAspectRatio="xMidYMid meet"` handles the letterboxing). Rebuilt on
+top of that fix: zoom via toolbar buttons, mouse wheel, and two-finger
+pinch (all funneled through the existing `attachZoom` helper), drag-to-pan
+via `attachDrag`, ESC/backdrop-click/close-button, and an opacity
+fade-in/out (double-`requestAnimationFrame` so the `display:none→block`
+flip lands before the transition starts). A new `sim-target="#sim-id"`
+attribute lets a figure skip the static image entirely: if the illustrated
+concept already has a live simulation, the expand button scrolls to and
+pulse-highlights that instead — "interactive version always wins over a
+picture of the same thing," wired once on `<svg-figure>` and reused by any
+future figure that duplicates a simulation's concept (see the circular
+motion example in `chapter-1.html`, whose "car on a curve" figure now
+points at `#sim-circular` instead of opening a redundant static drawing).
+
+**Fourth simulation: rotational motion & torque
+(`rotational-motion-sim.js`).** Fills the one real gap in section 5-1
+(τ = Iα, moment of inertia, angular kinematics) that had no dedicated
+visualization — a solid disk driven by a tangential force at its rim.
+`τ = torqueFromForce(F, r)`, `I = momentOfInertia.solidDisk(m, r)`,
+`α = τ/I`, integrated the same way circular motion's ω already was. Follows
+the 7-point pattern above exactly (drag the rim marker to spin the disk by
+hand, pausing integration and zeroing ω for the gesture; speed control;
+throttled formula readout; on-canvas `r = ... m` label; wiring lives in
+`chapter-1.js`, not the sim class). Verified the integration is physically
+correct (not just "doesn't crash") by comparing Δω across two different
+force values over the same wall-clock interval and confirming the ratio
+matches the force ratio exactly (2.0), rather than trusting an absolute
+real-time comparison — headless Playwright's `requestAnimationFrame`
+throttling makes absolute-time comparisons unreliable, but the *relative*
+scaling between two runs is not affected by that.
+
+**Kepler sim: velocity + gravity vectors, central-body spin.** The orbiting
+body's true velocity vector is now drawn from the analytic derivative of
+`r(theta)` (radial component `vr = e·sinθ·r²/L·θ̇` plus tangential
+`vθ = r·θ̇`, composed into Cartesian) — tangent to the actual elliptical
+path, not merely "perpendicular to r" (those only coincide at
+perihelion/aphelion). A second vector always points from the body toward
+the focus, representing the gravitational acceleration that produces this
+exact orbit (a true inverse-square central force always pulls toward the
+focus, even off the semi-axes). The focus itself now spins on an
+independent `_earthSpin` accumulator (advances every step regardless of
+whether the student is mid-drag) standing in for the planet's own axial
+rotation — three separate rotations sharing one canvas without being
+conflated.
+
+**A real Arabic-rendering bug, not just a hypothetical one.**
+`<math-block>` shows MathJax-typeset output, but if MathJax fails to load
+(this project has no offline fallback — see `src/lib/mathjax.js`) the raw
+`\[ ... \]` TeX source sits as plain text inside an RTL paragraph and gets
+reordered by the browser's bidi algorithm into unreadable garbage — e.g.
+`(363.4)^{2} = 363.4 \times 363.4 = 132{,}059.56` rendered as
+`\ times 363.4 = 132{,}059.56\ 363.4 = {2}^(363.4) ]\`. This is exactly
+what a blocked/slow CDN (school networks, some countries, offline-first
+use) would do to *every equation on every page* — found by deliberately
+testing in this sandbox, where the MathJax CDN is unreachable, which
+turned out to be a free natural test case for a bug that would otherwise
+only show up in degraded-network conditions. Fixed with one rule in
+`rtl.css`: `[dir='rtl'] math-block { direction: ltr; unicode-bidi: isolate;
+text-align: start; }` — mirrors the existing `mjx-container` rule but
+applies *before* typesetting succeeds (or forever, if it never does),
+matching the project's convention of targeting the actual light-DOM
+element directly rather than relying on shadow-DOM style inheritance.
+
+**Page table-of-contents: off-canvas, not permanent (`page-toc.js`).** The
+per-lesson TOC (`<page-toc>`) used to render as a sticky column that
+permanently took ~260px of width from the lesson on desktop — exactly the
+"table of contents still permanently visible" pattern Priority 3 called
+out as wrong, just on a different element than the already-fixed
+`<app-sidebar>`. `page-toc.js` is now fully self-contained: a small fixed
+edge tab (`writing-mode: vertical-rl`, always visible, minimal footprint)
+opens a sliding panel from the *inline-end* edge — the opposite side from
+`<app-sidebar>`'s inline-start drawer, so the two never collide — with the
+same backdrop/ESC/auto-close-on-link-click behavior as the main sidebar.
+`.ds-layout` (`layout.css`) dropped its two-column grid entirely; the
+lesson content is `display:block`, full width, at every breakpoint now.
+The wrapping `<aside class="ds-toc">` in `chapter-1.html`/
+`design-system.html` was removed since the component now positions itself.
+
 ## What's deliberately not here yet
 
 - No chapter-authoring pipeline from the source PDFs — Chapter 1 is

@@ -72,15 +72,23 @@ npm run preview   # preview the production build
   weak-student sequence — what each symbol/given means, why any unit
   conversion is needed and the conversion itself, every algebra and
   arithmetic step, a highlighted final answer — never jumping straight
-  from a formula to a number. Three interactive, directly draggable
-  simulations (uniform circular motion, Kepler orbits sweeping equal areas,
-  conservation of angular momentum) replace six of the book's static
-  figures, each with speed control and a live-updating formula readout; the
-  rest of the book's diagrams are hand-drawn SVGs. Supplementary asides
-  ("did you know?", "remember") are collapsed by default so the lesson's
-  core flow stays the one thing in focus. Unlocked and linked from the home
-  page's chapter grid. `ARCHITECTURE.md` documents the reusable pattern
-  behind these three simulations so a future chapter can add its own
+  from a formula to a number. Four interactive, directly draggable
+  simulations (uniform circular motion, Kepler orbits sweeping equal areas
+  with live velocity/gravity vectors and a spinning central body,
+  conservation of angular momentum, and rotational motion/torque) replace
+  seven of the book's static figures, each with speed control and a
+  live-updating formula readout; the rest of the book's diagrams are
+  hand-drawn SVGs, and any figure whose concept already has a matching
+  simulation (e.g. the "car on a curve" figure) opens that simulation
+  instead of a redundant static image. Supplementary asides ("did you
+  know?", "remember") are collapsed by default so the lesson's core flow
+  stays the one thing in focus. A per-page table of contents lives in a
+  small off-canvas drawer (opened from an edge tab) rather than a
+  permanent sidebar, so the lesson always gets the full reading width.
+  Figures open in a fullscreen viewer with zoom (buttons/wheel/pinch),
+  drag-to-pan, and ESC/backdrop-click to close. Unlocked and linked from
+  the home page's chapter grid. `ARCHITECTURE.md` documents the reusable
+  pattern behind these simulations so a future chapter can add its own
   without reinventing the wiring — built only when a lesson actually needs
   one, never speculatively for a topic that isn't written yet.
 

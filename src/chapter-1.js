@@ -6,6 +6,7 @@ import './components/index.js';
 import { CircularMotionSim } from './simulations/circular-motion-sim.js';
 import { KeplerOrbitSim } from './simulations/kepler-orbit-sim.js';
 import { AngularMomentumSim } from './simulations/angular-momentum-sim.js';
+import { RotationalMotionSim } from './simulations/rotational-motion-sim.js';
 
 // Theme, language, and motion preference must be applied before first paint reads them.
 initTheme();
@@ -16,6 +17,7 @@ customElements.whenDefined('sim-container').then(() => {
   mountCircularMotionSim();
   mountKeplerOrbitSim();
   mountAngularMomentumSim();
+  mountRotationalMotionSim();
 });
 
 /*
@@ -132,6 +134,40 @@ function mountAngularMomentumSim() {
 
   radiusSlider?.addEventListener('sim-change', (event) => sim.setRadius(event.detail.value));
   document.getElementById('am-speed')?.addEventListener('sim-speed-change', (event) => sim.setSpeed(event.detail.value));
+
+  sim.start();
+}
+
+function mountRotationalMotionSim() {
+  const host = document.getElementById('sim-rotation');
+  if (!host) return;
+
+  const sim = new RotationalMotionSim(host.viewport);
+  host.mount(sim);
+
+  const iDisplay = document.getElementById('rm-I');
+  const torqueDisplay = document.getElementById('rm-torque');
+  const alphaDisplay = document.getElementById('rm-alpha');
+  const omegaDisplay = document.getElementById('rm-omega');
+  const formula = document.getElementById('rm-formula');
+  formula?.setAttribute('template', '\\alpha = \\frac{\\tau}{I} = \\frac{{torque}}{{I}} \\approx {alpha}\\ \\text{rad/s}^{2}');
+
+  const updateFormula = throttled((torque, I, alpha) => {
+    if (formula) formula.values = { torque: torque.toFixed(2), I: I.toFixed(2), alpha: alpha.toFixed(2) };
+  }, 200);
+
+  sim.onUpdate = ({ omega, alpha, torque, I }) => {
+    if (iDisplay) iDisplay.value = I;
+    if (torqueDisplay) torqueDisplay.value = torque;
+    if (alphaDisplay) alphaDisplay.value = alpha;
+    if (omegaDisplay) omegaDisplay.value = omega;
+    updateFormula(torque, I, alpha);
+  };
+
+  document.getElementById('rm-mass')?.addEventListener('sim-change', (event) => sim.setMass(event.detail.value));
+  document.getElementById('rm-radius')?.addEventListener('sim-change', (event) => sim.setRadius(event.detail.value));
+  document.getElementById('rm-force')?.addEventListener('sim-change', (event) => sim.setForce(event.detail.value));
+  document.getElementById('rm-speed')?.addEventListener('sim-speed-change', (event) => sim.setSpeed(event.detail.value));
 
   sim.start();
 }
