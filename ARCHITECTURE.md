@@ -616,6 +616,100 @@ above the repo* (so entry files sit behind a `/physicsbook1990/`-style
 subpath, matching a Pages project site), not by trusting `vite`/
 `vite preview` alone — both hide exactly the two bug classes above.
 
+## Calm-UI rebuild (Phase 6)
+
+A full visual/UX pass across every page, driven by an explicit brief: reduce
+cognitive load (especially for weaker students) by cutting decoration,
+simplifying navigation, and making interaction/feedback louder where it
+actually teaches something. No textbook content changed — this phase only
+touched chrome, layout, and the simulation UI.
+
+**Tokens** (`tokens.css`): `--shadow-card`/`--shadow-card-hover` replace the
+sharper `--shadow-sm`/`--shadow-md` on persistent cards (header/modal
+shadows keep the originals — they're transient chrome, not part of the
+calm reading surface); `--radius-lg` 20px → 24px; `--content-max-width:
+68ch` caps prose measure; `--layout-gutter`/section spacing scaled up a
+step for more breathing room.
+
+**Navigation** (Priority 2 of the brief): `<app-header>` is now just a menu
+button + brand mark — search, theme, and language all moved into
+`<app-sidebar>`, which is a collapsible off-canvas drawer **on every
+breakpoint**, not just mobile (`layout.css`'s old `@media (min-width:
+1024px)` static sidebar column was removed entirely; `app-sidebar.js`'s
+fixed/off-canvas positioning is unconditional now). The sidebar holds
+exactly five things — Home, Chapters, Search, Theme, Language — with
+everything else (currently just the reduced-motion preference) one tap
+further behind a "More settings" link into a trimmed-down
+`<settings-panel>`.
+
+**Home page**: `<hero-visual>`/`<particle-field>` (orbiting-electron SVG +
+glow blobs + floating particles) are deleted outright, along with the
+`.glass`/`.glow-field`/`.lab-texture` utility classes in `layout.css` that
+only they used — decorative motion with no teaching content, and Priority 1
+was explicit about removing anything non-essential. The progress-ring/
+stat-tile section is gone too (it was never wired to real completion
+tracking — `markComplete()` has no caller anywhere — so it was permanently
+static filler competing with the one section that matters, the chapter
+grid). What's left: one centered hero (title, one line, one primary CTA)
+and the chapter grid, capped at 2-up instead of 3-up for more room per card.
+
+**Cards** (Priority 5): `content-card.js` (all 12 variants),
+`chapter-card.js`, `stat-tile.js`, and `lab-callout.js` all moved off
+`--glass-bg`/backdrop-blur onto a solid `--color-bg-raised` surface with
+`--shadow-card`, bumped internal padding a step, and enlarged every
+touch-sized element (icon badges, collapse toggles) to 44px. `lab-callout`
+gained a `collapsible`/`collapsed` pair of attributes, reusing the same
+data-attribute toggle pattern as `ContentCard`.
+
+**Chapter 1 progressive disclosure** (Priority 6): the required lesson
+skeleton (title → objectives → visualization → explanation → examples →
+exercises → summary) is untouched, but every supplementary aside — "did you
+know?", "remember" — now renders `collapsible collapsed`, so the default
+view is the core teaching flow with asides one tap away rather than N
+extra always-open panels stacked in the reading path. "Think" prompts stay
+open (they're meant to be seen immediately, before the worked solution) and
+worked-example/exercise solutions stay fully visible in their one card, per
+the earlier one-card-one-question-one-complete-solution rule — progressive
+disclosure applies to enrichment asides, not to the graded content itself.
+The chapter's own hero also lost its two-column "chapter contents" list
+(redundant with the sticky `<page-toc>`) and its glass/pattern-grid
+background in favor of the same solid card treatment as everywhere else;
+the objectives list moved into a `<ui-accordion>` for the same reason.
+
+**Simulations** (Priority 4): all three (`src/simulations/`) gained direct
+pointer-drag manipulation via the existing `attachDrag` helper — grab the
+orbiting particle in `CircularMotionSim` or `KeplerOrbitSim` and spin/
+reposition it by hand (`hitTest` checks proximity in world space, `onDrag`
+recomputes the angle from the pointer position, rotation pauses for the
+gesture and resumes on release); grab either mass in `AngularMomentumSim`
+and pull it in/out to change the arm radius directly (rotation pauses
+during the drag too — it turned out to matter more than expected, see
+below). Each sim also grew a throttled `<sim-formula-display>` showing the
+governing equation with live substituted numbers (throttled to 5/s in
+`chapter-1.js`, **not** the simulation's own render loop, which stays at
+full frame rate — `sim-formula-display` re-typesets through MathJax on
+every `.values` write, and MathJax is far too expensive to run 60×/second).
+
+**Bug found verifying the angular-momentum drag**: initially only the
+other two sims paused their own rotation while being dragged; this one
+left the arm spinning on the theory that "watching it keep spinning while
+you pull it in" was a better demonstration. In practice, at the higher
+angular speeds this sim reaches at small radius, the fixed 0.35-world-unit
+grab tolerance couldn't keep up with a fast-moving target between
+`pointerdown` and the first `pointermove` — the same failure mode a real
+student's slower reaction time would hit, not just a test-timing artifact.
+Fixed by pausing rotation during the drag here too (consistent with the
+other two sims) and widening the tolerance slightly to 0.4; the "watch it
+speed up" payoff still happens, just on release rather than mid-grab.
+
+Verified with the same raw-tree-under-a-subpath Playwright harness as
+Phase 5: zero horizontal overflow at a 375px viewport on both pages, zero
+console errors, sidebar contents match the five-item spec exactly, and —
+critically — the three drag interactions were checked by reading each
+sim's actual internal state (`theta`/`r`) before and after a pointer
+sequence computed from that same state, not just by asserting the code
+runs; the angular-momentum bug above was only caught because of that.
+
 ## What's deliberately not here yet
 
 - No chapter-authoring pipeline from the source PDFs — Chapter 1 is

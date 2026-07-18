@@ -26,7 +26,41 @@ const style = css`
   }
   input[type='range'] {
     width: 100%;
+    /* A comfortably tall hit area for the whole track, not just the thumb
+       (Priority 7 of the calm-UI rebuild) — some height comes from the
+       thumb/track sizing below, the rest from this padding box. */
+    height: 44px;
+    margin: 0;
     accent-color: var(--color-primary);
+    cursor: pointer;
+  }
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: var(--radius-pill);
+  }
+  input[type='range']::-moz-range-track {
+    height: 6px;
+    border-radius: var(--radius-pill);
+  }
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 3px solid var(--color-bg-raised);
+    box-shadow: var(--shadow-sm);
+    margin-top: -9px;
+    cursor: pointer;
+  }
+  input[type='range']::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 3px solid var(--color-bg-raised);
+    box-shadow: var(--shadow-sm);
     cursor: pointer;
   }
 `;

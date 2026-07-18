@@ -1,5 +1,6 @@
 import { CanvasEngine } from '../engine/canvas-engine.js';
 import { SimulationEngine } from '../engine/simulation-engine.js';
+import { attachDrag } from '../engine/interactions/drag.js';
 
 /*
   Interactive counterpart to Figures (4-1)/(5-1)/(6-1): a body orbits a
@@ -31,6 +32,7 @@ export class KeplerOrbitSim {
     this._totalTheta = 0;
     this._history = [];
     this._lag = 1.4;
+    this._dragging = false;
     /** @type {((values: { r: number, thetaDot: number }) => void) | null} */
     this.onUpdate = null;
 
@@ -44,6 +46,32 @@ export class KeplerOrbitSim {
       },
     });
     this._render();
+    this._detachDrag = attachDrag(this.engine.canvas, {
+      hitTest: (event) => this._distanceToBody(event) < 0.35,
+      onStart: () => {
+        this._dragging = true;
+      },
+      onDrag: (event) => {
+        const world = this.engine.clientToWorld(event.clientX, event.clientY);
+        this._theta = Math.atan2(world.y, world.x);
+        this._render();
+      },
+      onEnd: () => {
+        // Re-anchor the swept-area bookkeeping to the new position so the
+        // shaded sector doesn't jump across the gap the drag just skipped.
+        this._totalTheta = this._theta;
+        this._history = [];
+        this._dragging = false;
+      },
+    });
+  }
+
+  _distanceToBody(event) {
+    const world = this.engine.clientToWorld(event.clientX, event.clientY);
+    const r = this._radiusAt(this._theta);
+    const x = r * Math.cos(this._theta);
+    const y = r * Math.sin(this._theta);
+    return Math.hypot(world.x - x, world.y - y);
   }
 
   get running() {
@@ -63,6 +91,7 @@ export class KeplerOrbitSim {
   }
 
   destroy() {
+    this._detachDrag?.();
     this.sim.destroy();
     this.engine.destroy();
   }
@@ -84,6 +113,7 @@ export class KeplerOrbitSim {
   }
 
   _step(dt) {
+    if (this._dragging) return;
     const r = this._radiusAt(this._theta);
     const thetaDot = this._k() / (r * r);
     this._theta = (this._theta + thetaDot * dt) % (Math.PI * 2);
@@ -143,7 +173,7 @@ export class KeplerOrbitSim {
 
     // Swept-area sector trailing the body over a fixed time lag — equal in
     // area near perihelion and aphelion despite the very different arc shape.
-    if (this.sim.running) {
+    if (this.sim.running && !this._dragging) {
       const thetaLag = this._thetaAtLag();
       const sectorPts = this._sectorPoints(thetaLag, this._totalTheta, 24);
       const focusScreen = e.toScreen({ x: 0, y: 0 });
@@ -166,8 +196,9 @@ export class KeplerOrbitSim {
     // Orbiting body.
     const r = this._radiusAt(this._theta);
     const pos = { x: r * Math.cos(this._theta), y: r * Math.sin(this._theta) };
-    e.drawCircle(pos, 0.07, { fill: '#0eb7cc' });
+    e.drawCircle(pos, this._dragging ? 0.1 : 0.07, { fill: '#0eb7cc' });
     e.drawLine({ x: 0, y: 0 }, pos, { stroke: 'rgba(14,183,204,0.6)', lineWidth: 1.5, dash: [4, 4] });
+    e.drawText(`r = ${r.toFixed(2)}`, { x: pos.x / 2, y: pos.y / 2 + 0.14 }, { color: 'rgba(226,232,240,0.85)', font: '600 11px sans-serif' });
 
     const thetaDot = this._k() / (r * r);
     this.onUpdate?.({ r, thetaDot });

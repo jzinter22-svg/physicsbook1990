@@ -14,19 +14,25 @@ const style = css`
     background: var(--color-bg-raised);
     border: 1px solid var(--color-border);
     border-inline-start: 4px solid var(--accent);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
+    transition: box-shadow var(--duration-normal) var(--ease-standard);
+  }
+  :host(:hover) .card {
+    box-shadow: var(--shadow-card-hover);
   }
   .head {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-4) var(--space-5);
+    gap: var(--space-4);
+    /* Generous padding is deliberate here (Priority 5 of the calm-UI
+       rebuild) — a card should read as a single calm unit, not a cramped box. */
+    padding: var(--space-6);
   }
   .icon-badge {
     flex: none;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: var(--radius-md);
     display: grid;
     place-items: center;
@@ -58,8 +64,9 @@ const style = css`
     background: var(--color-bg-sunken);
     color: var(--color-text-muted);
     border-radius: var(--radius-pill);
-    width: 32px;
-    height: 32px;
+    /* 44px: comfortable touch target (Priority 7 of the calm-UI rebuild). */
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
     cursor: pointer;
@@ -81,7 +88,7 @@ const style = css`
     transform: rotate(90deg);
   }
   .body {
-    padding: 0 var(--space-5) var(--space-5);
+    padding: 0 var(--space-6) var(--space-6);
     color: var(--color-text);
     font-size: var(--fs-300);
     line-height: var(--lh-normal);
@@ -92,7 +99,7 @@ const style = css`
     display: none;
   }
   .footer {
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-5) var(--space-6);
     border-block-start: 1px solid var(--color-border);
     background: var(--color-bg-sunken);
   }

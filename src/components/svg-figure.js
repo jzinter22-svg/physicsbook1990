@@ -29,8 +29,8 @@ const style = css`
     position: absolute;
     top: var(--space-3);
     inset-inline-end: var(--space-3);
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
     border-radius: var(--radius-pill);
@@ -88,8 +88,8 @@ const style = css`
     position: absolute;
     top: var(--space-3);
     inset-inline-end: var(--space-3);
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
     border-radius: var(--radius-pill);

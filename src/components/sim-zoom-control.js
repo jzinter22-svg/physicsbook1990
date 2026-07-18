@@ -14,8 +14,8 @@ const style = css`
     background: var(--color-bg-raised);
     color: var(--color-text);
     border-radius: var(--radius-pill);
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
     font: inherit;

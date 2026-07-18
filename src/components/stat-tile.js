@@ -14,8 +14,9 @@ const style = css`
     gap: var(--space-4);
     padding: var(--space-5);
     border-radius: var(--radius-lg);
-    background: var(--glass-bg);
+    background: var(--color-bg-raised);
     border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
   }
   .icon-badge {
     flex: none;

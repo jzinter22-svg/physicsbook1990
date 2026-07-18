@@ -54,8 +54,8 @@ const style = css`
     border: 1px solid var(--color-border);
     background: var(--color-bg-raised);
     border-radius: var(--radius-pill);
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
     cursor: pointer;

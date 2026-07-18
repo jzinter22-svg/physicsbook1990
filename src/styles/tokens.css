@@ -85,10 +85,18 @@
   --color-domain-thermo: #eda100;
 
   --shadow-color: 220 60% 12%;
-  --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.08);
-  --shadow-md: 0 4px 12px hsl(var(--shadow-color) / 0.10);
-  --shadow-lg: 0 12px 32px hsl(var(--shadow-color) / 0.14);
+  --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.06);
+  --shadow-md: 0 4px 12px hsl(var(--shadow-color) / 0.08);
+  --shadow-lg: 0 12px 32px hsl(var(--shadow-color) / 0.12);
   --shadow-glow-primary: 0 0 0 3px hsl(190 80% 45% / 0.25);
+  /*
+    A calmer, single soft shadow for the "resting" state of lesson/example/
+    exercise cards (Priority 5 of the calm-UI rebuild) — noticeably lighter
+    than --shadow-md, which stays reserved for header/modal chrome that
+    actually needs to read as "floating above" the page.
+  */
+  --shadow-card: 0 1px 3px hsl(var(--shadow-color) / 0.05), 0 1px 2px hsl(var(--shadow-color) / 0.04);
+  --shadow-card-hover: 0 8px 20px hsl(var(--shadow-color) / 0.08), 0 2px 6px hsl(var(--shadow-color) / 0.05);
 
   /* ---- Typography ---- */
   --font-latin: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -120,10 +128,12 @@
   --space-8: 4rem;
   --space-9: 6rem;
 
-  /* ---- Shape ---- */
+  /* ---- Shape ----
+     radius-lg bumped 20px -> 24px: softer, calmer card corners (Priority 5
+     of the calm-UI rebuild) read less "boxy/technical" than the original. */
   --radius-sm: 6px;
   --radius-md: 12px;
-  --radius-lg: 20px;
+  --radius-lg: 24px;
   --radius-pill: 999px;
 
   /* ---- Motion ---- */
@@ -142,9 +152,13 @@
 
   /* ---- Layout ---- */
   --layout-max-width: 1200px;
-  --layout-gutter: clamp(1rem, 3vw, 2.5rem);
+  --layout-gutter: clamp(1.25rem, 4vw, 3rem);
   --header-height: 64px;
-  --sidebar-width: 264px;
+  --sidebar-width: 280px;
+  /* Comfortable reading measure for lesson prose — long lines are part of
+     what makes a page feel noisy; capping width is one of the cheapest
+     "calm reading experience" wins (Priority 6 of the calm-UI rebuild). */
+  --content-max-width: 68ch;
 
   /* ---- Z-index scale ---- */
   --z-header: 100;

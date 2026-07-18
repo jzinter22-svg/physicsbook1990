@@ -1,8 +1,6 @@
 import { defineOnce, css } from './utils.js';
 import { icon } from './icons.js';
 import { t } from '../lib/i18n.js';
-import { getStoredTheme, setTheme } from '../lib/theme.js';
-import { getStoredLang, setLang } from '../lib/i18n.js';
 import { getStoredMotion, setMotion } from '../lib/motion.js';
 
 const style = css`
@@ -27,11 +25,9 @@ const style = css`
     inset-block: 0;
     inset-inline-end: 0;
     width: min(340px, 90vw);
-    background: var(--glass-bg-strong);
-    border-inline-start: 1px solid var(--glass-border);
+    background: var(--color-bg-raised);
+    border-inline-start: 1px solid var(--color-border);
     box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
     display: flex;
     flex-direction: column;
     transform: translateX(0);
@@ -57,8 +53,8 @@ const style = css`
     border: 1px solid var(--color-border);
     background: var(--color-bg-raised);
     border-radius: var(--radius-pill);
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
     cursor: pointer;
@@ -115,14 +111,6 @@ const style = css`
   }
 `;
 
-const THEME_OPTIONS = [
-  { value: 'light', icon: 'sun', key: 'settings.theme.light' },
-  { value: 'dark', icon: 'moon', key: 'settings.theme.dark' },
-];
-const LANG_OPTIONS = [
-  { value: 'ar', label: 'العربية' },
-  { value: 'en', label: 'English' },
-];
 const MOTION_OPTIONS = [
   { value: 'full', key: 'settings.motion.full' },
   { value: 'reduced', key: 'settings.motion.reduced' },
@@ -145,14 +133,6 @@ class SettingsPanel extends HTMLElement {
         </div>
         <div class="body">
           <div class="field">
-            <label class="field-label" data-i18n="settings.theme.label"></label>
-            <div class="segmented" id="theme-group"></div>
-          </div>
-          <div class="field">
-            <label class="field-label" data-i18n="settings.language.label"></label>
-            <div class="segmented" id="lang-group"></div>
-          </div>
-          <div class="field">
             <label class="field-label" data-i18n="settings.motion.label"></label>
             <div class="segmented" id="motion-group"></div>
           </div>
@@ -160,8 +140,6 @@ class SettingsPanel extends HTMLElement {
       </div>
     `;
 
-    this._themeGroup = this.shadowRoot.getElementById('theme-group');
-    this._langGroup = this.shadowRoot.getElementById('lang-group');
     this._motionGroup = this.shadowRoot.getElementById('motion-group');
 
     this.shadowRoot.getElementById('close-btn').addEventListener('click', () => this.close());
@@ -176,10 +154,8 @@ class SettingsPanel extends HTMLElement {
 
     this._render();
     this._onLangChange = () => this._render();
-    this._onThemeChange = () => this._render();
     this._onMotionChange = () => this._render();
     document.addEventListener('langchange', this._onLangChange);
-    document.addEventListener('themechange', this._onThemeChange);
     document.addEventListener('motionchange', this._onMotionChange);
   }
 
@@ -187,7 +163,6 @@ class SettingsPanel extends HTMLElement {
     document.removeEventListener('open-settings', this._onOpenRequest);
     document.removeEventListener('keydown', this._onKeydown);
     document.removeEventListener('langchange', this._onLangChange);
-    document.removeEventListener('themechange', this._onThemeChange);
     document.removeEventListener('motionchange', this._onMotionChange);
   }
 
@@ -201,26 +176,8 @@ class SettingsPanel extends HTMLElement {
 
   _render() {
     this.shadowRoot.querySelector('[data-i18n="settings.title"]').textContent = t('settings.title');
-    this.shadowRoot.querySelector('[data-i18n="settings.theme.label"]').textContent = t('settings.theme.label');
-    this.shadowRoot.querySelector('[data-i18n="settings.language.label"]').textContent = t('settings.language.label');
     this.shadowRoot.querySelector('[data-i18n="settings.motion.label"]').textContent = t('settings.motion.label');
     this.shadowRoot.getElementById('close-btn').setAttribute('aria-label', t('settings.close'));
-
-    const theme = getStoredTheme();
-    this._themeGroup.innerHTML = THEME_OPTIONS.map(
-      (opt) => `<button type="button" data-value="${opt.value}" aria-pressed="${opt.value === theme}">${icon(opt.icon)}${t(opt.key)}</button>`
-    ).join('');
-    this._themeGroup.querySelectorAll('button').forEach((btn) => {
-      btn.addEventListener('click', () => setTheme(btn.dataset.value));
-    });
-
-    const lang = getStoredLang();
-    this._langGroup.innerHTML = LANG_OPTIONS.map(
-      (opt) => `<button type="button" data-value="${opt.value}" aria-pressed="${opt.value === lang}">${opt.label}</button>`
-    ).join('');
-    this._langGroup.querySelectorAll('button').forEach((btn) => {
-      btn.addEventListener('click', () => setLang(btn.dataset.value));
-    });
 
     const motion = getStoredMotion();
     this._motionGroup.innerHTML = MOTION_OPTIONS.map(

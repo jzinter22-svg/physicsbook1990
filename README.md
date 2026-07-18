@@ -18,12 +18,13 @@ npm run preview   # preview the production build
 ## What's here
 
 - Vite + vanilla JS + native Web Components (no framework dependency).
-- Interactive Science Lab design system: glassmorphism, soft glow, a
+- A calm, minimal design system: generous whitespace, soft card shadows, a
   CVD-validated categorical palette for chapter domains (`src/styles/tokens.css`).
-- A dashboard-style home page: sticky top nav, responsive sidebar (off-canvas
-  on mobile), hero section with an animated SVG illustration + floating
-  particles, chapter-card grid, progress section, command-palette search, and
-  a settings drawer.
+  All navigation (Home, Chapters, Search, Theme, Language) lives in one
+  collapsible sidebar, off-canvas at every breakpoint — nothing else is
+  permanently docked on screen.
+- A single-focus home page: one hero (title, one line, one CTA) and the
+  chapter grid — no competing panels.
 - Arabic (default, RTL) / English (LTR) language toggle.
 - Light/dark theme toggle, plus a reduced-motion override.
 - MathJax v3, lazy-loaded, with a `<math-block>` component.
@@ -64,11 +65,13 @@ npm run preview   # preview the production build
   three laws, rotational kinematics and moment of inertia, rotational
   energy/work/power, and angular momentum. Every worked example and every
   end-of-chapter question/problem is solved in full, one card per question
-  with no skipped steps. Three interactive simulations (uniform circular
-  motion, Kepler orbits sweeping equal areas, conservation of angular
-  momentum) replace six of the book's static figures, built on the Phase 4
-  engine; the rest of the book's diagrams are hand-drawn SVGs. Unlocked and
-  linked from the home page's chapter grid.
+  with no skipped steps. Three interactive, directly draggable simulations
+  (uniform circular motion, Kepler orbits sweeping equal areas, conservation
+  of angular momentum) replace six of the book's static figures, each with a
+  live-updating formula readout; the rest of the book's diagrams are
+  hand-drawn SVGs. Supplementary asides ("did you know?", "remember") are
+  collapsed by default so the lesson's core flow stays the one thing in
+  focus. Unlocked and linked from the home page's chapter grid.
 
 See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the reasoning behind each
 piece, including several Shadow DOM / CSS cascade gotchas worth knowing

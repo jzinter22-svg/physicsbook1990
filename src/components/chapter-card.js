@@ -15,11 +15,11 @@ const style = css`
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    padding: var(--space-5);
+    padding: var(--space-6);
     border-radius: var(--radius-lg);
-    background: var(--glass-bg);
+    background: var(--color-bg-raised);
     border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
     transition: transform var(--duration-normal) var(--ease-standard),
       box-shadow var(--duration-normal) var(--ease-standard),
@@ -35,9 +35,9 @@ const style = css`
   }
   :host(:hover) .card,
   :host(:focus-within) .card {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     border-color: var(--accent);
-    box-shadow: var(--shadow-md), 0 0 0 1px var(--accent);
+    box-shadow: var(--shadow-card-hover);
   }
   .icon-badge {
     width: 48px;
@@ -84,11 +84,6 @@ const style = css`
   .badge svg {
     width: 0.9em;
     height: 0.9em;
-  }
-  .progress-text {
-    font-size: var(--fs-200);
-    color: var(--color-text-muted);
-    font-weight: 600;
   }
   a.card-link {
     text-decoration: none;
@@ -141,7 +136,6 @@ class ChapterCard extends HTMLElement {
               ? `<span class="badge">${icon('lock')}${t('nav.chapters.soon')}</span>`
               : `<span class="badge badge--start">${icon('play')}${t('chapters.start')}</span>`
           }
-          <span class="progress-text">0%</span>
         </div>
       </div>
     `;

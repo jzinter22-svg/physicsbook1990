@@ -4,7 +4,12 @@
     sm: 640px   md: 768px   lg: 1024px   xl: 1280px
 */
 
-/* Dashboard shell: sticky topbar + sidebar + scrolling content column.
+/* Dashboard shell: sticky topbar + scrolling content column. The sidebar is
+   deliberately NOT a grid track at any breakpoint — it's always a
+   collapsible off-canvas drawer (see app-sidebar.js), on desktop as much as
+   mobile. Keeping the whole page a single content column, with navigation
+   tucked away until asked for, is the point: one primary focus on screen
+   at a time, not a permanently-docked panel competing for attention.
    minmax(0, 1fr), not a bare 1fr — an `fr` track's automatic minimum is
    `auto` (content-based), so a bare 1fr lets deeply nested content bubble
    all the way up and force this outermost container wider than the
@@ -22,28 +27,11 @@
   grid-area: topbar;
 }
 
-.app-shell > app-sidebar {
-  grid-area: sidebar;
-}
-
 .content-column {
   grid-area: main;
   display: flex;
   flex-direction: column;
   min-width: 0;
-}
-
-@media (min-width: 1024px) {
-  .app-shell {
-    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-    grid-template-areas: 'topbar topbar' 'sidebar main';
-  }
-
-  .app-shell > app-sidebar {
-    position: sticky;
-    top: var(--header-height);
-    height: calc(100vh - var(--header-height));
-  }
 }
 
 .container {
@@ -53,11 +41,16 @@
   padding-inline: var(--layout-gutter);
 }
 
+/* Caps prose measure at a comfortable reading width — see --content-max-width. */
+.content-max {
+  max-width: var(--content-max-width);
+}
+
 main {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
-  padding-block: var(--space-7);
+  gap: var(--space-9);
+  padding-block: var(--space-8);
   min-width: 0;
 }
 
@@ -102,43 +95,12 @@ main > * {
 }
 
 .section {
-  padding-block: var(--space-6);
+  padding-block: var(--space-7);
 }
 
 .section--sunken {
   background: var(--color-bg-sunken);
   border-radius: var(--radius-lg);
-}
-
-/* Graph-paper texture, used sparingly behind "lab" sections */
-.lab-texture {
-  background-image: var(--pattern-grid);
-  background-size: var(--pattern-grid-size);
-}
-
-/* Fluid hero */
-.hero {
-  display: grid;
-  /* minmax(0, 1fr), not a bare 1fr/auto track — an implicit or "auto" track
-     sizes to its content's min-content by default, which lets a long
-     heading or button row push the track (and the whole page) wider than
-     the viewport instead of wrapping. */
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-6);
-  padding-block: var(--space-8);
-  align-items: center;
-}
-
-@media (min-width: 1024px) {
-  .hero {
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  }
-}
-
-/* The track cap above isn't enough on its own — grid/flex ITEMS also default
-   to min-width:auto (sized to their own content), so reset that too. */
-.hero > * {
-  min-width: 0;
 }
 
 /* Simulation containers need a stable, resizable box on every viewport */
@@ -154,50 +116,6 @@ main > * {
   .sim-frame {
     aspect-ratio: 4 / 3;
   }
-}
-
-/* Glassmorphism surface — frosted, translucent panel over the lab texture / glow blobs */
-.glass {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-}
-
-.glass--strong {
-  background: var(--glass-bg-strong);
-}
-
-/* Soft ambient light blobs behind hero/lab sections. Purely decorative. */
-.glow-field {
-  position: relative;
-  isolation: isolate;
-}
-
-.glow-field::before,
-.glow-field::after {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  width: min(60vw, 640px);
-  height: min(60vw, 640px);
-  border-radius: 50%;
-  filter: blur(10px);
-  pointer-events: none;
-}
-
-.glow-field::before {
-  background: var(--glow-primary);
-  inset-inline-start: -10%;
-  top: -20%;
-}
-
-.glow-field::after {
-  background: var(--glow-accent);
-  inset-inline-end: -15%;
-  bottom: -30%;
 }
 
 /* Stat tiles / progress row */

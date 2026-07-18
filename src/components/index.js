@@ -9,8 +9,6 @@ import './sim-container.js';
 import './chapter-card.js';
 import './progress-ring.js';
 import './stat-tile.js';
-import './particle-field.js';
-import './hero-visual.js';
 import './app-search.js';
 import './settings-panel.js';
 

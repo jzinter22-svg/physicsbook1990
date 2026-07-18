@@ -2,7 +2,6 @@ import { initTheme } from './lib/theme.js';
 import { initI18n } from './lib/i18n.js';
 import { initMotion } from './lib/motion.js';
 import { CHAPTERS } from './data/chapters.js';
-import { computeStats } from './lib/progress.js';
 import './components/index.js';
 
 // Theme, language, and motion preference must be applied before first paint reads them.
@@ -35,14 +34,4 @@ function renderChapterGrid() {
   grid.innerHTML = cards + moreCard;
 }
 
-function renderProgress() {
-  const stats = computeStats(CHAPTERS);
-
-  document.getElementById('overall-progress')?.setAttribute('value', String(stats.percent));
-  document.getElementById('stat-available')?.setAttribute('value', String(stats.total));
-  document.getElementById('stat-completed')?.setAttribute('value', String(stats.completed));
-  document.getElementById('stat-percent')?.setAttribute('value', `${stats.percent}%`);
-}
-
 renderChapterGrid();
-renderProgress();

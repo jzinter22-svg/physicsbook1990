@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>كتاب الطبيعيات التفاعلي — الرئيسية</title>
-  <meta name="description" content="معمل فيزياء تفاعلي: نظام تصميم، دعم عربي/RTL كامل، MathJax، وإطار محاكاات — بدون محتوى الفصل الأول بعد." />
+  <meta name="description" content="كتاب طبيعيات تفاعلي: دروس تفاعلية، أمثلة محلولة بالكامل، ومحاكاات فيزيائية حيّة." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,6 +17,26 @@
   <link rel="stylesheet" href="src/styles/base.css" />
   <link rel="stylesheet" href="src/styles/layout.css" />
   <link rel="stylesheet" href="src/styles/rtl.css" />
+  <style>
+    /* A single calm, centered focal point — no competing panels, no
+       decorative motion (Priority 1 of the calm-UI rebuild). */
+    .hero-section {
+      padding-block: var(--space-9) var(--space-8);
+      display: flex;
+      justify-content: center;
+      text-align: center;
+    }
+    .hero-stack {
+      align-items: center;
+      margin-inline: auto;
+      gap: var(--space-5);
+    }
+    .hero-lede {
+      color: var(--color-text-muted);
+      font-size: var(--fs-400);
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#main-content" data-i18n="a11y.skipToContent">تخطي إلى المحتوى</a>
@@ -27,49 +47,20 @@
 
     <div class="content-column">
       <main id="main-content">
-        <section class="hero glow-field lab-texture container">
-          <div class="stack">
-            <span class="badge-pill" data-i18n="hero.badge"></span>
+        <section class="container hero-section">
+          <div class="stack hero-stack content-max">
             <h1 data-i18n="hero.title"></h1>
-            <p style="color:var(--color-text-muted); font-size:var(--fs-400); max-width:58ch;" data-i18n="hero.body"></p>
-            <div class="cluster">
-              <a class="btn btn--primary" href="#chapters" data-i18n="hero.cta.primary"></a>
-              <a class="btn btn--ghost" href="#about" data-i18n="hero.cta.secondary"></a>
-            </div>
+            <p class="hero-lede" data-i18n="hero.body"></p>
+            <a class="btn btn--primary btn--lg" href="#chapters" data-i18n="hero.cta.primary"></a>
           </div>
-          <hero-visual></hero-visual>
         </section>
 
         <section class="container section" id="chapters">
-          <div class="stack" style="margin-block-end: var(--space-5); max-width: 65ch;">
+          <div class="stack" style="margin-block-end: var(--space-6); max-width: 65ch;">
             <h2 data-i18n="chapters.sectionTitle"></h2>
             <p style="color:var(--color-text-muted);" data-i18n="chapters.sectionSubtitle"></p>
           </div>
-          <div class="grid grid--2-up grid--3-up" id="chapters-grid"></div>
-        </section>
-
-        <section class="container section" id="progress">
-          <div class="glass" style="padding: var(--space-6);">
-            <div class="stack" style="margin-block-end: var(--space-6);">
-              <h2 data-i18n="progress.title"></h2>
-              <p style="color:var(--color-text-muted);" data-i18n="progress.subtitle"></p>
-            </div>
-            <div class="cluster" style="align-items:center; gap: var(--space-7);">
-              <progress-ring id="overall-progress" value="0" size="140" stroke="12"></progress-ring>
-              <div class="stat-row" style="flex:1; min-width: 260px;">
-                <stat-tile icon="beaker" id="stat-available" label-key="progress.stat.available"></stat-tile>
-                <stat-tile icon="chart" id="stat-completed" label-key="progress.stat.completed"></stat-tile>
-                <stat-tile icon="spark" id="stat-percent" label-key="progress.stat.percent"></stat-tile>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="container section" id="about">
-          <lab-callout variant="note">
-            <h3 data-i18n="about.title" style="margin-block-end: var(--space-2);"></h3>
-            <p data-i18n="about.note"></p>
-          </lab-callout>
+          <div class="grid grid--2-up" id="chapters-grid"></div>
         </section>
       </main>
 

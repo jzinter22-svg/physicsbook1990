@@ -20,27 +20,14 @@
   <link rel="stylesheet" href="src/styles/rtl.css" />
   <style>
     .ch1-hero {
-      background: var(--pattern-grid);
-      background-size: var(--pattern-grid-size);
-      border-radius: var(--radius-lg);
-      padding: var(--space-6);
-      margin-block-end: var(--space-7);
+      margin-block-end: var(--space-8);
     }
     .ch1-hero-inner {
-      background: var(--glass-bg);
-      backdrop-filter: blur(var(--glass-blur));
-      border: 1px solid var(--glass-border);
+      background: var(--color-bg-raised);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-card);
       border-radius: var(--radius-lg);
-      padding: var(--space-6);
-    }
-    .ch1-two-col {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-6);
-      margin-block-start: var(--space-5);
-    }
-    @media (min-width: 720px) {
-      .ch1-two-col { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      padding: var(--space-7);
     }
     .ch1-list {
       margin: 0;
@@ -51,26 +38,6 @@
       color: var(--color-text-muted);
       font-size: var(--fs-300);
       line-height: var(--lh-normal);
-    }
-    .ch1-toc-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
-    }
-    .ch1-toc-list a {
-      display: block;
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-md);
-      color: var(--color-text);
-      text-decoration: none;
-      font-size: var(--fs-300);
-    }
-    .ch1-toc-list a:hover {
-      background: var(--color-bg-sunken);
-      color: var(--color-primary);
     }
     .ch1-section {
       margin-block-end: var(--space-8);
@@ -145,6 +112,25 @@
       gap: var(--space-3);
       margin-block-start: var(--space-4);
     }
+    .ch1-drag-hint {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--color-text-muted);
+      font-size: var(--fs-200);
+      margin: var(--space-3) 0 0;
+    }
+    .ch1-drag-hint::before {
+      content: '👆';
+      font-size: 1em;
+    }
+    .ch1-sim-formula {
+      margin-block-start: var(--space-4);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      background: var(--color-bg-sunken);
+      text-align: center;
+    }
     .ch1-mcq-options {
       margin: var(--space-3) 0 0;
       padding-inline-start: var(--space-5);
@@ -184,41 +170,23 @@
 
           <section class="ch1-hero">
             <div class="ch1-hero-inner stack">
-              <span class="badge-pill">الفصل الأول</span>
               <h1 style="margin:0;">الحركة الدائرية والدورانية</h1>
-              <p style="color:var(--color-text-muted); font-size:var(--fs-400); max-width:70ch; margin:0;">
+              <p class="content-max" style="color:var(--color-text-muted); font-size:var(--fs-400); margin:0;">
                 الحركة الدائرية، القوة المركزية، مدارات الأقمار الاصطناعية وقوانين كبلر، الحركة الدورانية، عزم القصور
                 الذاتي، الطاقة، الشغل، القدرة، والزخم الزاوي — مع محاكاات تفاعلية وأمثلة وتمارين محلولة بالكامل.
               </p>
 
-              <div class="ch1-two-col">
-                <div>
-                  <h2 style="font-size:var(--fs-500); margin-block-end:var(--space-2);" data-i18n="ch1.objectives.title"></h2>
-                  <p style="color:var(--color-text-muted); font-size:var(--fs-200); margin-block-end:var(--space-2);">
-                    بعد إتمام دراسة هذا الفصل يكون الطالب قادرًا على:
-                  </p>
+              <ui-accordion style="margin-block-start: var(--space-2);">
+                <ui-accordion-item label="الأهداف السلوكية">
+                  <p style="margin-block-end:var(--space-2);">بعد إتمام دراسة هذا الفصل يكون الطالب قادرًا على:</p>
                   <ol class="ch1-list">
                     <li>معرفة الحركة الدائرية والدورانية، والقوة المركزية.</li>
                     <li>معرفة القدرة والشغل والحركة الدورانية.</li>
                     <li>استيعاب المفاهيم الآتية واستخراج قيمتها باستعمال المعادلات الرياضية: الحركة الدورانية والسرعة الزاوية والتعجيل الزاوي؛ عزم القصور الذاتي؛ القدرة والشغل والحركة الدورانية.</li>
                     <li>معرفة قوانين كبلر في الحركة الدائرية، ومن أمثلتها حركة الأقمار الاصطناعية.</li>
                   </ol>
-                </div>
-                <div>
-                  <h2 style="font-size:var(--fs-500); margin-block-end:var(--space-2);" data-i18n="ch1.contents.title"></h2>
-                  <ul class="ch1-toc-list">
-                    <li><a href="#sec-1-1">1-1 تمهيد</a></li>
-                    <li><a href="#sec-2-1">2-1 الحركة الدائرية</a></li>
-                    <li><a href="#sec-3-1">3-1 القوة المركزية</a></li>
-                    <li><a href="#sec-4-1">4-1 مدارات الأقمار الاصطناعية وقوانين كبلر</a></li>
-                    <li><a href="#sec-5-1">5-1 الحركة الدورانية</a></li>
-                    <li><a href="#sec-6-1">6-1 الطاقة في الحركة الدورانية</a></li>
-                    <li><a href="#sec-7-1">7-1 الشغل والقدرة في الحركة الدورانية</a></li>
-                    <li><a href="#sec-8-1">8-1 الزخم الزاوي</a></li>
-                    <li><a href="#sec-9-1">9-1 أسئلة ومسائل الفصل</a></li>
-                  </ul>
-                </div>
-              </div>
+                </ui-accordion-item>
+              </ui-accordion>
             </div>
           </section>
 
@@ -328,6 +296,7 @@
                   <simulation-card title="محاكاة الحركة الدائرية المنتظمة">
                     <p data-i18n="ch1.sim.circular.caption"></p>
                     <sim-container class="sim-frame" id="sim-circular" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
+                    <p class="ch1-drag-hint" data-i18n="ch1.sim.circular.dragHint"></p>
                     <div class="ch1-sim-controls cols-3">
                       <sim-slider id="cm-radius" data-i18n-attr="label:ch1.sim.circular.radius" unit="m" min="0.5" max="3" step="0.1" value="1.5"></sim-slider>
                       <sim-slider id="cm-omega" data-i18n-attr="label:ch1.sim.circular.omega" unit="rad/s" min="0.5" max="6" step="0.1" value="2"></sim-slider>
@@ -338,6 +307,7 @@
                       <sim-value-display id="cm-ac" data-i18n-attr="label:ch1.sim.circular.ac" unit="m/s^2"></sim-value-display>
                       <sim-value-display id="cm-fc" data-i18n-attr="label:ch1.sim.circular.fc" unit="N"></sim-value-display>
                     </div>
+                    <sim-formula-display id="cm-formula" class="ch1-sim-formula"></sim-formula-display>
                   </simulation-card>
                 </lesson-card>
               </section>
@@ -374,7 +344,7 @@
                   </p>
                 </lesson-card>
 
-                <lab-callout variant="note" label="هل تعلم؟">
+                <lab-callout variant="note" label="هل تعلم؟" collapsible collapsed>
                   <p>
                     يعتمد أساس عمل جهاز الطرد المركزي (Centrifuge) على تغيّر القوة المركزية باختلاف كتلة المادة، وبذلك
                     يمكن فصل موادّ مختلفة عن بعضها بحسب الكتلة أو الكثافة. يحتوي الجهاز على وعاء توضع فيه عيّنات مختلفة
@@ -426,7 +396,7 @@
                   <p>حيث μₖ معامل الاحتكاك الحركي.</p>
                 </lab-callout>
 
-                <lab-callout variant="note" label="هل تعلم؟">
+                <lab-callout variant="note" label="هل تعلم؟" collapsible collapsed>
                   <p>
                     تُصمَّم مخارج الطرق السريعة ومنعطفات حلبات السباق بميل طفيف (انحدار)، وذلك لزيادة القوة المركزية
                     الجاذبة؛ إذ تتحلل قوة رد فعل الطريق المائل على السيارة إلى مركبتين: إحداهما عمودية على الطريق تساوي
@@ -505,6 +475,7 @@
                 <simulation-card title="محاكاة قوانين كبلر — المسار الإهليلجي وكنس المساحات">
                   <p data-i18n="ch1.sim.kepler.caption"></p>
                   <sim-container class="sim-frame" id="sim-kepler" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
+                  <p class="ch1-drag-hint" data-i18n="ch1.sim.kepler.dragHint"></p>
                   <div class="ch1-sim-controls">
                     <sim-slider id="kp-ecc" data-i18n-attr="label:ch1.sim.kepler.eccentricity" min="0" max="0.75" step="0.05" value="0.3"></sim-slider>
                   </div>
@@ -512,9 +483,10 @@
                     <sim-value-display id="kp-r" data-i18n-attr="label:ch1.sim.kepler.r" unit="AU" precision="2"></sim-value-display>
                     <sim-value-display id="kp-thetadot" data-i18n-attr="label:ch1.sim.kepler.thetadot" unit="rad/s" precision="2"></sim-value-display>
                   </div>
+                  <sim-formula-display id="kp-formula" class="ch1-sim-formula"></sim-formula-display>
                 </simulation-card>
 
-                <lab-callout variant="note" label="تذكر">
+                <lab-callout variant="note" label="تذكر" collapsible collapsed>
                   <p>
                     أيّ كتلتين في الكون تتجاذبان بقوة تتناسب طرديًا مع حاصل ضرب الكتلتين (M, m) وعكسيًا مع مربع المسافة
                     بينهما (r) — هذا هو قانون نيوتن للجذب العام، رياضيًا:
@@ -655,7 +627,7 @@
                     <math-block>\[ \omega = 2\pi f \]</math-block>
                   </formula-card>
 
-                  <lab-callout variant="note" label="هل تعلم؟">
+                  <lab-callout variant="note" label="هل تعلم؟" collapsible collapsed>
                     <p>
                       تحتوي آلية مشغّل القرص المدمج (CD) على محرك يُدير القرص المرن ويتحكم بسرعته، والتي تتراوح بين 200
                       و500 دورة في الدقيقة، حتى تتمكن حزمة الليزر من قراءة المعلومات المخزّنة على القرص.
@@ -940,7 +912,7 @@
                   </formula-card>
                 </lesson-card>
 
-                <lab-callout variant="note" label="هل تعلم؟">
+                <lab-callout variant="note" label="هل تعلم؟" collapsible collapsed>
                   <p>
                     يصنع مصنّعو العجلات الدوّارة (Flywheel) معظم كتلة العجلة مُركّزة عند حافتها/إطارها، ليكون عزم قصورها
                     الذاتي كبيرًا، من أجل الحفاظ على زخمها/استقرارها أثناء الحركة.
@@ -950,6 +922,7 @@
                 <simulation-card title="محاكاة حفظ الزخم الزاوي">
                   <p data-i18n="ch1.sim.angmom.caption"></p>
                   <sim-container class="sim-frame" id="sim-angmom" style="aspect-ratio:16/9; max-width:640px; margin-inline:auto;"></sim-container>
+                  <p class="ch1-drag-hint" data-i18n="ch1.sim.angmom.dragHint"></p>
                   <div class="ch1-sim-controls">
                     <sim-slider id="am-radius" data-i18n-attr="label:ch1.sim.angmom.radius" unit="m" min="0.3" max="1.2" step="0.05" value="0.9"></sim-slider>
                   </div>
@@ -959,6 +932,7 @@
                     <sim-value-display id="am-L" data-i18n-attr="label:ch1.sim.angmom.L" unit="kg*m^2/s" precision="2"></sim-value-display>
                     <sim-value-display id="am-ke" data-i18n-attr="label:ch1.sim.angmom.ke" unit="J" precision="2"></sim-value-display>
                   </div>
+                  <sim-formula-display id="am-formula" class="ch1-sim-formula"></sim-formula-display>
                 </simulation-card>
 
                 <example-card number="6" title="عزم القصور الذاتي لكرة صلدة">
