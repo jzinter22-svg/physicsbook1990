@@ -11,22 +11,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="assets/css/main.css" />
 <style>
-  /* padding-block only — .hero is combined with .container in the markup,
-     and .container already owns the horizontal padding-inline gutter.
-     A physical `padding` shorthand here would zero that gutter out. */
-  .hero{ padding-block: 90px 40px; position:relative; overflow:hidden; }
-  .hero__orbits{ position:absolute; inset:0; z-index:-1; opacity:.5; pointer-events:none; }
-  .hero__grid{ display:grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items:center; }
-  @media (max-width: 940px){ .hero__grid{ grid-template-columns: 1fr; } }
-  .hero__actions{ display:flex; gap:14px; margin-top: 30px; flex-wrap:wrap; }
-  .hero__stats{ display:flex; gap: 26px; margin-top: 38px; flex-wrap:wrap; }
+  /* padding-block فقط — .hero يجتمع مع .container في العنصر نفسه، و.container
+     يملك أصلًا هامش padding-inline الأفقي. أي اختصار padding فيزيائي هنا
+     كان سيُصفّر ذلك الهامش (هذا كان خطأ سابقًا تم إصلاحه). */
+  .hero{
+    position:relative; overflow:hidden;
+    /* توسيط الحزمة الكاملة (الشارة، العنوان، الوصف، الأزرار، الإحصاءات،
+       الرسم التوضيحي) أفقيًا ورأسيًا ضمن ارتفاع الشاشة المرئية عند التحميل،
+       مع بقائها قابلة للنمو الطبيعي دون أي قصّ لو زاد المحتوى عن الشاشة. */
+    min-height: calc(100svh - var(--header-h));
+    display:flex; align-items:center;
+    padding-block: var(--space-10);
+  }
+  .hero__grid{ width:100%; display:grid; grid-template-columns: 1.05fr .95fr; gap: var(--space-12); align-items:center; }
+  @media (max-width: 1023px){ .hero__grid{ grid-template-columns: 1fr; text-align:center; } }
+  .hero__actions{ display:flex; gap: var(--space-4); margin-top: var(--space-8); flex-wrap:wrap; }
+  @media (max-width: 1023px){ .hero__actions{ justify-content:center; } }
+  .hero__stats{ display:flex; gap: var(--space-7); margin-top: var(--space-10); flex-wrap:wrap; }
+  @media (max-width: 1023px){ .hero__stats{ justify-content:center; } }
   .hero__stat b{ display:block; font-size:1.5rem; font-weight:900; background:var(--accent-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .hero__stat span{ font-size:.82rem; color:var(--text-faint); font-weight:700; }
 
   .book-cover{
     position:relative; aspect-ratio: 3/4; max-width: 266px; margin-inline:auto;
-    border-radius: 26px; background: var(--accent-grad);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-xl); background: var(--accent-grad);
+    box-shadow: var(--elevation-3);
     display:flex; align-items:center; justify-content:center; overflow:hidden;
   }
   .book-cover::before{
@@ -38,44 +47,44 @@
   .book-cover__orbit.o2{ width:92%; height:92%; animation-duration: 30s; animation-direction: reverse; }
   .book-cover__planet{ position:absolute; width:11px; height:11px; border-radius:50%; background:#fff; top:0; inset-inline-start:50%; box-shadow: 0 0 16px rgba(255,255,255,.8); }
   @keyframes spin{ to{ transform: rotate(360deg); } }
-  .book-cover__content{ position:relative; text-align:center; color:#fff; padding: 20px; }
-  .book-cover__content .badge{ font-size:.75rem; font-weight:800; background:rgba(255,255,255,.2); padding:6px 14px; border-radius:999px; }
-  .book-cover__content h2{ font-size: 1.8rem; margin: 16px 0 4px; font-weight:900; }
+  .book-cover__content{ position:relative; text-align:center; color:#fff; padding: var(--space-5); }
+  .book-cover__content .badge{ font-size:.75rem; font-weight:800; background:rgba(255,255,255,.2); padding: var(--space-2) var(--space-4); border-radius:999px; }
+  .book-cover__content h2{ font-size: 1.8rem; margin: var(--space-4) 0 var(--space-1); font-weight:900; }
   .book-cover__content p{ opacity:.9; font-weight:700; font-size:.9rem; }
-  .book-cover__icon{ font-size: 2.4rem; margin-bottom: 6px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.25)); animation: float 4s ease-in-out infinite; }
+  .book-cover__icon{ font-size: 2.4rem; margin-bottom: var(--space-2); filter: drop-shadow(0 8px 16px rgba(0,0,0,.25)); animation: float 4s ease-in-out infinite; }
   @keyframes float{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-10px);} }
 
-  .feature-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
-  @media (max-width: 900px){ .feature-grid{ grid-template-columns: repeat(2,1fr); } }
-  @media (max-width: 560px){ .feature-grid{ grid-template-columns: 1fr; } }
-  .feature{ padding: 24px; border-radius: var(--radius-md); text-align:center; }
+  .feature-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap: var(--space-5); }
+  @media (max-width: 1023px){ .feature-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 639px){ .feature-grid{ grid-template-columns: 1fr; } }
+  .feature{ padding: var(--space-6); border-radius: var(--radius-md); text-align:center; }
   .feature__icon{
-    width:52px; height:52px; border-radius:16px; margin:0 auto 14px; display:flex; align-items:center; justify-content:center;
+    width:52px; height:52px; border-radius: var(--radius-md); margin:0 auto var(--space-4); display:flex; align-items:center; justify-content:center;
     background: var(--accent-grad); color:#fff; font-size:1.4rem;
   }
-  .feature h3{ font-size:1rem; margin-bottom:6px; }
+  .feature h3{ font-size:1rem; margin-bottom: var(--space-2); }
   .feature p{ font-size:.86rem; color:var(--text-soft); margin:0; }
 
-  .chapters-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  @media (max-width: 980px){ .chapters-grid{ grid-template-columns: repeat(2,1fr); } }
-  @media (max-width: 640px){ .chapters-grid{ grid-template-columns: 1fr; } }
+  .chapters-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+  @media (max-width: 1023px){ .chapters-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 639px){ .chapters-grid{ grid-template-columns: 1fr; } }
 
   .chapter-card{
-    padding: 26px; border-radius: var(--radius-lg); position:relative; overflow:hidden;
-    display:flex; flex-direction:column; gap:14px;
+    padding: var(--space-6); border-radius: var(--radius-lg); position:relative; overflow:hidden;
+    display:flex; flex-direction:column; gap: var(--space-3);
     transition: transform .4s var(--ease-spring), box-shadow .4s var(--ease);
   }
   .chapter-card.is-active{ cursor:pointer; }
-  .chapter-card.is-active:hover{ transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+  .chapter-card.is-active:hover{ transform: translateY(-8px); box-shadow: var(--elevation-3); }
   .chapter-card__num{
-    width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center;
-    font-weight:900; background: var(--accent-grad); color:#fff; box-shadow: var(--shadow-sm);
+    width:44px; height:44px; border-radius: var(--radius-sm); display:flex; align-items:center; justify-content:center;
+    font-weight:900; background: var(--accent-grad); color:#fff; box-shadow: var(--elevation-1);
   }
   .chapter-card.is-soon .chapter-card__num{ background: var(--border-strong); color: var(--text-faint); box-shadow:none; }
   .chapter-card__title{ font-weight:800; font-size:1.05rem; margin:0; }
   .chapter-card__desc{ font-size:.86rem; color: var(--text-soft); margin:0; flex:1; }
   .chapter-card__badge{
-    align-self:flex-start; font-size:.72rem; font-weight:800; padding: 5px 12px; border-radius:999px;
+    align-self:flex-start; font-size:.72rem; font-weight:800; padding: var(--space-1) var(--space-3); border-radius:999px;
   }
   .chapter-card.is-active .chapter-card__badge{ background: color-mix(in srgb, var(--success) 16%, transparent); color: var(--success); }
   .chapter-card.is-soon .chapter-card__badge{ background: var(--border); color: var(--text-faint); }
@@ -83,10 +92,10 @@
   .chapter-card__link{ position:absolute; inset:0; }
 
   .cta-band{
-    border-radius: var(--radius-lg); padding: 50px; text-align:center; background: var(--accent-grad); color:#fff; position:relative; overflow:hidden;
+    border-radius: var(--radius-lg); padding: var(--space-12); text-align:center; background: var(--accent-grad); color:#fff; position:relative; overflow:hidden;
   }
-  .cta-band h2{ font-size: clamp(1.4rem,3vw,2rem); margin-bottom:10px; }
-  .cta-band p{ opacity:.92; margin-bottom: 24px; }
+  .cta-band h2{ font-size: clamp(1.4rem,3vw,2rem); margin-bottom: var(--space-3); text-wrap: balance; }
+  .cta-band p{ opacity:.92; margin-bottom: var(--space-6); }
   .cta-band .btn--ghost{ background: rgba(255,255,255,.16); color:#fff; border-color: rgba(255,255,255,.4); backdrop-filter: blur(6px); }
 </style>
 </head>

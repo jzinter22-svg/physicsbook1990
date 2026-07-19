@@ -1,14 +1,22 @@
 /* ============================================================
    مكوّنات صفحة الفصل الدراسي — قابلة لإعادة الاستخدام لأي فصل
+   تُبنى بالكامل فوق رموز main.css (المسافات 8pt، الأشكال، الارتفاع)
+   ولا تحتوي على أي قيمة مقاس ثابتة تخصّ صفحة بعينها.
+
+   نقاط الاستجابة الوحيدة المستخدمة هنا: 640px (جوال) و 1024px (سطح مكتب)،
+   بما يجعل اللوحي (640–1023) الحالة الافتراضية/الأساسية للتصميم.
    ============================================================ */
 
-/* ---------- Chapter Hero ---------- */
+/* ---------- Chapter Hero: composition متوسّطة أفقيًا ورأسيًا ---------- */
 .ch-hero{
   position: relative;
-  /* padding-block only — never fight .container's padding-inline gutter
-     if this class is ever combined with .container on the same element. */
-  padding-block: 54px 40px;
   overflow: hidden;
+  /* تتوسّط الحزمة (الشارة + العنوان + الوصف + الرقاقات + الرسم) رأسيًا
+     ضمن الشاشة المرئية عند التحميل، مع بقائها قابلة للنمو الطبيعي دون
+     أي قصّ إن كان المحتوى أطول من الشاشة. */
+  min-height: calc(100svh - var(--header-h));
+  display:flex; align-items:center;
+  padding-block: var(--space-12) var(--space-10);
 }
 .ch-hero__bg{
   position:absolute; inset:0; z-index:-1;
@@ -17,27 +25,28 @@
   mask-image: linear-gradient(to bottom, black, transparent);
 }
 .ch-hero__grid{
-  display:grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items:center;
+  width: 100%;
+  display:grid; grid-template-columns: 1.3fr 1fr; gap: var(--space-10); align-items:center;
 }
-@media (max-width: 900px){ .ch-hero__grid{ grid-template-columns: 1fr; } }
+@media (max-width: 1023px){ .ch-hero__grid{ grid-template-columns: 1fr; } }
 
-.ch-kicker{ display:flex; align-items:center; gap:10px; color: var(--brand-1); font-weight:800; margin-bottom:14px; }
+.ch-kicker{ display:flex; align-items:center; gap: var(--space-2); color: var(--brand-1); font-weight:800; margin-bottom: var(--space-3); }
 .ch-kicker__num{
-  width:34px; height:34px; border-radius:10px; background:var(--accent-grad); color:#fff;
-  display:flex; align-items:center; justify-content:center; font-size:.95rem; box-shadow: var(--shadow-sm);
+  width:34px; height:34px; border-radius: var(--radius-sm); background:var(--accent-grad); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:.95rem; box-shadow: var(--elevation-1);
 }
-.ch-title{ font-size: clamp(1.9rem, 4.2vw, 3rem); font-weight:900; margin: 0 0 .35em; }
+.ch-title{ font-size: clamp(1.9rem, 4.2vw, 3rem); font-weight:900; margin: 0 0 .35em; text-wrap: balance; }
 .ch-subtitle{ color: var(--text-soft); font-size: 1.08rem; max-width: 60ch; }
 
-.ch-meta{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 20px; }
+.ch-meta{ display:flex; flex-wrap:wrap; gap: var(--space-3); margin-top: var(--space-5); }
 .ch-meta__chip{
-  display:flex; align-items:center; gap:8px; font-size:.85rem; font-weight:700;
-  background: var(--surface-solid); border:1px solid var(--border); padding: 8px 14px; border-radius: var(--radius-pill);
+  display:flex; align-items:center; gap: var(--space-2); font-size:.85rem; font-weight:700;
+  background: var(--surface-solid); border:1px solid var(--border); padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
   color: var(--text-soft);
 }
 
 .ch-hero__art{
-  aspect-ratio: 1/1; border-radius: var(--radius-lg); position:relative;
+  aspect-ratio: 1/1; border-radius: var(--radius-xl); position:relative;
   display:flex; align-items:center; justify-content:center;
   max-width: var(--hero-art-max-width); margin-inline: auto;
 }
@@ -46,107 +55,113 @@
 .orbit-loader{ width:100%; max-width:320px; margin-inline:auto; }
 
 /* ---------- Chapter body grid: sidebar TOC + lesson column ----------
-   Fully defined here (base + responsive) so any chapter page only ever
-   needs `<div class="ch-body-grid">` — no inline grid-template-columns
-   to remember to copy when a new chapter is added. */
+   مُعرَّف بالكامل هنا (الحالة الأساسية + الاستجابة) بحيث تحتاج أي صفحة
+   فصل فقط إلى <div class="ch-body-grid"> دون أي قيمة عمود مضمّنة يجب
+   تذكّرها عند إضافة فصل جديد. اللوحي بوضع الطولي (portrait) ينتقل إلى
+   عمود واحد مع قائمة منسدلة، بينما اللوحي بالعرضي (landscape) وسطح
+   المكتب يحتفظان بالشريط الجانبي. */
 .ch-body-grid{
-  display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 44px; align-items: start;
+  display: grid; grid-template-columns: 260px minmax(0,1fr); gap: var(--space-10); align-items: start;
 }
-.toc-mobile{ display:none; }
 .ch-body-grid > *{ min-width: 0; }
-@media (max-width: 900px){
+@media (max-width: 1023px){
   .ch-body-grid{ grid-template-columns: minmax(0,1fr); }
   .toc{ display:none; }
-  .toc-mobile{ display:block; }
 }
 
 /* ---------- Table of contents ---------- */
-.toc{ position: sticky; top: 90px; }
-.toc__panel{ padding: 20px 10px; }
-.toc__title{ font-weight:800; font-size:.95rem; color: var(--text-faint); margin-bottom: 10px; padding-inline: 16px; }
-.toc__list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; border-inline-start: 2px solid var(--border); }
+.toc{ position: sticky; top: calc(var(--header-h) + var(--space-4)); }
+.toc__panel{ padding: var(--space-5) var(--space-3); }
+.toc__title{ font-weight:800; font-size:.95rem; color: var(--text-faint); margin-bottom: var(--space-2); padding-inline: var(--space-4); }
+.toc__list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap: var(--space-1); border-inline-start: 2px solid var(--border); }
 .toc__link{
-  display:block; padding: 7px 16px; font-size:.88rem; color: var(--text-soft); font-weight:700;
+  display:block; padding: var(--space-2) var(--space-4); font-size:.88rem; color: var(--text-soft); font-weight:700;
   border-inline-start: 2px solid transparent; margin-inline-start:-2px; transition: all .25s var(--ease);
 }
 .toc__link:hover{ color: var(--brand-1); }
 .toc__link.is-active{
   color: var(--brand-1); border-inline-start-color: var(--brand-1);
   background: color-mix(in srgb, var(--brand-1) 8%, transparent);
-  /* Round only the corners away from the accent rail (logical, RTL/LTR-safe)
-     so the pill's own curve never crowds the outer card's rounded corner. */
-  border-start-end-radius: 10px; border-end-end-radius: 10px;
+  /* استدارة الجهة البعيدة عن الشريط اللوني فقط (منطقية، تعمل صح في
+     RTL/LTR) حتى لا يزدحم انحناء الرقاقة مع انحناء البطاقة الخارجية. */
+  border-start-end-radius: var(--radius-sm); border-end-end-radius: var(--radius-sm);
 }
 
+/* قائمة منسدلة للفهرس على الجوال واللوحي الطولي */
 .toc-mobile{
-  position: sticky; top: 62px; z-index: 40; margin-bottom: 20px;
+  display:none;
+  position: sticky; top: calc(var(--header-h) - var(--space-2)); z-index: 40; margin-bottom: var(--space-5);
 }
+@media (max-width: 1023px){ .toc-mobile{ display:block; } }
 .toc-mobile select{
-  width:100%; padding: 12px 16px; border-radius: var(--radius-pill); border:1px solid var(--border-strong);
+  width:100%; padding: var(--space-3) var(--space-4); border-radius: var(--radius-pill); border:1px solid var(--border-strong);
   background: var(--surface-strong); color: var(--text); font-family: var(--font-main); font-weight:700; font-size:.9rem;
   backdrop-filter: blur(14px);
 }
 
 /* ---------- Lesson section ---------- */
-.lesson{ scroll-margin-top: 90px; padding-block: 46px; border-top: 1px dashed var(--border); }
+.lesson{ scroll-margin-top: calc(var(--header-h) + var(--space-4)); padding-block: var(--space-12); border-top: 1px dashed var(--border); }
 .lesson:first-of-type{ border-top: none; }
-.lesson__head{ display:flex; align-items:center; gap:14px; margin-bottom: 18px; flex-wrap: wrap; }
+.lesson__head{ display:flex; align-items:center; gap: var(--space-4); margin-bottom: var(--space-5); flex-wrap: wrap; }
 .lesson__num{
-  flex:none; width:46px; height:46px; border-radius:14px; background: var(--accent-grad); color:#fff;
-  display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1rem; box-shadow: var(--shadow-sm);
+  flex:none; width:46px; height:46px; border-radius: var(--radius-md); background: var(--accent-grad); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1rem; box-shadow: var(--elevation-1);
 }
-.lesson__title{ font-size: clamp(1.25rem, 2.6vw, 1.6rem); font-weight:900; margin:0; min-width:0; overflow-wrap: break-word; }
-.lesson__sub{ font-size: 1.05rem; font-weight:800; margin: 22px 0 10px; color: var(--brand-2); }
+.lesson__title{ font-size: clamp(1.25rem, 2.6vw, 1.6rem); font-weight:900; margin:0; min-width:0; overflow-wrap: break-word; text-wrap: balance; }
+.lesson__sub{ font-size: 1.05rem; font-weight:800; margin: var(--space-6) 0 var(--space-3); color: var(--brand-2); }
 
 .prose{ color: var(--text); font-size: 1.02rem; }
-.prose p{ margin: 0 0 14px; }
+.prose p{ margin: 0 0 var(--space-4); }
 .prose strong{ color: var(--brand-1); }
-.prose ul, .prose ol{ margin: 0 0 14px; padding-inline-start: 22px; }
-.prose li{ margin-bottom: 6px; }
+.prose ul, .prose ol{ margin: 0 0 var(--space-4); padding-inline-start: var(--space-6); }
+.prose li{ margin-bottom: var(--space-2); }
 
-/* ---------- Figures ---------- */
-.figure{ margin: 26px auto; max-width: var(--figure-max-width); text-align:center; }
-/* Modifier for figures that hold a data table or anything else that needs
-   more horizontal room to stay legible — use instead of an inline max-width. */
+/* ---------- Figures: حاوية مخصّصة تحفظ مساحة كافية حول الرسم ---------- */
+.figure{ margin: var(--space-7) auto; max-width: var(--figure-max-width); text-align:center; }
+/* معدِّل للأشكال التي تحوي جدول بيانات أو أي محتوى يحتاج عرضًا أكبر —
+   يُستخدم بدل أي قيمة max-width مضمّنة. */
 .figure--wide{ max-width: var(--figure-max-width-wide); }
 .figure__frame{
   background: var(--surface-solid); border:1px solid var(--border); border-radius: var(--radius-md);
-  padding: 18px; box-shadow: var(--shadow-sm);
+  padding: var(--space-5); box-shadow: var(--elevation-1);
 }
 .figure__frame--scroll{ overflow-x: auto; }
-.figure__cap{ margin-top:10px; font-size:.88rem; font-weight:700; color: var(--text-faint); }
+.figure__cap{ margin-top: var(--space-3); font-size:.88rem; font-weight:700; color: var(--text-faint); }
 
 /* ---------- Formula box ---------- */
 .formula{
   background: linear-gradient(135deg, color-mix(in srgb, var(--brand-1) 10%, var(--surface-solid)), color-mix(in srgb, var(--brand-3) 8%, var(--surface-solid)));
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
-  padding: 20px 26px;
-  margin: 18px 0;
+  padding: var(--space-6);
+  margin: var(--space-5) 0;
   font-size: 1.15rem;
   text-align:center;
   position: relative;
   overflow:auto;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--elevation-1);
 }
 .formula--law{
   border-inline-start: 5px solid var(--brand-4);
   background: color-mix(in srgb, var(--brand-4) 8%, var(--surface-solid));
 }
 .formula sup, .formula sub{ font-size: .7em; }
-.formula__tag{ position:absolute; top:-11px; inset-inline-start: 18px; background: var(--accent-grad); color:#fff; font-size:.72rem; font-weight:800; padding: 3px 12px; border-radius: var(--radius-pill); }
+.formula__tag{
+  position:absolute; top:-11px; inset-inline-start: var(--space-5); background: var(--accent-grad); color:#fff;
+  font-size:.72rem; font-weight:800; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill);
+}
 
 /* ---------- Callouts ---------- */
 .callout{
-  display:flex; gap: 14px; align-items:flex-start;
-  border-radius: var(--radius-md); padding: 18px 20px; margin: 22px 0;
+  display:flex; gap: var(--space-4); align-items:flex-start;
+  border-radius: var(--radius-md); padding: var(--space-5) var(--space-6); margin: var(--space-6) 0;
   border: 1px solid var(--border);
 }
 .callout__icon{
-  flex:none; width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  flex:none; width:38px; height:38px; border-radius: var(--radius-sm); display:flex; align-items:center; justify-content:center;
   font-size:1.1rem; color:#fff;
 }
-.callout__title{ font-weight:800; margin-bottom: 4px; }
+.callout__title{ font-weight:800; margin-bottom: var(--space-1); }
 .callout--tip{ background: color-mix(in srgb, var(--brand-3) 10%, var(--surface-solid)); }
 .callout--tip .callout__icon{ background: var(--brand-3); }
 .callout--note{ background: color-mix(in srgb, var(--brand-5) 12%, var(--surface-solid)); }
@@ -156,25 +171,27 @@
 .callout--warn{ background: color-mix(in srgb, var(--danger) 10%, var(--surface-solid)); }
 .callout--warn .callout__icon{ background: var(--danger); }
 
-/* ---------- Example / Question cards ---------- */
+/* ---------- بطاقات الأمثلة والأسئلة (ارتفاع تلقائي دومًا) ----------
+   قاعدة واحدة لكل أنواع البطاقات: ارتفاع auto حسب المحتوى، حشوة سخية
+   متساوية على الجهات، ولا قيمة height/min-height ثابتة إطلاقًا. */
 .ex-card, .q-card{
   border-radius: var(--radius-lg);
   background: var(--surface-solid);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  margin: 26px 0;
+  box-shadow: var(--elevation-1);
+  margin: var(--space-7) 0;
   overflow: hidden;
   transition: box-shadow .35s var(--ease), transform .35s var(--ease);
 }
-.ex-card:hover, .q-card:hover{ box-shadow: var(--shadow-md); }
+.ex-card:hover, .q-card:hover{ box-shadow: var(--elevation-2); }
 
 .ex-card__head, .q-card__head{
-  display:flex; align-items:flex-start; gap:12px; padding: 20px 22px;
+  display:flex; align-items:flex-start; gap: var(--space-3); padding: var(--space-5) var(--space-6);
   background: linear-gradient(90deg, color-mix(in srgb, var(--brand-1) 12%, transparent), transparent);
   cursor:pointer; user-select:none;
 }
 .ex-card__badge, .q-card__badge{
-  flex:none; width:40px; height:40px; border-radius:12px; background: var(--accent-grad); color:#fff;
+  flex:none; width:40px; height:40px; border-radius: var(--radius-sm); background: var(--accent-grad); color:#fff;
   display:flex; align-items:center; justify-content:center; font-weight:900; font-size: .95rem;
 }
 .ex-card__label, .q-card__label{
@@ -182,42 +199,42 @@
   overflow-wrap: break-word; word-break: break-word;
   line-height: 1.6; padding-top: 3px;
 }
-.ex-card__chevron{ transition: transform .35s var(--ease); color: var(--text-faint); flex:none; margin-top: 6px; }
+.ex-card__chevron{ transition: transform .35s var(--ease); color: var(--text-faint); flex:none; margin-top: var(--space-1); }
 .ex-card.is-open .ex-card__chevron, .q-card.is-open .q-card__chevron{ transform: rotate(180deg); }
 
-.ex-card__prompt{ padding: 4px 22px 20px; font-size: 1.02rem; color: var(--text); }
-.q-card__prompt{ padding: 4px 22px 20px; font-size: 1rem; color: var(--text); }
+.ex-card__prompt{ padding: var(--space-2) var(--space-6) var(--space-6); font-size: 1.02rem; color: var(--text); }
+.q-card__prompt{ padding: var(--space-2) var(--space-6) var(--space-6); font-size: 1rem; color: var(--text); }
 
 .ex-card__body, .q-card__body{
-  /* Closed by default (max-height:0). The open height is never a guessed
-     constant — app.js measures the body's real scrollHeight and sets it
-     inline, so every card's expand animation matches its actual content. */
+  /* مُغلقة افتراضيًا (max-height:0). ارتفاع الفتح ليس رقمًا تخمينيًا
+     أبدًا — يقيس app.js الارتفاع الحقيقي (scrollHeight) ويضبطه مباشرة،
+     فتُطابق حركة كل بطاقة محتواها الفعلي تمامًا مهما كان قصيرًا أو طويلًا. */
   max-height: 0; overflow: hidden; transition: max-height .5s var(--ease);
 }
 
-.ex-card__section{ padding: 18px 22px; border-top: 1px dashed var(--border); }
+.ex-card__section{ padding: var(--space-5) var(--space-6); border-top: 1px dashed var(--border); }
 .ex-card__section-title{
-  display:flex; align-items:center; gap:8px; font-weight:800; font-size:.92rem; color: var(--brand-1); margin-bottom: 10px;
+  display:flex; align-items:center; gap: var(--space-2); font-weight:800; font-size:.92rem; color: var(--brand-1); margin-bottom: var(--space-3);
 }
-.step{ display:flex; gap: 12px; margin-bottom: 14px; align-items:flex-start; }
+.step{ display:flex; gap: var(--space-3); margin-bottom: var(--space-4); align-items:flex-start; }
 .step__num{
   flex:none; width:26px; height:26px; border-radius:50%; background: color-mix(in srgb, var(--brand-1) 16%, transparent);
   color: var(--brand-1); font-weight:800; font-size:.78rem; display:flex; align-items:center; justify-content:center; margin-top:2px;
 }
 .step__body{ flex:1; }
-.step__math{ margin-top: 6px; overflow-x:auto; }
+.step__math{ margin-top: var(--space-2); overflow-x:auto; }
 
 .answer-box{
-  margin-top: 14px; padding: 16px 20px; border-radius: var(--radius-sm);
+  margin-top: var(--space-4); padding: var(--space-4) var(--space-5); border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--success) 12%, transparent); border: 1px solid color-mix(in srgb, var(--success) 30%, transparent);
-  font-weight: 800; display:flex; align-items:center; gap:10px; flex-wrap: wrap;
+  font-weight: 800; display:flex; align-items:center; gap: var(--space-3); flex-wrap: wrap;
 }
 .answer-box__icon{ color: var(--success); flex:none; }
 
-.mcq-options{ list-style:none; margin: 10px 0 0; padding:0; display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
-@media (max-width:560px){ .mcq-options{ grid-template-columns:1fr; } }
+.mcq-options{ list-style:none; margin: var(--space-3) 0 0; padding:0; display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+@media (max-width: 639px){ .mcq-options{ grid-template-columns:1fr; } }
 .mcq-options li{
-  padding: 9px 14px; border-radius: 10px; border:1px solid var(--border); font-size:.94rem; color: var(--text-soft);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-xs); border:1px solid var(--border); font-size:.94rem; color: var(--text-soft);
 }
 .mcq-options li.is-correct{
   border-color: color-mix(in srgb, var(--success) 45%, transparent); color: var(--success); font-weight:800;
@@ -226,40 +243,40 @@
 
 /* ---------- Key concept strip ---------- */
 .key-concept{
-  margin-top: 16px; padding: 16px 20px; border-radius: var(--radius-sm);
+  margin-top: var(--space-4); padding: var(--space-4) var(--space-5); border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--brand-4) 10%, transparent);
   border-inline-start: 4px solid var(--brand-4);
   font-weight: 700; font-size: .95rem;
 }
 
-/* ---------- Diagram wrapper (50% of content width on desktop, centered) ---------- */
+/* ---------- حاوية الرسم التفاعلي: تحفظ مساحة كافية دومًا حول الرسم ---------- */
 .diagram{
   width: var(--diagram-width); min-width: var(--diagram-min-width); max-width: var(--diagram-max-width);
-  margin: 34px auto; text-align:center;
+  margin: var(--space-8) auto; text-align:center;
 }
-@media (max-width: 720px){
+@media (max-width: 639px){
   .diagram{ width: var(--diagram-width-mobile); max-width: var(--diagram-max-width-mobile); }
 }
 .diagram__stage{
   background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md); padding: 18px; position: relative;
+  box-shadow: var(--elevation-2); padding: var(--space-5); position: relative;
 }
 .diagram__canvas-holder{ width:100%; aspect-ratio: 1/1; border-radius: var(--radius-md); overflow:hidden; position:relative; }
 .diagram__canvas-holder canvas{ width:100%; height:100%; display:block; }
-.diagram__title{ font-weight:800; margin-bottom: 6px; }
-.diagram__desc{ font-size:.85rem; color: var(--text-faint); margin-bottom: 14px; }
+.diagram__title{ font-weight:800; margin-bottom: var(--space-2); }
+.diagram__desc{ font-size:.85rem; color: var(--text-faint); margin-bottom: var(--space-4); }
 
 .diagram__readout{
-  display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top: 14px;
+  display:flex; flex-wrap:wrap; gap: var(--space-3); justify-content:center; margin-top: var(--space-4);
 }
 .readout-chip{
-  background: var(--surface); border:1px solid var(--border); padding: 8px 14px; border-radius: var(--radius-pill);
-  font-size:.82rem; font-weight:800; color: var(--text-soft); display:flex; gap:6px; align-items:center;
+  background: var(--surface); border:1px solid var(--border); padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
+  font-size:.82rem; font-weight:800; color: var(--text-soft); display:flex; gap: var(--space-2); align-items:center;
 }
 .readout-chip b{ color: var(--brand-1); font-size:.95rem; }
 
-.diagram__controls{ display:flex; flex-direction:column; gap: 14px; margin-top: 16px; text-align: start; }
-.control{ display:flex; flex-direction:column; gap: 6px; }
+.diagram__controls{ display:flex; flex-direction:column; gap: var(--space-4); margin-top: var(--space-5); text-align: start; }
+.control{ display:flex; flex-direction:column; gap: var(--space-2); }
 .control__label{ display:flex; justify-content:space-between; font-size:.82rem; font-weight:700; color: var(--text-soft); }
 .control input[type=range]{
   -webkit-appearance:none; width:100%; height:6px; border-radius: 6px;
@@ -268,18 +285,18 @@
 }
 .control input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
-  background:#fff; border: 3px solid var(--brand-1); box-shadow: var(--shadow-sm); cursor:pointer;
+  background:#fff; border: 3px solid var(--brand-1); box-shadow: var(--elevation-1); cursor:pointer;
 }
 .control input[type=range]::-moz-range-thumb{
   width:20px; height:20px; border-radius:50%; background:#fff; border: 3px solid var(--brand-1); cursor:pointer;
 }
-.diagram__buttons{ display:flex; gap:8px; justify-content:center; margin-top: 6px; flex-wrap: wrap; }
+.diagram__buttons{ display:flex; gap: var(--space-2); justify-content:center; margin-top: var(--space-2); flex-wrap: wrap; }
 .chip-btn{
-  padding: 8px 16px; border-radius: var(--radius-pill); border:1px solid var(--border-strong);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); border:1px solid var(--border-strong);
   background: var(--surface-solid); font-weight:800; font-size:.82rem; cursor:pointer; color: var(--text);
   transition: all .25s var(--ease-spring);
 }
-.chip-btn:hover{ transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.chip-btn:hover{ transform: translateY(-2px); box-shadow: var(--elevation-1); }
 .chip-btn.is-active{ background: var(--accent-grad); color:#fff; border-color: transparent; }
 
 /* ---------- Inline math helpers (no external math library needed) ---------- */
@@ -291,16 +308,16 @@
 .formula .math{ font-size: 1.1em; }
 
 /* ---------- Table ---------- */
-.data-table{ width:100%; border-collapse: collapse; margin: 18px 0; font-size:.95rem; }
-.data-table th, .data-table td{ padding: 12px 14px; border: 1px solid var(--border); text-align:center; }
+.data-table{ width:100%; border-collapse: collapse; margin: var(--space-5) 0; font-size:.95rem; }
+.data-table th, .data-table td{ padding: var(--space-3) var(--space-4); border: 1px solid var(--border); text-align:center; }
 .data-table th{ background: color-mix(in srgb, var(--brand-1) 10%, transparent); font-weight:800; }
 .data-table tr:nth-child(even) td{ background: color-mix(in srgb, var(--text) 3%, transparent); }
 .table-wrap{ overflow-x:auto; border-radius: var(--radius-sm); }
 
 /* ---------- Objectives list ---------- */
-.objectives{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.objectives{ list-style:none; margin:0; padding:0; display:grid; gap: var(--space-3); }
 .objectives li{
-  display:flex; gap:10px; align-items:flex-start; padding: 12px 16px; border-radius: var(--radius-sm);
+  display:flex; gap: var(--space-3); align-items:flex-start; padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm);
   background: var(--surface-solid); border:1px solid var(--border);
 }
 .objectives li::before{
@@ -308,25 +325,25 @@
   font-size:.72rem; display:flex; align-items:center; justify-content:center; margin-top:2px; font-weight:900;
 }
 
-/* ---------- Section jump nav (mobile bottom bar for chapter) ---------- */
+/* ---------- Section jump nav (mobile/tablet bottom bar) ---------- */
 .jump-fab{
-  position: fixed; bottom: 20px; inset-inline-end: 20px; z-index: 90;
+  position: fixed; bottom: var(--space-5); inset-inline-end: var(--space-5); z-index: 90;
   width:52px; height:52px; border-radius:50%; background: var(--accent-grad); color:#fff;
-  display:flex; align-items:center; justify-content:center; box-shadow: var(--shadow-lg);
+  display:flex; align-items:center; justify-content:center; box-shadow: var(--elevation-3);
   cursor:pointer; border:none; opacity:0; pointer-events:none; transform: translateY(10px) scale(.9);
   transition: all .3s var(--ease-spring);
 }
 .jump-fab.is-visible{ opacity:1; pointer-events:auto; transform:none; }
 
 /* ---------- Chapter intro panel (vocabulary + objectives) ---------- */
-.ch-intro-panel{ padding: 28px 30px; margin-bottom: 10px; }
+.ch-intro-panel{ padding: var(--space-8); margin-bottom: var(--space-3); }
 .ch-intro-panel .lesson__sub:first-child{ margin-top: 0; }
-.ch-intro-panel .objectives{ margin-top: 4px; }
+.ch-intro-panel .objectives{ margin-top: var(--space-1); }
 
 /* ---------- Chapter vocabulary chips ---------- */
-.vocab-list{ display:flex; flex-wrap:wrap; gap:10px; margin: 18px 0; }
+.vocab-list{ display:flex; flex-wrap:wrap; gap: var(--space-3); margin: var(--space-5) 0; }
 .vocab-chip{
   background: var(--surface-solid); border:1px solid var(--border); border-radius: var(--radius-pill);
-  padding: 8px 16px; font-size:.85rem; font-weight:700; color: var(--text-soft); display:flex; gap:8px; align-items:center;
+  padding: var(--space-2) var(--space-4); font-size:.85rem; font-weight:700; color: var(--text-soft); display:flex; gap: var(--space-2); align-items:center;
 }
 .vocab-chip b{ color: var(--brand-1); }

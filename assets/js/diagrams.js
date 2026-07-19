@@ -5,8 +5,18 @@
 (function () {
   "use strict";
 
+  // Reading a custom property directly (getPropertyValue) returns its literal
+  // specified text, not its resolved value — for tokens defined with
+  // light-dark(), that text (e.g. "light-dark(#12c2b0, #2fe0c9)") is not a
+  // color Canvas can use. Instead, apply the token to a real CSS property on
+  // a probe element and read that property back, which forces the browser to
+  // resolve light-dark()/color-mix() into a plain color string.
+  const cssVarProbe = document.createElement("span");
+  cssVarProbe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none;";
+  document.documentElement.appendChild(cssVarProbe);
   function cssVar(name) {
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    cssVarProbe.style.color = `var(${name})`;
+    return getComputedStyle(cssVarProbe).color;
   }
 
   function setupCanvas(canvas) {

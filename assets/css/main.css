@@ -2,120 +2,121 @@
    الطبيعيات التفاعلي — نظام التصميم الأساسي (Design System)
    يُستخدم في جميع صفحات الكتاب. أي فصل جديد يُبنى فوق هذا الملف
    بدون الحاجة لإعادة التصميم.
+
+   البنية:
+   1) الرموز (Design tokens): ألوان، تدرّج المسافات 8pt، الأشكال،
+      الارتفاع (elevation)، نقاط الاستجابة.
+   2) القواعد الأساسية (Reset) والخط.
+   3) عناصر بنائية عامة (Layout primitives): الحاوية، الأقسام، الحركة.
+   4) مكوّنات مشتركة: الرأس/التنقل، الأزرار، الزجاج، التذييل.
    ============================================================ */
 
+/* ------------------------------------------------------------
+   1) الرموز — Design tokens
+   ------------------------------------------------------------
+   نقاط الاستجابة المعتمدة في كل الملفات (لا تُستخدم أرقام عشوائية
+   أخرى في أي استعلام وسائط بالمشروع):
+     • جوال:     أصغر من 640px
+     • لوحي:     640px – 1023px  (الجهاز المستهدف أساسًا)
+     • سطح مكتب: 1024px فأكثر
+   ------------------------------------------------------------ */
 :root{
-  /* ---- Brand palette (light) ---- */
-  --bg: #f3f6fb;
-  --bg-alt: #e9eef8;
-  --surface: rgba(255,255,255,0.72);
-  --surface-solid: #ffffff;
-  --surface-strong: rgba(255,255,255,0.9);
-  --border: rgba(15,23,42,0.08);
-  --border-strong: rgba(15,23,42,0.14);
+  color-scheme: light dark; /* يحترم تفضيل النظام افتراضيًا، ما لم يتدخّل المستخدم */
 
-  --text: #10192b;
-  --text-soft: #47546b;
-  --text-faint: #7c879c;
+  /* ---- الألوان: قيمة واحدة لكل رمز عبر light-dark() بدل تكرار كتلة كاملة للوضعين ---- */
+  --bg: light-dark(#f3f6fb, #0b0f1c);
+  --bg-alt: light-dark(#e9eef8, #0f1526);
+  --surface: light-dark(rgba(255,255,255,.72), rgba(22,28,46,.72));
+  --surface-solid: light-dark(#ffffff, #131a2c);
+  --surface-strong: light-dark(rgba(255,255,255,.9), rgba(24,31,51,.92));
+  --border: light-dark(rgba(15,23,42,.08), rgba(255,255,255,.08));
+  --border-strong: light-dark(rgba(15,23,42,.14), rgba(255,255,255,.14));
 
-  --brand-1: #4f6df5;   /* بنفسجي أزرق */
-  --brand-2: #7c5cff;   /* بنفسجي */
-  --brand-3: #12c2b0;   /* فيروزي */
-  --brand-4: #ff8a5c;   /* برتقالي دافئ */
-  --brand-5: #ffb020;   /* ذهبي */
+  --text: light-dark(#10192b, #eef1fb);
+  --text-soft: light-dark(#47546b, #b7c0d8);
+  --text-faint: light-dark(#7c879c, #7f8bab);
+
+  --brand-1: light-dark(#4f6df5, #7c93ff); /* بنفسجي أزرق */
+  --brand-2: light-dark(#7c5cff, #a78bff); /* بنفسجي */
+  --brand-3: light-dark(#12c2b0, #2fe0c9); /* فيروزي */
+  --brand-4: light-dark(#ff8a5c, #ff9d72); /* برتقالي دافئ */
+  --brand-5: light-dark(#ffb020, #ffc857); /* ذهبي */
 
   --accent-grad: linear-gradient(120deg, var(--brand-1), var(--brand-2) 55%, var(--brand-3));
   --accent-grad-warm: linear-gradient(120deg, var(--brand-4), var(--brand-5));
 
-  --success: #1fb27a;
-  --danger: #ef4763;
-  --info: #2f8fe0;
+  --success: light-dark(#1a9c6b, #35d498);
+  --danger: light-dark(#e0304f, #ff6b86);
+  --info: light-dark(#2f8fe0, #6fb3f0);
 
-  --shadow-sm: 0 2px 10px rgba(20, 30, 60, 0.06);
-  --shadow-md: 0 10px 30px rgba(20, 30, 60, 0.10);
-  --shadow-lg: 0 24px 60px rgba(20, 30, 60, 0.16);
-  --shadow-glow: 0 0 0 1px rgba(79,109,245,0.12), 0 20px 45px rgba(79,109,245,0.18);
+  /* ---- الارتفاع (Elevation): ظلال ناعمة جدًا، طبقة واحدة أساسية ---- */
+  --elevation-1: light-dark(0 1px 2px rgba(20,30,60,.05), 0 1px 3px rgba(0,0,0,.3));
+  --elevation-2: light-dark(0 8px 24px rgba(20,30,60,.08), 0 10px 26px rgba(0,0,0,.4));
+  --elevation-3: light-dark(0 20px 48px rgba(20,30,60,.14), 0 22px 55px rgba(0,0,0,.5));
+  --elevation-glow:
+    0 0 0 1px light-dark(rgba(79,109,245,.12), rgba(124,147,255,.18)),
+    0 20px 45px light-dark(rgba(79,109,245,.18), rgba(124,147,255,.22));
+  /* أسماء متوافقة مع الإصدار السابق (تُستخدم داخليًا فقط، لا في HTML) */
+  --shadow-sm: var(--elevation-1);
+  --shadow-md: var(--elevation-2);
+  --shadow-lg: var(--elevation-3);
+  --shadow-glow: var(--elevation-glow);
 
+  /* ---- الأشكال: تدرّج زوايا الاستدارة ---- */
+  --radius-xs: 8px;
   --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-lg: 28px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
   --radius-pill: 999px;
 
+  /* ---- نظام المسافات (8pt spacing scale) ----
+     يُستخدم لكل حشوة/هامش/فجوة في المشروع بدل قيم عشوائية. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ---- الحركة ---- */
   --ease: cubic-bezier(.22,1,.36,1);
   --ease-spring: cubic-bezier(.34,1.56,.64,1);
 
   --font-main: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
 
-  /* ---- Illustration & diagram sizing tokens ----
-     Single source of truth for how large any figure, interactive
-     diagram, or hero illustration renders. Every chapter page consumes
-     these through shared classes (.figure, .diagram, .ch-hero__art) —
-     tune once here and every current and future chapter picks it up
-     automatically, no per-page overrides needed. */
-  --figure-max-width: 448px;       /* static SVG illustrations */
-  --figure-max-width-wide: 640px;  /* .figure--wide: data/table figures that need more room */
+  /* ---- رموز حجم الرسوم التوضيحية والرسوم التفاعلية ----
+     مصدر واحد لحجم أي شكل أو رسم تفاعلي أو صورة البطل، يستهلكه أي
+     فصل حالي أو مستقبلي عبر أصناف مشتركة (.figure, .diagram, .ch-hero__art)
+     دون الحاجة لأي تعديل يدوي لكل صفحة على حدة. */
+  --figure-max-width: 448px;
+  --figure-max-width-wide: 640px;
   --diagram-width: 35%;
   --diagram-min-width: 224px;
   --diagram-max-width: 364px;
   --diagram-width-mobile: 70%;
   --diagram-max-width-mobile: 294px;
-  --hero-art-max-width: 252px;     /* chapter-hero decorative illustration */
+  --hero-art-max-width: 252px;
 
-  color-scheme: light;
+  /* ---- ارتفاع الرأس الثابت (يُستخدم لتوسيط قسم البطل رأسيًا) ---- */
+  --header-h: 72px;
 }
 
-:root[data-theme="dark"]{
-  --bg: #0b0f1c;
-  --bg-alt: #0f1526;
-  --surface: rgba(22, 28, 46, 0.72);
-  --surface-solid: #131a2c;
-  --surface-strong: rgba(24, 31, 51, 0.92);
-  --border: rgba(255,255,255,0.08);
-  --border-strong: rgba(255,255,255,0.14);
+/* تركيب صريح يتيح للمستخدم تجاوز تفضيل النظام عبر مبدّل الوضع */
+:root[data-theme="light"]{ color-scheme: light; }
+:root[data-theme="dark"]{ color-scheme: dark; }
 
-  --text: #eef1fb;
-  --text-soft: #b7c0d8;
-  --text-faint: #7f8bab;
-
-  --brand-1: #7c93ff;
-  --brand-2: #a78bff;
-  --brand-3: #2fe0c9;
-  --brand-4: #ff9d72;
-  --brand-5: #ffc857;
-
-  --shadow-sm: 0 2px 12px rgba(0,0,0,0.35);
-  --shadow-md: 0 14px 34px rgba(0,0,0,0.45);
-  --shadow-lg: 0 26px 65px rgba(0,0,0,0.55);
-  --shadow-glow: 0 0 0 1px rgba(124,147,255,0.18), 0 20px 45px rgba(124,147,255,0.22);
-
-  color-scheme: dark;
-}
-
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg: #0b0f1c;
-    --bg-alt: #0f1526;
-    --surface: rgba(22, 28, 46, 0.72);
-    --surface-solid: #131a2c;
-    --surface-strong: rgba(24, 31, 51, 0.92);
-    --border: rgba(255,255,255,0.08);
-    --border-strong: rgba(255,255,255,0.14);
-    --text: #eef1fb;
-    --text-soft: #b7c0d8;
-    --text-faint: #7f8bab;
-    --brand-1: #7c93ff;
-    --brand-2: #a78bff;
-    --brand-3: #2fe0c9;
-    --brand-4: #ff9d72;
-    --brand-5: #ffc857;
-    --shadow-sm: 0 2px 12px rgba(0,0,0,0.35);
-    --shadow-md: 0 14px 34px rgba(0,0,0,0.45);
-    --shadow-lg: 0 26px 65px rgba(0,0,0,0.55);
-    --shadow-glow: 0 0 0 1px rgba(124,147,255,0.18), 0 20px 45px rgba(124,147,255,0.22);
-    color-scheme: dark;
-  }
-}
-
+/* ------------------------------------------------------------
+   2) القواعد الأساسية
+   ------------------------------------------------------------ */
 *, *::before, *::after{ box-sizing: border-box; }
 html{ scroll-behavior: smooth; }
 
@@ -140,7 +141,6 @@ svg{ display:block; }
 
 ::selection{ background: color-mix(in srgb, var(--brand-1) 35%, transparent); color: var(--text); }
 
-/* ---------------- Scrollbar ---------------- */
 ::-webkit-scrollbar{ width: 10px; height: 10px; }
 ::-webkit-scrollbar-track{ background: transparent; }
 ::-webkit-scrollbar-thumb{ background: color-mix(in srgb, var(--brand-1) 35%, var(--text-faint)); border-radius: 10px; }
@@ -163,49 +163,53 @@ svg{ display:block; }
   -webkit-backdrop-filter: blur(16px) saturate(160%);
   background: color-mix(in srgb, var(--bg) 72%, transparent);
   border-bottom: 1px solid var(--border);
+  block-size: var(--header-h);
+  display:flex; align-items:center;
 }
 .nav{
-  /* max-width/margin/padding-inline come from .container (always paired with
-     .nav in markup) — only add the vertical padding this component needs,
-     so it can never clobber .container's horizontal gutter. */
-  padding-block: 14px;
-  display:flex; align-items:center; justify-content:space-between; gap: 16px;
+  /* max-width/margin/padding-inline تأتي من .container (تُستخدم معه دومًا) —
+     هذا الصنف يضيف فقط الحشوة الرأسية التي يحتاجها، فلا يمكنه مطلقًا
+     إلغاء هامش .container الأفقي. */
+  width: 100%;
+  padding-block: var(--space-3);
+  display:flex; align-items:center; justify-content:space-between; gap: var(--space-4);
 }
 .brand{
-  display:flex; align-items:center; gap:10px; font-weight: 800; font-size: 1.05rem;
+  display:flex; align-items:center; gap: var(--space-2); font-weight: 800; font-size: 1.05rem;
 }
 .brand__mark{
-  width: 38px; height: 38px; border-radius: 12px;
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
   background: var(--accent-grad);
   display:flex; align-items:center; justify-content:center;
-  color:#fff; font-size: 1.1rem; box-shadow: var(--shadow-sm);
+  color:#fff; font-size: 1.1rem; box-shadow: var(--elevation-1);
   flex: none;
 }
-.nav__links{ display:flex; align-items:center; gap: 6px; }
+.nav__links{ display:flex; align-items:center; gap: var(--space-1); }
 .nav__link{
-  padding: 9px 14px; border-radius: var(--radius-pill); font-weight:700; font-size:.92rem;
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); font-weight:700; font-size:.92rem;
   color: var(--text-soft); transition: all .25s var(--ease);
 }
-.nav__link:hover, .nav__link.is-active{ background: var(--surface-solid); color: var(--brand-1); box-shadow: var(--shadow-sm); }
+.nav__link:hover, .nav__link.is-active{ background: var(--surface-solid); color: var(--brand-1); box-shadow: var(--elevation-1); }
 
-.nav__actions{ display:flex; align-items:center; gap:8px; }
+.nav__actions{ display:flex; align-items:center; gap: var(--space-2); }
 .icon-btn{
   width: 42px; height: 42px; border-radius: 50%;
   display:flex; align-items:center; justify-content:center;
   border: 1px solid var(--border); background: var(--surface-solid);
   color: var(--text); cursor:pointer; transition: all .25s var(--ease-spring);
 }
-.icon-btn:hover{ transform: translateY(-2px) rotate(-6deg); box-shadow: var(--shadow-md); color: var(--brand-1); }
+.icon-btn:hover{ transform: translateY(-2px) rotate(-6deg); box-shadow: var(--elevation-2); color: var(--brand-1); }
 .icon-btn svg{ width: 20px; height: 20px; }
 
 .menu-toggle{ display:none; }
 
-@media (max-width: 880px){
+/* لوحي مستقيم (بورتريه) وما دونه يحصل على قائمة منسدلة نظيفة */
+@media (max-width: 1023px){
   .nav__links{
-    position: fixed; inset-inline: 12px; top: 74px;
-    flex-direction: column; align-items: stretch; gap: 4px;
+    position: fixed; inset-inline: var(--space-3); top: calc(var(--header-h) + var(--space-2));
+    flex-direction: column; align-items: stretch; gap: var(--space-1);
     background: var(--surface-strong); border: 1px solid var(--border);
-    border-radius: var(--radius-md); padding: 10px; box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-md); padding: var(--space-3); box-shadow: var(--elevation-3);
     backdrop-filter: blur(20px);
     transform-origin: top center;
     transform: scaleY(.85) translateY(-8px); opacity:0; visibility:hidden;
@@ -216,12 +220,16 @@ svg{ display:block; }
   .menu-toggle{ display:flex; }
 }
 
-/* ================= Layout helpers ================= */
-.container{ max-width: 1240px; margin: 0 auto; padding-inline: 24px; }
+/* ================= Layout primitives ================= */
+.container{
+  max-width: 1240px; margin-inline: auto;
+  /* هامش مريح يتمدّد بسلاسة بين الجوال واللوحي وسطح المكتب دون قفزات مفاجئة */
+  padding-inline: clamp(20px, 4vw, 40px);
+}
 .container--narrow{ max-width: 960px; }
 
-.section{ padding-block: 64px; }
-.section--tight{ padding-block: 36px; }
+.section{ padding-block: var(--space-16); }
+.section--tight{ padding-block: var(--space-8); }
 
 .reveal{ opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
 .reveal.is-visible{ opacity: 1; transform: translateY(0); }
@@ -234,10 +242,10 @@ svg{ display:block; }
 
 /* ================= Typography ================= */
 .eyebrow{
-  display:inline-flex; align-items:center; gap:8px;
+  display:inline-flex; align-items:center; gap: var(--space-2);
   font-size: .8rem; font-weight: 800; letter-spacing:.02em;
   color: var(--brand-1); background: color-mix(in srgb, var(--brand-1) 12%, transparent);
-  padding: 6px 14px; border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
 }
 h1,h2,h3,h4{ font-weight: 800; margin: 0 0 .5em; line-height: 1.5; }
 .display-title{
@@ -251,25 +259,25 @@ h1,h2,h3,h4{ font-weight: 800; margin: 0 0 .5em; line-height: 1.5; }
 
 /* ================= Buttons ================= */
 .btn{
-  display:inline-flex; align-items:center; gap:10px; justify-content:center;
-  padding: 13px 26px; border-radius: var(--radius-pill); font-weight: 800; font-size: .96rem;
+  display:inline-flex; align-items:center; gap: var(--space-2); justify-content:center;
+  padding: var(--space-3) var(--space-6); border-radius: var(--radius-pill); font-weight: 800; font-size: .96rem;
   cursor:pointer; border: 1px solid transparent; transition: all .3s var(--ease-spring);
   white-space: nowrap;
 }
-.btn--primary{ background: var(--accent-grad); color: #fff; box-shadow: var(--shadow-glow); }
+.btn--primary{ background: var(--accent-grad); color: #fff; box-shadow: var(--elevation-glow); }
 .btn--primary:hover{ transform: translateY(-3px); filter: brightness(1.05); }
 .btn--ghost{ background: var(--surface-solid); color: var(--text); border-color: var(--border-strong); }
-.btn--ghost:hover{ transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.btn--ghost:hover{ transform: translateY(-3px); box-shadow: var(--elevation-2); }
 
-/* ================= Glass Card ================= */
+/* ================= Glass Card (subtle glassmorphism) ================= */
 .glass{
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  box-shadow: var(--elevation-2);
 }
 
 /* ================= Footer ================= */
-.site-footer{ padding-block: 40px 60px; text-align:center; color: var(--text-faint); font-size:.9rem; }
+.site-footer{ padding-block: var(--space-10) var(--space-16); text-align:center; color: var(--text-faint); font-size:.9rem; }
