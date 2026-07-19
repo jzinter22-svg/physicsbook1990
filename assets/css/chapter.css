@@ -37,23 +37,31 @@
 .ch-hero__art{
   aspect-ratio: 1/1; border-radius: var(--radius-lg); position:relative;
   display:flex; align-items:center; justify-content:center;
+  max-width: var(--hero-art-max-width); margin-inline: auto;
 }
 
 /* ---------- Progress ring on chapter card ---------- */
 .orbit-loader{ width:100%; max-width:320px; margin-inline:auto; }
 
-/* ---------- Responsive chapter body grid ---------- */
+/* ---------- Chapter body grid: sidebar TOC + lesson column ----------
+   Fully defined here (base + responsive) so any chapter page only ever
+   needs `<div class="ch-body-grid">` — no inline grid-template-columns
+   to remember to copy when a new chapter is added. */
+.ch-body-grid{
+  display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 44px; align-items: start;
+}
 .toc-mobile{ display:none; }
 .ch-body-grid > *{ min-width: 0; }
 @media (max-width: 900px){
-  .ch-body-grid{ grid-template-columns: minmax(0,1fr) !important; }
+  .ch-body-grid{ grid-template-columns: minmax(0,1fr); }
   .toc{ display:none; }
   .toc-mobile{ display:block; }
 }
 
 /* ---------- Table of contents ---------- */
 .toc{ position: sticky; top: 90px; }
-.toc__title{ font-weight:800; font-size:.95rem; color: var(--text-faint); margin-bottom: 10px; }
+.toc__panel{ padding: 20px 6px; }
+.toc__title{ font-weight:800; font-size:.95rem; color: var(--text-faint); margin-bottom: 10px; padding-inline: 16px; }
 .toc__list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; border-inline-start: 2px solid var(--border); }
 .toc__link{
   display:block; padding: 7px 16px; font-size:.88rem; color: var(--text-soft); font-weight:700;
@@ -89,11 +97,15 @@
 .prose li{ margin-bottom: 6px; }
 
 /* ---------- Figures ---------- */
-.figure{ margin: 26px auto; max-width: 448px; text-align:center; }
+.figure{ margin: 26px auto; max-width: var(--figure-max-width); text-align:center; }
+/* Modifier for figures that hold a data table or anything else that needs
+   more horizontal room to stay legible — use instead of an inline max-width. */
+.figure--wide{ max-width: var(--figure-max-width-wide); }
 .figure__frame{
   background: var(--surface-solid); border:1px solid var(--border); border-radius: var(--radius-md);
   padding: 18px; box-shadow: var(--shadow-sm);
 }
+.figure__frame--scroll{ overflow-x: auto; }
 .figure__cap{ margin-top:10px; font-size:.88rem; font-weight:700; color: var(--text-faint); }
 
 /* ---------- Formula box ---------- */
@@ -212,10 +224,11 @@
 
 /* ---------- Diagram wrapper (50% of content width on desktop, centered) ---------- */
 .diagram{
-  width: 35%; min-width: 224px; max-width: 364px; margin: 34px auto; text-align:center;
+  width: var(--diagram-width); min-width: var(--diagram-min-width); max-width: var(--diagram-max-width);
+  margin: 34px auto; text-align:center;
 }
 @media (max-width: 720px){
-  .diagram{ width: 70%; max-width: 294px; }
+  .diagram{ width: var(--diagram-width-mobile); max-width: var(--diagram-max-width-mobile); }
 }
 .diagram__stage{
   background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius-lg);
@@ -294,6 +307,11 @@
   transition: all .3s var(--ease-spring);
 }
 .jump-fab.is-visible{ opacity:1; pointer-events:auto; transform:none; }
+
+/* ---------- Chapter intro panel (vocabulary + objectives) ---------- */
+.ch-intro-panel{ padding: 28px 30px; margin-bottom: 10px; }
+.ch-intro-panel .lesson__sub:first-child{ margin-top: 0; }
+.ch-intro-panel .objectives{ margin-top: 4px; }
 
 /* ---------- Chapter vocabulary chips ---------- */
 .vocab-list{ display:flex; flex-wrap:wrap; gap:10px; margin: 18px 0; }
