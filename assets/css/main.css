@@ -46,6 +46,21 @@
 
   --font-main: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
 
+  /* ---- Illustration & diagram sizing tokens ----
+     Single source of truth for how large any figure, interactive
+     diagram, or hero illustration renders. Every chapter page consumes
+     these through shared classes (.figure, .diagram, .ch-hero__art) —
+     tune once here and every current and future chapter picks it up
+     automatically, no per-page overrides needed. */
+  --figure-max-width: 448px;       /* static SVG illustrations */
+  --figure-max-width-wide: 640px;  /* .figure--wide: data/table figures that need more room */
+  --diagram-width: 35%;
+  --diagram-min-width: 224px;
+  --diagram-max-width: 364px;
+  --diagram-width-mobile: 70%;
+  --diagram-max-width-mobile: 294px;
+  --hero-art-max-width: 252px;     /* chapter-hero decorative illustration */
+
   color-scheme: light;
 }
 
