@@ -165,7 +165,10 @@ svg{ display:block; }
   border-bottom: 1px solid var(--border);
 }
 .nav{
-  max-width: 1240px; margin: 0 auto; padding: 14px 24px;
+  /* max-width/margin/padding-inline come from .container (always paired with
+     .nav in markup) — only add the vertical padding this component needs,
+     so it can never clobber .container's horizontal gutter. */
+  padding-block: 14px;
   display:flex; align-items:center; justify-content:space-between; gap: 16px;
 }
 .brand{
@@ -269,4 +272,4 @@ h1,h2,h3,h4{ font-weight: 800; margin: 0 0 .5em; line-height: 1.5; }
 }
 
 /* ================= Footer ================= */
-.site-footer{ padding: 40px 0 60px; text-align:center; color: var(--text-faint); font-size:.9rem; }
+.site-footer{ padding-block: 40px 60px; text-align:center; color: var(--text-faint); font-size:.9rem; }
