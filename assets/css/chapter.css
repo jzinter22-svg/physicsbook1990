@@ -74,12 +74,12 @@
 /* ---------- Lesson section ---------- */
 .lesson{ scroll-margin-top: 90px; padding-block: 46px; border-top: 1px dashed var(--border); }
 .lesson:first-of-type{ border-top: none; }
-.lesson__head{ display:flex; align-items:center; gap:14px; margin-bottom: 18px; }
+.lesson__head{ display:flex; align-items:center; gap:14px; margin-bottom: 18px; flex-wrap: wrap; }
 .lesson__num{
   flex:none; width:46px; height:46px; border-radius:14px; background: var(--accent-grad); color:#fff;
   display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1rem; box-shadow: var(--shadow-sm);
 }
-.lesson__title{ font-size: clamp(1.25rem, 2.6vw, 1.6rem); font-weight:900; margin:0; }
+.lesson__title{ font-size: clamp(1.25rem, 2.6vw, 1.6rem); font-weight:900; margin:0; min-width:0; overflow-wrap: break-word; }
 .lesson__sub{ font-size: 1.05rem; font-weight:800; margin: 22px 0 10px; color: var(--brand-2); }
 
 .prose{ color: var(--text); font-size: 1.02rem; }
@@ -89,7 +89,7 @@
 .prose li{ margin-bottom: 6px; }
 
 /* ---------- Figures ---------- */
-.figure{ margin: 26px auto; max-width: 640px; text-align:center; }
+.figure{ margin: 26px auto; max-width: 448px; text-align:center; }
 .figure__frame{
   background: var(--surface-solid); border:1px solid var(--border); border-radius: var(--radius-md);
   padding: 18px; box-shadow: var(--shadow-sm);
@@ -149,16 +149,20 @@
 .ex-card:hover, .q-card:hover{ box-shadow: var(--shadow-md); }
 
 .ex-card__head, .q-card__head{
-  display:flex; align-items:center; gap:12px; padding: 18px 22px;
+  display:flex; align-items:flex-start; gap:12px; padding: 20px 22px;
   background: linear-gradient(90deg, color-mix(in srgb, var(--brand-1) 12%, transparent), transparent);
-  cursor:pointer; user-select:none;
+  cursor:pointer; user-select:none; min-height: 66px;
 }
 .ex-card__badge, .q-card__badge{
   flex:none; width:40px; height:40px; border-radius:12px; background: var(--accent-grad); color:#fff;
   display:flex; align-items:center; justify-content:center; font-weight:900; font-size: .95rem;
 }
-.ex-card__label, .q-card__label{ font-weight:800; font-size: 1.02rem; flex:1; }
-.ex-card__chevron{ transition: transform .35s var(--ease); color: var(--text-faint); flex:none; }
+.ex-card__label, .q-card__label{
+  font-weight:800; font-size: 1.02rem; flex:1; min-width:0;
+  overflow-wrap: break-word; word-break: break-word;
+  line-height: 1.6; padding-top: 3px;
+}
+.ex-card__chevron{ transition: transform .35s var(--ease); color: var(--text-faint); flex:none; margin-top: 6px; }
 .ex-card.is-open .ex-card__chevron, .q-card.is-open .q-card__chevron{ transform: rotate(180deg); }
 
 .ex-card__prompt{ padding: 4px 22px 20px; font-size: 1.02rem; color: var(--text); }
@@ -208,10 +212,10 @@
 
 /* ---------- Diagram wrapper (50% of content width on desktop, centered) ---------- */
 .diagram{
-  width: 50%; min-width: 320px; max-width: 520px; margin: 34px auto; text-align:center;
+  width: 35%; min-width: 224px; max-width: 364px; margin: 34px auto; text-align:center;
 }
 @media (max-width: 720px){
-  .diagram{ width: 100%; max-width: 420px; }
+  .diagram{ width: 70%; max-width: 294px; }
 }
 .diagram__stage{
   background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius-lg);

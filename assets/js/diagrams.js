@@ -17,6 +17,9 @@
     canvas.height = size * dpr;
     const ctx = canvas.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // The page is RTL, but canvas text direction must stay LTR — otherwise
+    // textAlign values (and Arabic label text) render mirrored/truncated.
+    ctx.direction = "ltr";
     return { ctx, size };
   }
 
@@ -474,7 +477,6 @@
 
       const elapsed = (performance.now() - t0) / 1000;
 
-      ctx.font = "bold 12px Cairo, sans-serif";
       shapes.forEach((s, i) => {
         // acceleration down incline: a = g sinθ / (1 + k)
         const g = 9.8,
@@ -494,21 +496,22 @@
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // ball
+        // lane label — fixed above the lane line, in the gap between lanes,
+        // so it never collides with the moving ball on the line itself
+        ctx.fillStyle = s.color;
+        ctx.font = "bold 12px Cairo, sans-serif";
+        ctx.textAlign = "start";
+        ctx.textBaseline = "alphabetic";
+        ctx.fillText(s.name, rampX1, laneY - laneGap * 0.32);
+
+        // ball (plain — no text inside, avoids overflow in a small circle)
         ctx.fillStyle = s.color;
         ctx.beginPath();
-        ctx.arc(x, laneY, 14, 0, Math.PI * 2);
+        ctx.arc(x, laneY, 10, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = cssVar("--surface-solid");
-        ctx.font = "bold 10px Cairo, sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(s.name, x, laneY + 3.5);
-
-        if (x >= rampX2 - 1) {
-          ctx.fillStyle = s.color;
-          ctx.textAlign = "start";
-          ctx.font = "bold 13px Cairo, sans-serif";
-        }
+        ctx.strokeStyle = cssVar("--surface-solid");
+        ctx.lineWidth = 2;
+        ctx.stroke();
       });
 
       // finish line
