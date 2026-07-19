@@ -171,7 +171,7 @@
 .ex-card__head, .q-card__head{
   display:flex; align-items:flex-start; gap:12px; padding: 20px 22px;
   background: linear-gradient(90deg, color-mix(in srgb, var(--brand-1) 12%, transparent), transparent);
-  cursor:pointer; user-select:none; min-height: 66px;
+  cursor:pointer; user-select:none;
 }
 .ex-card__badge, .q-card__badge{
   flex:none; width:40px; height:40px; border-radius:12px; background: var(--accent-grad); color:#fff;
@@ -189,9 +189,11 @@
 .q-card__prompt{ padding: 4px 22px 20px; font-size: 1rem; color: var(--text); }
 
 .ex-card__body, .q-card__body{
+  /* Closed by default (max-height:0). The open height is never a guessed
+     constant — app.js measures the body's real scrollHeight and sets it
+     inline, so every card's expand animation matches its actual content. */
   max-height: 0; overflow: hidden; transition: max-height .5s var(--ease);
 }
-.ex-card.is-open .ex-card__body, .q-card.is-open .q-card__body{ max-height: 4000px; }
 
 .ex-card__section{ padding: 18px 22px; border-top: 1px dashed var(--border); }
 .ex-card__section-title{
@@ -206,7 +208,7 @@
 .step__math{ margin-top: 6px; overflow-x:auto; }
 
 .answer-box{
-  margin-top: 14px; padding: 14px 18px; border-radius: var(--radius-sm);
+  margin-top: 14px; padding: 16px 20px; border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--success) 12%, transparent); border: 1px solid color-mix(in srgb, var(--success) 30%, transparent);
   font-weight: 800; display:flex; align-items:center; gap:10px; flex-wrap: wrap;
 }
@@ -240,7 +242,7 @@
 }
 .diagram__stage{
   background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md); padding: 14px; position: relative;
+  box-shadow: var(--shadow-md); padding: 18px; position: relative;
 }
 .diagram__canvas-holder{ width:100%; aspect-ratio: 1/1; border-radius: var(--radius-md); overflow:hidden; position:relative; }
 .diagram__canvas-holder canvas{ width:100%; height:100%; display:block; }
