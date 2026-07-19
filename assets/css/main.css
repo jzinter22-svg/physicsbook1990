@@ -34,7 +34,11 @@
 
   --text: light-dark(#10192b, #eef1fb);
   --text-soft: light-dark(#47546b, #b7c0d8);
-  --text-faint: light-dark(#7c879c, #7f8bab);
+  /* اللون الفاتح السابق (#7c879c) كان تباينه على خلفية بيضاء ٣.٦:١ فقط —
+     أقل من حد WCAG AA (٤.٥:١) للنص العادي. القيمة الجديدة تحافظ على نفس
+     التدرّج الهرمي (أفتح من --text-soft) لكن بتباين ~٥.٩:١، مناسب لجلسات
+     القراءة الطويلة. */
+  --text-faint: light-dark(#5c6579, #7f8bab);
 
   --brand-1: light-dark(#4f6df5, #7c93ff); /* بنفسجي أزرق */
   --brand-2: light-dark(#7c5cff, #a78bff); /* بنفسجي */
@@ -123,15 +127,22 @@ html{ scroll-behavior: smooth; }
 body{
   margin: 0;
   font-family: var(--font-main);
-  background:
-    radial-gradient(1200px 600px at 15% -10%, color-mix(in srgb, var(--brand-1) 14%, transparent), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, color-mix(in srgb, var(--brand-3) 12%, transparent), transparent 60%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
   line-height: 1.9;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   transition: background-color .4s var(--ease), color .4s var(--ease);
+}
+/* الخلفية المتدرّجة اللافتة مناسبة لصفحة تعريفية (بطل تسويقي) لكنها تشوّش
+   التركيز في صفحة قراءة طويلة. تُفعَّل تلقائيًا فقط في الصفحات التي تحوي
+   قسم بطل تسويقي (.hero) — أي صفحة فصل تستخدم .ch-hero بدلًا منه تبقى
+   على سطح هادئ دون أي حاجة لإضافة صنف يدويًا. */
+body:has(.hero){
+  background:
+    radial-gradient(1200px 600px at 15% -10%, color-mix(in srgb, var(--brand-1) 14%, transparent), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, color-mix(in srgb, var(--brand-3) 12%, transparent), transparent 60%),
+    var(--bg);
 }
 
 img{ max-width: 100%; display:block; }
@@ -243,7 +254,9 @@ svg{ display:block; }
 /* ================= Typography ================= */
 .eyebrow{
   display:inline-flex; align-items:center; gap: var(--space-2);
-  font-size: .8rem; font-weight: 800; letter-spacing:.02em;
+  /* لا تُستخدم letter-spacing مع الحروف العربية: التباعد الإضافي بين
+     الحروف يكسر تشكيل الحروف المتصلة ويُشوّه القراءة، بخلاف اللاتينية. */
+  font-size: .8rem; font-weight: 800;
   color: var(--brand-1); background: color-mix(in srgb, var(--brand-1) 12%, transparent);
   padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
 }
