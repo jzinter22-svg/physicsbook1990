@@ -77,30 +77,54 @@
     revealEls.forEach((el) => el.classList.add("is-visible"));
   }
 
-  /* ---------------- Accordion cards (examples / questions) ---------------- */
-  document.querySelectorAll("[data-accordion-head]").forEach((head) => {
-    function toggleCard() {
-      const card = head.closest("[data-accordion]");
-      if (!card) return;
-      card.classList.toggle("is-open");
-      head.setAttribute("aria-expanded", card.classList.contains("is-open") ? "true" : "false");
+  /* ---------------- Accordion cards (examples / questions) ----------------
+     Cards must size to their own content, never a guessed fixed number, so
+     the open transition animates to the body's real measured height
+     (scrollHeight) instead of relying on a large fixed max-height ceiling. */
+  const accordionBodies = [];
+
+  document.querySelectorAll("[data-accordion]").forEach((card) => {
+    const head = card.querySelector("[data-accordion-head]");
+    const body = card.querySelector(".ex-card__body, .q-card__body");
+    if (!head || !body) return;
+
+    function setOpen(open) {
+      card.classList.toggle("is-open", open);
+      head.setAttribute("aria-expanded", String(open));
+      body.style.maxHeight = open ? body.scrollHeight + "px" : "0px";
     }
-    head.addEventListener("click", toggleCard);
+
+    head.addEventListener("click", () => setOpen(!card.classList.contains("is-open")));
     head.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
         e.preventDefault();
-        toggleCard();
+        setOpen(!card.classList.contains("is-open"));
       }
     });
+
+    card._pbSetOpen = setOpen;
+    accordionBodies.push({ card, body });
   });
 
   window.PB_expandAll = function (open) {
     document.querySelectorAll("[data-accordion]").forEach((card) => {
-      card.classList.toggle("is-open", open);
-      const head = card.querySelector("[data-accordion-head]");
-      if (head) head.setAttribute("aria-expanded", String(open));
+      if (card._pbSetOpen) card._pbSetOpen(open);
     });
   };
+
+  // Keep open cards correctly sized if their content reflows — e.g. text
+  // rewraps on resize, or the web font swaps in after first paint.
+  function resyncOpenAccordions() {
+    accordionBodies.forEach(({ card, body }) => {
+      if (card.classList.contains("is-open")) {
+        body.style.maxHeight = body.scrollHeight + "px";
+      }
+    });
+  }
+  window.addEventListener("resize", resyncOpenAccordions, { passive: true });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(resyncOpenAccordions);
+  }
 
   /* ---------------- TOC scrollspy (desktop) + mobile select ---------------- */
   const sections = Array.from(document.querySelectorAll("[data-lesson-section]"));
