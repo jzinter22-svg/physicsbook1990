@@ -21,7 +21,7 @@
   .hero__stat span{ font-size:.82rem; color:var(--text-faint); font-weight:700; }
 
   .book-cover{
-    position:relative; aspect-ratio: 3/4; max-width: 380px; margin-inline:auto;
+    position:relative; aspect-ratio: 3/4; max-width: 266px; margin-inline:auto;
     border-radius: 26px; background: var(--accent-grad);
     box-shadow: var(--shadow-lg);
     display:flex; align-items:center; justify-content:center; overflow:hidden;
@@ -33,13 +33,13 @@
   .book-cover__orbit{ position:absolute; border:2px dashed rgba(255,255,255,.45); border-radius:50%; animation: spin 18s linear infinite; }
   .book-cover__orbit.o1{ width:70%; height:70%; }
   .book-cover__orbit.o2{ width:92%; height:92%; animation-duration: 30s; animation-direction: reverse; }
-  .book-cover__planet{ position:absolute; width:16px; height:16px; border-radius:50%; background:#fff; top:0; inset-inline-start:50%; box-shadow: 0 0 16px rgba(255,255,255,.8); }
+  .book-cover__planet{ position:absolute; width:11px; height:11px; border-radius:50%; background:#fff; top:0; inset-inline-start:50%; box-shadow: 0 0 16px rgba(255,255,255,.8); }
   @keyframes spin{ to{ transform: rotate(360deg); } }
   .book-cover__content{ position:relative; text-align:center; color:#fff; padding: 20px; }
   .book-cover__content .badge{ font-size:.75rem; font-weight:800; background:rgba(255,255,255,.2); padding:6px 14px; border-radius:999px; }
   .book-cover__content h2{ font-size: 1.8rem; margin: 16px 0 4px; font-weight:900; }
   .book-cover__content p{ opacity:.9; font-weight:700; font-size:.9rem; }
-  .book-cover__icon{ font-size: 3.4rem; margin-bottom: 6px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.25)); animation: float 4s ease-in-out infinite; }
+  .book-cover__icon{ font-size: 2.4rem; margin-bottom: 6px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.25)); animation: float 4s ease-in-out infinite; }
   @keyframes float{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-10px);} }
 
   .feature-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
