@@ -135,7 +135,7 @@
   border-radius: var(--radius-md);
   padding: var(--space-6);
   margin: var(--space-5) 0;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   text-align:center;
   position: relative;
   overflow:auto;
@@ -264,7 +264,7 @@
 .diagram__canvas-holder{ width:100%; aspect-ratio: 1/1; border-radius: var(--radius-md); overflow:hidden; position:relative; }
 .diagram__canvas-holder canvas{ width:100%; height:100%; display:block; }
 .diagram__title{ font-weight:800; margin-bottom: var(--space-2); }
-.diagram__desc{ font-size:.85rem; color: var(--text-faint); margin-bottom: var(--space-4); }
+.diagram__desc{ font-size:.9rem; line-height: 1.7; color: var(--text-faint); margin-bottom: var(--space-4); }
 
 .diagram__readout{
   display:flex; flex-wrap:wrap; gap: var(--space-3); justify-content:center; margin-top: var(--space-4);
@@ -273,22 +273,32 @@
   background: var(--surface); border:1px solid var(--border); padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
   font-size:.82rem; font-weight:800; color: var(--text-soft); display:flex; gap: var(--space-2); align-items:center;
 }
-.readout-chip b{ color: var(--brand-1); font-size:.95rem; }
+.readout-chip b{ color: var(--brand-1); font-size:.95rem; font-variant-numeric: tabular-nums; }
 
 .diagram__controls{ display:flex; flex-direction:column; gap: var(--space-4); margin-top: var(--space-5); text-align: start; }
 .control{ display:flex; flex-direction:column; gap: var(--space-2); }
 .control__label{ display:flex; justify-content:space-between; font-size:.82rem; font-weight:700; color: var(--text-soft); }
+/* الشريط المرئي رفيع، لكن مساحة اللمس الفعلية للمدخل أطول (28px) — مهمّ
+   على اللوحي حيث يكون الإصبع أداة السحب الأساسية. */
 .control input[type=range]{
-  -webkit-appearance:none; width:100%; height:6px; border-radius: 6px;
+  -webkit-appearance:none; appearance:none;
+  width:100%; height: 28px; background: transparent; outline:none; cursor:pointer;
+}
+.control input[type=range]::-webkit-slider-runnable-track{
+  height:8px; border-radius:6px;
   background: linear-gradient(90deg, var(--brand-1), var(--brand-3));
-  outline:none;
+}
+.control input[type=range]::-moz-range-track{
+  height:8px; border-radius:6px;
+  background: linear-gradient(90deg, var(--brand-1), var(--brand-3));
 }
 .control input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+  -webkit-appearance:none; width:26px; height:26px; border-radius:50%;
   background:#fff; border: 3px solid var(--brand-1); box-shadow: var(--elevation-1); cursor:pointer;
+  margin-top: -9px; /* يوسّط المقبض 26px على شريط ارتفاعه 8px */
 }
 .control input[type=range]::-moz-range-thumb{
-  width:20px; height:20px; border-radius:50%; background:#fff; border: 3px solid var(--brand-1); cursor:pointer;
+  width:26px; height:26px; border-radius:50%; background:#fff; border: 3px solid var(--brand-1); cursor:pointer;
 }
 .diagram__buttons{ display:flex; gap: var(--space-2); justify-content:center; margin-top: var(--space-2); flex-wrap: wrap; }
 .chip-btn{
@@ -300,7 +310,12 @@
 .chip-btn.is-active{ background: var(--accent-grad); color:#fff; border-color: transparent; }
 
 /* ---------- Inline math helpers (no external math library needed) ---------- */
-.math{ font-family: 'Cairo', sans-serif; font-style: normal; direction: ltr; display:inline-flex; align-items:center; gap:.15em; unicode-bidi: isolate; }
+.math{
+  font-family: 'Cairo', sans-serif; font-style: normal; direction: ltr; display:inline-flex; align-items:center; gap:.15em; unicode-bidi: isolate;
+  /* أرقام بعرض ثابت داخل المعادلات — تحافظ الكسور والمعادلات المتتابعة على
+     محاذاة رأسية نظيفة بدل تذبذب عرض كل رقم. */
+  font-variant-numeric: tabular-nums;
+}
 .frac{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 .2em; line-height:1.05; }
 .frac .num{ display:block; padding: 0 .2em .1em; border-bottom: 2px solid currentColor; }
 .frac .den{ display:block; padding: .1em .2em 0; }
@@ -308,7 +323,7 @@
 .formula .math{ font-size: 1.1em; }
 
 /* ---------- Table ---------- */
-.data-table{ width:100%; border-collapse: collapse; margin: var(--space-5) 0; font-size:.95rem; }
+.data-table{ width:100%; border-collapse: collapse; margin: var(--space-5) 0; font-size:.95rem; font-variant-numeric: tabular-nums; }
 .data-table th, .data-table td{ padding: var(--space-3) var(--space-4); border: 1px solid var(--border); text-align:center; }
 .data-table th{ background: color-mix(in srgb, var(--brand-1) 10%, transparent); font-weight:800; }
 .data-table tr:nth-child(even) td{ background: color-mix(in srgb, var(--text) 3%, transparent); }
