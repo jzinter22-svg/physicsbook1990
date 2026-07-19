@@ -11,7 +11,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="assets/css/main.css" />
 <style>
-  .hero{ padding: 90px 0 40px; position:relative; overflow:hidden; }
+  /* padding-block only — .hero is combined with .container in the markup,
+     and .container already owns the horizontal padding-inline gutter.
+     A physical `padding` shorthand here would zero that gutter out. */
+  .hero{ padding-block: 90px 40px; position:relative; overflow:hidden; }
   .hero__orbits{ position:absolute; inset:0; z-index:-1; opacity:.5; pointer-events:none; }
   .hero__grid{ display:grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items:center; }
   @media (max-width: 940px){ .hero__grid{ grid-template-columns: 1fr; } }
